@@ -1,0 +1,441 @@
+/24 255.255.255.0 
+
+/22 255.255.252.0
+/16 255.255.0.0
+/14 255.252.0.0
+
+
+
+R1
+enable
+conf terminal
+int Eth0/0/0 
+ip add 14.0.0.5 255.255.255.252
+no shut
+int Eth0/1/0
+ip add 14.0.0.9 255.255.255.252
+no shut
+int Eth0/2/0
+ip add 14.0.0.13 255.255.255.252
+no shut
+exit
+
+int Fa0/0
+no shut
+int Fa0/0.3
+encapsulation dot1Q 3
+ip add 14.0.7.254 255.255.252.0
+no shut
+int Fa0/0.4
+encapsulation dot1Q 4
+ip add 14.0.1.254 255.255.255.0
+no shut
+exit
+
+ip dhcp pool tres
+network 14.0.4.0 255.255.252.0
+default-router 14.0.7.254 
+exit
+ip dhcp pool cuatro
+network 14.0.1.0 255.255.255.0
+default-router 14.0.1.254
+exit
+
+!----------- ip routes --------------
+
+ip route 14.0.0.16 255.255.255.252 14.0.0.6
+ip route 14.0.0.20 255.255.255.252 14.0.0.6
+ip route 14.0.0.24 255.255.255.252 14.0.0.6
+ip route 14.0.0.28 255.255.255.252 14.0.0.6
+ip route 14.0.0.32 255.255.255.252 14.0.0.6
+
+ip route 14.0.2.0 255.255.255.0 14.0.0.6
+
+ip route 14.0.8.0 255.255.252.0 14.0.0.6
+ip route 14.0.12.0 255.255.252.0 14.0.0.6
+ip route 14.0.16.0 255.255.252.0  14.0.0.6
+
+ip route 14.1.0.0 255.255.0.0 14.0.0.6
+
+ip route 14.4.0.0 255.252.0.0 14.0.0.6
+ip route 14.8.0.0 255.252.0.0 14.0.0.6
+ip route 14.12.0.0 255.252.0.0 14.0.0.6
+
+
+
+
+R2
+enable  
+conf terminal
+int Eth0/0/0
+ip add 14.0.0.6 255.255.255.252
+no shut
+int Eth0/2/0
+ip add 14.0.0.17 255.255.255.252
+no shut
+
+int Fa0/0
+no shut
+int Fa0/0.2
+encapsulation dot1Q 2
+ip add 14.7.255.254 255.252.0.0
+no shut
+int Fa0/0.5
+encapsulation dot1Q 5
+ip add 14.1.255.254 255.255.0.0
+no shut
+exit
+
+ip dhcp pool dos
+network 14.4.0.0 255.252.0.0
+default-router 14.7.255.254
+exit
+ip dhcp pool cinco
+network 14.1.0.0 255.255.0.0
+default-router 14.1.255.254
+exit 
+
+!----------- ip routes --------------
+
+ip route 14.0.0.8 255.255.255.252 14.0.0.18 
+ip route 14.0.0.12 255.255.255.252 14.0.0.18
+ip route 14.0.0.20 255.255.255.252 14.0.0.18
+ip route 14.0.0.24 255.255.255.252 14.0.0.18
+ip route 14.0.0.28 255.255.255.252 14.0.0.18
+ip route 14.0.0.32 255.255.255.252 14.0.0.18
+
+ip route 14.0.1.0 255.255.255.0 14.0.0.18
+ip route 14.0.2.0 255.255.255.0 14.0.0.18
+
+ip route 14.0.4.0 255.255.252.0 14.0.0.18
+ip route 14.0.8.0 255.255.252.0 14.0.0.18
+ip route 14.0.12.0 255.255.252.0 14.0.0.18
+ip route 14.0.16.0 255.255.252.0  14.0.0.18
+
+ip route 14.4.0.0 255.252.0.0 14.0.0.18
+ip route 14.8.0.0 255.252.0.0 14.0.0.18
+ip route 14.12.0.0 255.252.0.0 14.0.0.18
+
+
+R3
+enable
+conf terminal
+int Eth0/0/0
+ip add 14.0.0.21 255.255.255.252
+no shut
+int Eth0/1/0
+ip add 14.0.0.10 255.255.255.252
+no shut
+int Eth0/2/0
+ip add 14.0.0.18 255.255.255.252
+no shut
+int Eth0/3/0
+ip add 14.0.0.25 255.255.255.252
+no shut
+
+!----------- ip routes --------------
+
+ip route 14.0.0.4 255.255.255.252 14.0.0.9
+ip route 14.0.0.12 255.255.255.252 14.0.0.26
+ip route 14.0.0.28 255.255.255.252 14.0.0.26
+ip route 14.0.0.32 255.255.255.252 14.0.0.26
+
+ip route 14.0.1.0 255.255.255.0 14.0.0.9
+ip route 14.0.2.0 255.255.255.0 14.0.0.26
+
+ip route 14.0.4.0 255.255.252.0 14.0.0.9
+ip route 14.0.8.0 255.255.252.0 14.0.0.26
+ip route 14.0.12.0 255.255.252.0 14.0.0.26
+ip route 14.0.16.0 255.255.252.0  14.0.0.26
+
+ip route 14.1.0.0 255.255.0.0 14.0.0.9
+
+ip route 14.4.0.0 255.252.0.0 14.0.0.9
+ip route 14.8.0.0 255.252.0.0 14.0.0.26
+ip route 14.12.0.0 255.252.0.0 14.0.0.26
+
+
+
+
+
+R4
+enable
+conf terminal
+int Eth0/0/0
+ip add 14.0.0.22 255.255.255.252
+no shut
+int Eth0/2/0
+ip add 14.0.0.14 255.255.255.252
+no shut
+int Eth0/3/0
+ip add 14.0.0.29 255.255.255.252
+no shut
+
+int Fa0/0
+no shut
+int Fa0/0.2
+encapsulation dot1Q 2
+ip add 14.11.255.254 255.252.0.0
+no shut
+int Fa0/0.3
+encapsulation dot1Q 3
+ip add 14.0.11.254 255.255.252.0
+no shut
+exit
+
+ip dhcp pool dos
+network 14.8.0.0 255.252.0.0
+default-router 14.11.255.254
+exit
+ip dhcp pool tres
+network 14.0.8.0 255.255.252.0
+default-router 14.0.11.254
+exit
+
+!----------- ip routes --------------
+
+ip route 14.0.0.4 255.255.255.252 14.0.0.13
+ip route 14.0.0.8 255.255.255.252 14.0.0.13
+ip route 14.0.0.16 255.255.255.252 14.0.0.13
+ip route 14.0.0.24 255.255.255.252 14.0.0.21
+ip route 14.0.0.32 255.255.255.252 14.0.0.21
+
+ip route 14.0.1.0 255.255.255.0 14.0.0.13
+ip route 14.0.2.0 255.255.255.0 14.0.0.21
+
+ip route 14.0.4.0 255.255.252.0 14.0.0.13
+
+ip route 14.0.12.0 255.255.252.0 14.0.0.21
+ip route 14.0.16.0 255.255.252.0  14.0.0.21
+
+ip route 14.1.0.0 255.255.0.0 14.0.0.13
+
+ip route 14.4.0.0 255.252.0.0 14.0.0.13
+ip route 14.12.0.0 255.252.0.0 14.0.0.21
+
+
+
+R5
+enable
+conf terminal
+int Eth0/0/0
+ip add 14.0.0.33 255.255.255.252
+no shut 
+int Eth0/3/0
+ip add 14.0.0.26 255.255.255.252
+no shut
+
+int Fa0/0
+no shut
+int Fa0/0.2
+encapsulation dot1Q 2
+ip add 14.15.255.254 255.252.0.0
+no shut
+int Fa0/0.3
+encapsulation dot1Q 3
+ip add 14.0.15.254 255.255.252.0
+no shut
+exit
+
+ip dhcp pool dos
+network 14.12.0.0 255.252.0.0
+default-router 14.15.255.254
+exit 
+ip dhcp pool tres
+network 14.0.12.0 255.255.252.0
+default-router 14.0.15.254
+exit 
+
+!----------- ip routes --------------
+
+ip route 14.0.0.4 255.255.255.252 14.0.0.34
+ip route 14.0.0.8 255.255.255.252 14.0.0.34
+ip route 14.0.0.12 255.255.255.252 14.0.0.34
+ip route 14.0.0.16 255.255.255.252 14.0.0.34
+ip route 14.0.0.20 255.255.255.252 14.0.0.34
+ip route 14.0.0.28 255.255.255.252 14.0.0.34
+
+ip route 14.0.1.0 255.255.255.0 14.0.0.34
+ip route 14.0.2.0 255.255.255.0 14.0.0.34
+
+ip route 14.0.4.0 255.255.252.0 14.0.0.34
+ip route 14.0.8.0 255.255.252.0 14.0.0.34
+ip route 14.0.16.0 255.255.252.0  14.0.0.34
+
+ip route 14.1.0.0 255.255.0.0 14.0.0.34
+
+ip route 14.4.0.0 255.252.0.0 14.0.0.34
+ip route 14.8.0.0 255.252.0.0 14.0.0.34
+
+
+
+
+R6
+enable
+conf terminal
+int Eth0/0/0
+ip add 14.0.0.34 255.255.255.252
+no shut
+int Eth0/3/0
+ip add 14.0.0.30 255.255.255.252
+no shut
+
+int Fa0/0
+no shut
+int Fa0/0.3
+encapsulation dot1Q 3
+ip add 14.0.19.254 255.255.252.0
+no shut
+int Fa0/0.4
+encapsulation dot1Q 4
+ip add 14.0.2.254 255.255.255.0
+no shut 
+exit
+
+ip dhcp pool tres
+network 14.0.16.0 255.255.252.0
+default-router 14.0.19.254 
+exit
+ip dhcp pool cuatro
+network 14.0.2.0 255.255.255.0
+default-router 14.0.2.254
+exit
+
+!----------- ip routes --------------
+
+ip route 14.0.0.4 255.255.255.252 14.0.0.29
+ip route 14.0.0.8 255.255.255.252 14.0.0.29
+ip route 14.0.0.12 255.255.255.252 14.0.0.29
+ip route 14.0.0.16 255.255.255.252 14.0.0.29
+ip route 14.0.0.20 255.255.255.252 14.0.0.29
+ip route 14.0.0.24 255.255.255.252 14.0.0.29
+
+ip route 14.0.1.0 255.255.255.0 14.0.0.29
+
+
+ip route 14.0.4.0 255.255.252.0 14.0.0.29
+ip route 14.0.8.0 255.255.252.0 14.0.0.29
+ip route 14.0.12.0 255.255.252.0 14.0.0.29
+
+
+ip route 14.1.0.0 255.255.0.0 14.0.0.29
+
+ip route 14.4.0.0 255.252.0.0 14.0.0.29
+ip route 14.8.0.0 255.252.0.0 14.0.0.29
+ip route 14.12.0.0 255.252.0.0 14.0.0.29
+
+
+
+SW1
+enable
+conf terminal
+vlan 3
+name tres
+vlan 4 
+name cuatro
+int Fa0/1
+switchport mode trunk
+int Fa0/2
+switchport mode access
+switchport access vlan 4
+no shut
+int Fa0/3
+switchport mode access
+switchport access vlan 3
+no shut
+int Fa0/4
+switchport mode access
+switchport access vlan 4
+no shut
+
+Sw2
+enable
+conf terminal
+vlan 2
+name dos
+vlan 5
+name cinco
+int Fa0/1
+switchport mode trunk
+int Fa0/2
+switchport mode access
+switchport access vlan 2
+no shut
+int Fa0/3
+switchport mode access
+switchport access vlan 5
+no shut
+int Fa0/4
+switchport mode access
+switchport access vlan 5
+no shut
+
+Sw3
+enable
+conf terminal
+vlan 2
+name dos
+vlan 3
+name tres
+
+int Fa0/1
+switchport mode trunk
+int Fa0/2
+switchport mode access
+switchport access vlan 2
+no shut
+int Fa0/3
+switchport mode access
+switchport access vlan 3
+no shut
+int Fa0/4
+switchport mode access
+switchport access vlan 2
+no shut
+
+Sw4
+enable
+conf terminal
+vlan 2
+name dos
+vlan 3
+name tres
+
+int Fa0/1
+switchport mode trunk
+int Fa0/2
+switchport mode access
+switchport access vlan 2
+no shut
+int Fa0/3
+switchport mode access
+switchport access vlan 3
+no shut
+int Fa0/4
+switchport mode access
+switchport access vlan 3
+no shut
+
+Sw5
+enable
+conf terminal
+
+vlan 3
+name tres
+vlan 4
+name cuatro
+
+int Fa0/1
+switchport mode trunk
+int Fa0/2
+switchport mode access
+switchport access vlan 4
+no shut
+int Fa0/3
+switchport mode access
+switchport access vlan 4
+no shut
+int Fa0/4
+switchport mode access
+switchport access vlan 3
+no shut

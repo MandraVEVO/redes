@@ -1,0 +1,30 @@
+en
+conf t
+int fa0/1
+switchport mode trunk
+int fa0/2
+switchport mode trunk
+exit
+hostname SW1
+ip domain-name ulsa.com 
+crypto key generate rsa
+y
+1024
+service password-encryption
+enable secret abcd1234
+ip ssh ver 2
+line vty 0 4
+transport input ssh
+login local
+exit
+username admin privilege 15 secret adminabcd
+
+!---para entrar en el router 
+ssh -l admin 192.168.1.254 (la default gateway)
+!--- para entrar en el switch
+!-en vlan 1
+int vlan 1
+ip add 192.168.1.253 255.255.255.0
+no shut
+!-----dentro de la pc 
+ssh -l admin 192.168.1.254 (la ip de la vlan 1 del switch)

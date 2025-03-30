@@ -1,0 +1,45 @@
+Redes entre routers (/30):
+Router 1: 16.0.0.4 - 16.0.0.7
+Router 2: 16.0.0.8 - 16.0.0.11
+Router 3: 16.0.0.12 - 16.0.0.15
+
+Combos generados para cada VLAN:
+
+VLAN 2: 255.255.252.0 || 0.0.3.255
+16.0.4.0 - 16.0.7.255 r1 
+
+VLAN 3: 255.255.0.0 || 0.0.255.255 
+16.1.0.0 - 16.1.255.255 r2 
+16.2.0.0 - 16.2.255.255 r3 
+
+VLAN 4: 255.255.255.240 || 0.0.0.15
+16.0.0.16 - 16.0.0.31 r1 
+16.0.0.32 - 16.0.0.47 r2 
+
+VLAN 5: 255.252.0.0 || 0.3.255.255
+16.4.0.0 - 16.7.255.255 r2 
+16.8.0.0 - 16.11.255.255 r3 
+
+
+ACL
+Router 1:
+access-list 1 deny 16.2.0.0 0.0.255.255
+access-list 1 permit any
+int fa0/0.4
+ip access-group 1 out
+
+Router 2:
+access-list 1 deny 16.8.0.0 0.3.255.255
+access-list 1 permit any
+int fa0/0.4
+ip access-group 1 out
+
+
+
+en
+conf t  
+access-list 1 deny 192.168.5.0 0.0.0.255
+access-list 1 permit any
+!--- se niega la vlan del router 
+int fa0/1.2
+ip access-group 1 out 

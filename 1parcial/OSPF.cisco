@@ -1,0 +1,13 @@
+router ospf 10
+network 
+
+ospf multiple
+
+router ospf 10
+router-id 2.2.2.2
+redistribute connected subnets
+redistribute static subnets (se pone para el router que no conoce el area principal )
+network 
+
+
+redistribute static

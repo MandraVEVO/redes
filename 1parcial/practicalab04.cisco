@@ -1,0 +1,219 @@
+R1
+en
+conf t
+int eth 0/0/0
+ip add 15.0.0.5 255.255.255.252
+no shut 
+int eth 0/2/0
+ip add 15.0.0.9 255.255.255.252
+no shut
+int fa0/0
+no shut
+
+int fa0/0.2
+encapsulation dot1q 2
+ip add 15.0.255.254 255.255.128.0
+no shut
+int fa0/0.3
+encapsulation dot1q 3
+ip add 15.0.1.254 255.255.255.0
+no shut
+int fa0/0.4
+encapsulation dot1q 4
+ip add 15.2.255.254 255.255.0.0
+no shut
+
+ip dhcp pool vlan2_4
+network 15.0.128.0 255.255.128.0
+default-router 15.0.255.254
+exit
+ip dhcp pool vlan3_4
+network 15.0.1.0 255.255.255.0
+default-router 15.0.1.254
+exit
+ip dhcp pool vlan4_4
+network 15.2.0.0 255.255.0.0
+default-router 15.2.255.254
+exit
+
+router ospf 10
+router-id 1.1.1.1
+redistribute connected subnets
+network 15.0.0.4 0.0.0.3 area 0
+network 15.0.0.8 0.0.0.3 area 0
+network 15.0.128.0 0.0.127.255 area 0
+network 15.0.1.0 0.0.0.255 area 0
+network 15.2.0.0 0.0.255.255 area 0
+exit
+
+
+R2
+en
+conf t
+int eth 0/0/0
+ip add 15.0.0.6 255.255.255.252
+no shut
+int eth 0/2/0
+ip add 15.0.0.13 255.255.255.252
+no shut
+int fa0/0
+no shut
+int fa0/0.2
+encapsulation dot1q 2
+ip add 15.1.127.254 255.255.128.0
+no shut
+int fa0/0.3
+encapsulation dot1q 3
+ip add 15.0.2.254 255.255.255.0
+no shut
+int fa0/0.4
+encapsulation dot1q 4
+ip add 15.3.255.254 255.255.0.0
+no shut
+
+ip dhcp pool vlan2_4
+network 15.1.0.0 255.255.128.0
+default-router 15.1.127.254
+exit
+ip dhcp pool vlan3_4
+network 15.0.2.0 255.255.255.0
+default-router 15.0.2.254
+exit
+ip dhcp pool vlan4_4
+network 15.3.0.0 255.255.0.0
+default-router 15.3.255.254
+exit
+
+router ospf 10
+router-id 2.2.2.2
+redistribute connected subnets
+redistribute static subnets
+network 15.0.0.4 0.0.0.3 area 0
+network 15.0.0.12 0.0.0.3 area 2
+network 15.1.0.0 0.0.127.255 area 2
+network 15.0.2.0 0.0.0.255 area 2
+network 15.3.0.0 0.0.255.255 area 2
+exit
+
+ip route 15.0.4.0 255.255.255.0 15.0.0.14
+ip route 15.12.0.0 255.252.0.0 15.0.0.14
+
+
+
+R3
+en
+conf t
+int eth 0/2/0
+ip add 15.0.0.14 255.255.255.252
+no shut
+int eth 0/0/0
+ip add 15.0.0.18 255.255.255.252
+no shut
+int eth 0/3/0
+ip add 15.0.0.26 255.255.255.252
+no shut
+
+int fa0/0
+no shut
+int fa0/0.3
+encapsulation dot1q 3
+ip add 15.0.3.254 255.255.255.0
+no shut
+int fa0/0.5
+encapsulation dot1q 5
+ip add 15.11.255.254 255.252.0.0
+no shut
+
+ip dhcp pool vlan3_4
+network 15.0.3.0 255.255.255.0
+default-router 15.0.3.254
+exit
+ip dhcp pool vlan5_4
+network 15.8.0.0 255.252.0.0
+default-router 15.11.255.254
+exit
+
+router ospf 10
+router-id 4.4.4.4
+redistribute connected subnets
+network 15.0.0.12 0.0.0.3 area 2
+network 15.0.0.16 0.0.0.3 area 3
+network 15.0.0.24 0.0.0.3 area 3
+network 15.0.3.0 0.0.0.255 area 3
+network 15.8.0.0 0.3.255.255 area 3
+exit
+
+R5
+en
+conf t 
+int eth 0/3/0
+ip add 15.0.0.25 255.255.255.252
+no shut 
+int eth 0/1/0
+ip add 15.0.0.22 255.255.255.252
+no shut
+int fa0/0
+no shut
+int fa0/0.3
+encapsulation dot1q 3
+ip add 15.0.4.254 255.255.255.0
+no shut
+int fa0/0.5
+encapsulation dot1q 5
+ip add 15.15.255.254 255.252.0.0
+no shut
+
+ip dhcp pool vlan3_4
+network 15.0.4.0 255.255.255.0
+default-router 15.0.4.254
+exit
+ip dhcp pool vlan5_4
+network 15.12.0.0 255.252.0.0
+default-router 15.15.255.254
+exit
+
+router ospf 10
+router-id 5.5.5.5
+redistribute connected subnets
+network 15.0.0.24 0.0.0.3 area 3
+network 15.0.0.20 0.0.0.3 area 4
+network 15.0.4.0 0.0.0.255 area 4
+network 15.12.0.0 0.3.255.255 area 4
+exit
+
+R4
+en
+conf t
+int eth 0/1/0
+ip add 15.0.0.21 255.255.255.252
+no shut
+int eth 0/2/0
+ip add 15.0.0.10 255.255.255.252
+no shut
+int eth 0/0/0
+ip add 15.0.0.17 255.255.255.252
+no shut
+int fa0/0
+no shut
+int fa0/0.5
+encapsulation dot1q 5
+ip add 15.19.255.254 255.252.0.0 
+no shut 
+
+ip dhcp pool vlan5_4
+network 15.16.0.0 255.252.0.0
+default-router 15.19.255.254
+exit
+
+router ospf 10
+router-id 3.3.3.3
+redistribute connected subnets
+redistribute static subnets
+network 15.0.0.8 0.0.0.3 area 0
+network 15.0.0.16 0.0.0.3 area 3
+network 15.0.0.20 0.0.0.3 area 4
+network 15.16.0.0 0.3.255.255 area 5
+exit
+
+ip route 15.0.4.0 255.255.255.0 15.0.0.25
+ip route 15.16.0.0 255.252.0.0 15.0.0.25

@@ -1,0 +1,109 @@
+R1
+en
+conf t
+int eth0/2/0
+ip add 192.168.5.5 255.255.255.252
+no shut
+int fa0/0
+no shut
+int fa0/0.2
+encapsulation dot1q 2
+ip add 192.168.2.254 255.255.255.0
+no shut
+int fa0/0.3
+encapsulation dot1q 3
+ip add 192.168.3.254 255.255.255.0
+no shut
+
+ip dhcp pool vlan2
+network 192.168.2.0 255.255.255.0
+default-router 192.168.2.254
+exit
+
+ip dhcp pool vlan3
+network 192.168.3.0 255.255.255.0
+default-router 192.168.3.254
+exit
+
+router ospf 10
+redistribute connected subnets
+network 192.168.5.4 0.0.0.3 area 0
+network 192.168.2.0 0.0.0.255 area 0
+network 192.168.3.0 0.0.0.255 area 0
+exit
+!// asignar en donde
+en
+conf t
+int fa0/0.3
+ip access-group 100 out
+access-list 100 deny tcp 192.168.6.0 0.0.0.255 host 192.168.3.1 eq 80
+access-list 100 permit ip any any
+
+sw1
+en
+conf t
+vlan 2
+name vlan2
+vlan 3
+name vlan3
+
+int fa0/1
+switchport mode trunk
+int fa0/2   
+switchport access vlan 2
+int fa0/3
+switchport access vlan 3
+int fa0/4
+switchport access vlan 2
+
+
+R2
+en
+conf t
+int eth0/2/0
+ip add 192.168.5.6 255.255.255.252
+no shut
+int fa0/0
+no shut
+int fa0/0.2
+encapsulation dot1q 2
+ip add 192.168.6.254 255.255.255.0
+no shut
+int fa0/0.3
+encapsulation dot1q 3
+ip add 192.168.7.254 255.255.255.0
+no shut
+
+ip dhcp pool vlan2
+network 192.168.6.0 255.255.255.0
+default-router 192.168.6.254
+exit
+ip dhcp pool vlan3
+network 192.168.7.0 255.255.255.0
+default-router 192.168.7.254
+exit
+
+router ospf 10
+redistribute connected subnets
+network 192.168.5.4 0.0.0.3 area 0
+network 192.168.6.0 0.0.0.255 area 0 
+network 192.168.7.0 0.0.0.255 area 0
+exit
+
+
+sw1
+en
+conf t
+vlan 2
+name vlan2
+vlan 3
+name vlan3
+
+int fa0/1
+switchport mode trunk
+int fa0/2
+switchport access vlan 3
+int fa0/3
+switchport access vlan 2
+int fa0/4
+switchport access vlan 3

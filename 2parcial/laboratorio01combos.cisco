@@ -1,0 +1,35 @@
+Redes entre routers (/30):
+Router 1: 12.0.0.4 - 12.0.0.7
+Router 2: 12.0.0.8 - 12.0.0.11
+Router 3: 12.0.0.12 - 12.0.0.15
+
+Combos generados para cada VLAN:
+
+VLAN 2: 255.252.0.0   0.3.255.255 
+12.4.0.0 - 12.7.255.255
+12.8.0.0 - 12.11.255.255
+
+VLAN 3: 255.255.252.0   0.0.3.255
+12.0.4.0 - 12.0.7.255
+12.0.8.0 - 12.0.11.255
+
+VLAN 4: 255.255.224.0   0.0.31.255 
+12.0.32.0 - 12.0.63.255
+12.0.64.0 - 12.0.95.255
+12.0.96.0 - 12.0.127.255
+
+VLAN 5: 255.255.0.0   0.0.255.255
+12.1.0.0 - 12.1.255.255
+
+ip domain-name ulsa.com 
+crypto key generate rsa
+y
+1024
+service password-encryption
+enable secret abcd1234
+ip ssh ver 2
+line vty 0 4
+transport input ssh
+login local
+exit
+username admin privilege 15 secret adminabcd

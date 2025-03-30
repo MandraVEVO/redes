@@ -1,0 +1,960 @@
+R1
+en 
+conf t 
+ipv6 unicast-routing
+int Eth0/0/0
+ip add 17.0.0.5 255.255.255.252
+ipv6 add a1::1/126
+no shut
+int Eth0/1/0
+ip add 17.0.0.9 255.255.255.252
+ipv6 add a2::1/126
+no shut
+int Eth0/2/0
+ip add 17.0.0.13 255.255.255.252
+ipv6 add a3::1/126
+no shut
+int Fa0/0
+no shut
+int Fa0/0.2
+encapsulation dot1Q 2
+ip add 17.0.3.254 255.255.254.0
+ipv6 add abcd:abcd:ab:1b::1/64
+ipv6 nd managed-config-flag
+ipv6 dhcp server Vlan2_6
+no shut
+int Fa0/0.3
+encapsulation dot1Q 3
+ip add 17.0.0.62 255.255.255.240
+ipv6 add abcd:abcd:ab:1c::1/64
+ipv6 nd managed-config-flag
+ipv6 dhcp server Vlan3_6
+no shut
+int Fa0/0.5
+encapsulation dot1Q 5
+ip add 17.0.15.254 255.255.252.0
+ipv6 add abcd:abcd:ab:1f::1/64
+ipv6 nd managed-config-flag
+ipv6 dhcp server Vlan5_6
+no shut
+
+ip dhcp pool Vlan2_4
+network 17.0.2.0 255.255.254.0
+default-router 17.0.3.254
+ipv6 dhcp pool Vlan2_6
+add prefix abcd:abcd:ab:1b::/64
+
+ip dhcp pool Vlan3_4
+network 17.0.0.48 255.255.255.240
+default-router 17.0.0.62
+ipv6 dhcp pool Vlan3_6
+add prefix abcd:abcd:ab:1c::/64
+
+ip dhcp pool Vlan5_4
+network 17.0.12.0 255.255.252.0
+default-router 17.0.15.254
+ipv6 dhcp pool Vlan5_6
+add prefix abcd:abcd:ab:1f::/64
+exit
+
+!---------------ip routes----------------
+!--routers
+
+ip route 17.0.0.16 255.255.255.252 17.0.0.6
+ip route 17.0.0.20 255.255.255.252 17.0.0.6
+ip route 17.0.0.24 255.255.255.252 17.0.0.6
+ip route 17.0.0.28 255.255.255.252 17.0.0.6
+ip route 17.0.0.32 255.255.255.252 17.0.0.6
+ip route 17.0.0.36 255.255.255.252 17.0.0.6
+
+
+ipv6 route a4::/126 a1::2
+ipv6 route a5::/126 a1::2
+ipv6 route a6::/126 a1::2
+ipv6 route a7::/126 a1::2
+ipv6 route a8::/126 a1::2
+ipv6 route a9::/126 a1::2
+
+!--V2
+ip route 17.0.4.0 255.255.254.0 17.0.0.6
+ip route 17.0.6.0 255.255.254.0 17.0.0.6
+ip route 17.0.8.0 255.255.254.0 17.0.0.6
+ip route 17.0.10.0 255.255.254.0 17.0.0.6
+
+ipv6 route abcd:abcd:ab:2b::/64 a1::2
+ipv6 route abcd:abcd:ab:3b::/64 a1::2
+ipv6 route abcd:abcd:ab:4b::/64 a1::2
+ipv6 route abcd:abcd:ab:5b::/64 a1::2
+!--V3
+ip route 17.0.0.64 255.255.255.240 17.0.0.6
+ip route 17.0.0.80 255.255.255.240 17.0.0.6
+ip route 17.0.0.96 255.255.255.240 17.0.0.6
+ip route 17.0.0.112 255.255.255.240 17.0.0.6
+ip route 17.0.0.128 255.255.255.240 17.0.0.6
+
+ipv6 route abcd:abcd:ab:2c::/64 a1::2
+ipv6 route abcd:abcd:ab:3c::/64 a1::2
+ipv6 route abcd:abcd:ab:4c::/64 a1::2
+ipv6 route abcd:abcd:ab:5c::/64 a1::2
+ipv6 route abcd:abcd:ab:6c::/64 a1::2
+!--V4
+ip route 17.1.0.0 255.255.0.0 17.0.0.6
+ip route 17.2.0.0 255.255.0.0 17.0.0.6
+ip route 17.3.0.0 255.255.0.0 17.0.0.6
+ip route 17.4.0.0 255.255.0.0 17.0.0.6
+
+ipv6 route abcd:abcd:ab:1e::/64 a1::2
+ipv6 route abcd:abcd:ab:2e::/64 a1::2
+ipv6 route abcd:abcd:ab:3e::/64 a1::2
+ipv6 route abcd:abcd:ab:4e::/64 a1::2
+!--V5
+ip route 17.0.16.0 255.255.252.0 17.0.0.6
+ip route 17.0.20.0 255.255.252.0 17.0.0.6
+
+ipv6 route abcd:abcd:ab:2f::/64 a1::2
+ipv6 route abcd:abcd:ab:3f::/64 a1::2
+
+
+
+R2
+en
+conf t
+ipv6 unicast-routing
+int Eth0/0/0
+ip add 17.0.0.6 255.255.255.252
+ipv6 add a1::2/126
+no shut
+int Eth0/1/0
+ip add 17.0.0.21 255.255.255.252
+ipv6 add a5::1/126
+no shut
+int Eth0/2/0
+ip add 17.0.0.17 255.255.255.252
+ipv6 add a4::1/126
+no shut
+int Eth0/3/0
+ip add 17.0.0.25 255.255.255.252
+ipv6 add a6::1/126
+no shut
+
+int Fa0/0
+no shut
+int Fa0/0.2
+encapsulation dot1Q 2
+ip add 17.0.5.254 255.255.254.0
+ipv6 add abcd:abcd:ab:2b::1/64
+ipv6 nd managed-config-flag
+ipv6 dhcp server Vlan2_6
+no shut
+int Fa0/0.3
+encapsulation dot1Q 3
+ip add 17.0.0.78 255.255.255.240
+ipv6 add abcd:abcd:ab:2c::1/64
+ipv6 nd managed-config-flag
+ipv6 dhcp server Vlan3_6
+no shut
+int Fa0/0.4
+encapsulation dot1Q 4
+ip add 17.1.255.254 255.255.0.0
+ipv6 add abcd:abcd:ab:1e::1/64
+ipv6 nd managed-config-flag
+ipv6 dhcp server Vlan4_6
+no shut
+int Fa0/0.5
+encapsulation dot1Q 5
+ip add 17.0.19.254 255.255.252.0
+ipv6 add abcd:abcd:ab:2f::1/64
+ipv6 nd managed-config-flag
+ipv6 dhcp server Vlan5_6
+no shut
+
+ip dhcp pool Vlan2_4
+network 17.0.4.0 255.255.254.0
+default-router 17.0.5.254
+ipv6 dhcp pool Vlan2_6
+add prefix abcd:abcd:ab:2b::/64
+
+ip dhcp pool Vlan3_4
+network 17.0.0.64 255.255.255.240
+default-router 17.0.0.78
+ipv6 dhcp pool Vlan3_6
+add prefix abcd:abcd:ab:2c::/64
+
+ip dhcp pool Vlan4_4
+network 17.1.0.0 255.255.0.0
+default-router 17.1.255.254
+ipv6 dhcp pool Vlan4_6
+add prefix abcd:abcd:ab:1e::/64
+
+ip dhcp pool Vlan5_4
+network 17.0.16.0 255.255.252.0
+default-router 17.0.19.254
+ipv6 dhcp pool Vlan5_6
+add prefix abcd:abcd:ab:2f::/64
+exit
+
+!---------------ip routes----------------
+!--routers
+ip route 17.0.0.8 255.255.255.252 17.0.0.18
+ip route 17.0.0.12 255.255.255.252 17.0.0.18
+
+ip route 17.0.0.28 255.255.255.252 17.0.0.18
+ip route 17.0.0.32 255.255.255.252 17.0.0.26
+ip route 17.0.0.36 255.255.255.252 17.0.0.26
+
+ipv6 route a2::/126 a4::2
+ipv6 route a3::/126 a4::2
+
+ipv6 route a7::/126 a4::2
+ipv6 route a8::/126 a6::2
+ipv6 route a9::/126 a6::2
+
+!--V2
+ip route 17.0.2.0 255.255.254.0 17.0.0.18
+ip route 17.0.6.0 255.255.254.0 17.0.0.18
+ip route 17.0.8.0 255.255.254.0 17.0.0.26
+ip route 17.0.10.0 255.255.254.0 17.0.0.26
+
+ipv6 route abcd:abcd:ab:1b::/64 a4::2
+ipv6 route abcd:abcd:ab:3b::/64 a4::2
+ipv6 route abcd:abcd:ab:4b::/64 a6::2
+ipv6 route abcd:abcd:ab:5b::/64 a6::2
+!--V3
+ip route 17.0.0.48 255.255.255.240 17.0.0.18
+ip route 17.0.0.80 255.255.255.240 17.0.0.18
+ip route 17.0.0.96 255.255.255.240 17.0.0.18
+ip route 17.0.0.112 255.255.255.240 17.0.0.26
+ip route 17.0.0.128 255.255.255.240 17.0.0.26
+
+ipv6 route abcd:abcd:ab:1c::/64 a4::2
+ipv6 route abcd:abcd:ab:3c::/64 a4::2
+ipv6 route abcd:abcd:ab:4c::/64 a4::2
+ipv6 route abcd:abcd:ab:5c::/64 a6::2
+ipv6 route abcd:abcd:ab:6c::/64 a6::2
+!--V4
+ip route 17.2.0.0 255.255.0.0 17.0.0.18
+ip route 17.3.0.0 255.255.0.0 17.0.0.18
+ip route 17.4.0.0 255.255.0.0 17.0.0.26
+
+ipv6 route abcd:abcd:ab:2e::/64 a4::2
+ipv6 route abcd:abcd:ab:3e::/64 a4::2
+ipv6 route abcd:abcd:ab:4e::/64 a6::2
+!--V5
+ip route 17.0.12.0 255.255.252.0 17.0.0.18
+ip route 17.0.20.0 255.255.252.0 17.0.0.26
+
+ipv6 route abcd:abcd:ab:1f::/64 a4::2
+ipv6 route abcd:abcd:ab:3f::/64 a6::2
+
+R3
+en
+conf t
+ipv6 unicast-routing
+int Eth0/0/0
+ip add 17.0.0.33 255.255.255.252
+ipv6 add a8::1/126
+no shut
+int Eth0/1/0
+ip add 17.0.0.10 255.255.255.252
+ipv6 add a2::2/126
+no shut
+int Eth0/2/0
+ip add 17.0.0.18 255.255.255.252
+ipv6 add a4::2/126
+no shut
+int Eth0/3/0
+ip add 17.0.0.29 255.255.255.252
+ipv6 add a7::1/126
+no shut
+int Fa0/0
+no shut
+
+int Fa0/0.3
+encapsulation dot1Q 3
+ip add 17.0.0.94 255.255.255.240
+ipv6 add abcd:abcd:ab:3c::1/64
+ipv6 nd managed-config-flag
+ipv6 dhcp server Vlan3_6
+no shut
+int Fa0/0.4
+encapsulation dot1Q 4
+ip add 17.2.255.254 255.255.0.0
+ipv6 add abcd:abcd:ab:2e::1/64
+ipv6 nd managed-config-flag
+ipv6 dhcp server Vlan4_6
+no shut
+
+
+ip dhcp pool Vlan3_4
+network 17.0.0.80 255.255.255.240
+default-router 17.0.0.94
+ipv6 dhcp pool Vlan3_6
+add prefix abcd:abcd:ab:3c::/64
+
+ip dhcp pool Vlan4_4
+network 17.2.0.0 255.255.0.0
+default-router 17.2.255.254
+ipv6 dhcp pool Vlan4_6
+add prefix abcd:abcd:ab:2e::/64
+exit
+
+!---------------ip routes----------------
+!--routers
+ip route 17.0.0.4 255.255.255.252 17.0.0.9
+ip route 17.0.0.12 255.255.255.252 17.0.0.30
+ip route 17.0.0.20 255.255.255.252 17.0.0.30
+ip route 17.0.0.24 255.255.255.252 17.0.0.9
+ip route 17.0.0.36 255.255.255.252 17.0.0.9
+
+ipv6 route a1::/126 a2::1
+ipv6 route a3::/126 a7::2
+ipv6 route a5::/126 a7::2
+ipv6 route a6::/126 a2::1
+ipv6 route a9::/126 a2::1
+
+!--V2
+ip route 17.0.2.0 255.255.254.0 17.0.0.9
+ip route 17.0.4.0 255.255.254.0 17.0.0.9
+ip route 17.0.6.0 255.255.254.0 17.0.0.30
+ip route 17.0.8.0 255.255.254.0 17.0.0.9
+ip route 17.0.10.0 255.255.254.0 17.0.0.9
+
+ipv6 route abcd:abcd:ab:1b::/64 a2::1
+ipv6 route abcd:abcd:ab:2b::/64 a2::1
+ipv6 route abcd:abcd:ab:3b::/64 a7::2
+ipv6 route abcd:abcd:ab:4b::/64 a2::1
+ipv6 route abcd:abcd:ab:5b::/64 a2::1
+!--V3
+ip route 17.0.0.48 255.255.255.240 17.0.0.9
+ip route 17.0.0.64 255.255.255.240 17.0.0.9
+ip route 17.0.0.96 255.255.255.240 17.0.0.30
+ip route 17.0.0.112 255.255.255.240 17.0.0.9
+ip route 17.0.0.128 255.255.255.240 17.0.0.9
+
+ipv6 route abcd:abcd:ab:1c::/64 a2::1
+ipv6 route abcd:abcd:ab:2c::/64 a2::1
+ipv6 route abcd:abcd:ab:4c::/64 a7::2
+ipv6 route abcd:abcd:ab:5c::/64 a2::1
+ipv6 route abcd:abcd:ab:6c::/64 a2::1
+!--V4
+ip route 17.1.0.0 255.255.0.0 17.0.0.9
+ip route 17.3.0.0 255.255.0.0 17.0.0.30
+ip route 17.4.0.0 255.255.0.0 17.0.0.9
+
+ipv6 route abcd:abcd:ab:1e::/64 a2::1
+ipv6 route abcd:abcd:ab:3e::/64 a7::2
+ipv6 route abcd:abcd:ab:4e::/64 a2::1
+!--V5
+ip route 17.0.12.0 255.255.252.0 17.0.0.9
+ip route 17.0.16.0 255.255.252.0 17.0.0.9
+ip route 17.0.20.0 255.255.252.0 17.0.0.9
+
+ipv6 route abcd:abcd:ab:1f::/64 a2::1
+ipv6 route abcd:abcd:ab:2f::/64 a2::1
+ipv6 route abcd:abcd:ab:3f::/64 a2::1
+
+R4
+en
+conf t
+ipv6 unicast-routing
+int Eth0/1/0
+ip add 17.0.0.22 255.255.255.252
+ipv6 add a5::2/126
+no shut
+int Eth0/2/0
+ip add 17.0.0.14 255.255.255.252
+ipv6 add a3::2/126
+no shut
+int Eth0/3/0
+ip add 17.0.0.30 255.255.255.252
+ipv6 add a7::2/126
+no shut
+int Fa0/0
+no shut
+
+int Fa0/0.2
+encapsulation dot1Q 2
+ip add 17.0.7.254 255.255.254.0
+ipv6 add abcd:abcd:ab:3b::1/64
+ipv6 nd managed-config-flag
+ipv6 dhcp server Vlan2_6
+no shut
+
+int Fa0/0.3
+encapsulation dot1Q 3
+ip add 17.0.0.110 255.255.255.240
+ipv6 add abcd:abcd:ab:4c::1/64
+ipv6 nd managed-config-flag
+ipv6 dhcp server Vlan3_6
+no shut
+
+int Fa0/0.4
+encapsulation dot1Q 4
+ip add 17.3.255.254 255.255.0.0
+ipv6 add abcd:abcd:ab:3e::1/64
+ipv6 nd managed-config-flag
+ipv6 dhcp server Vlan4_6
+no shut
+
+ip dhcp pool Vlan2_4
+network 17.0.6.0 255.255.254.0
+default-router 17.0.7.254
+ipv6 dhcp pool Vlan2_6
+add prefix abcd:abcd:ab:3b::/64
+
+ip dhcp pool Vlan3_4
+network 17.0.0.96 255.255.255.240
+default-router 17.0.0.110
+ipv6 dhcp pool Vlan3_6
+add prefix abcd:abcd:ab:4c::/64
+
+ip dhcp pool Vlan4_4
+network 17.3.0.0 255.255.0.0
+default-router 17.3.255.254
+ipv6 dhcp pool Vlan4_6
+add prefix abcd:abcd:ab:3e::/64
+exit
+
+!---------------ip routes----------------
+!--routers
+ip route 17.0.0.4 255.255.255.252 17.0.0.13
+ip route 17.0.0.8 255.255.255.252 17.0.0.21
+ip route 17.0.0.16 255.255.255.252 17.0.0.21
+ip route 17.0.0.24 255.255.255.252 17.0.0.21
+ip route 17.0.0.32 255.255.255.252 17.0.0.21
+ip route 17.0.0.36 255.255.255.252 17.0.0.21
+
+ipv6 route a1::/126 a3::1
+ipv6 route a2::/126 a5::1
+ipv6 route a4::/126 a5::1
+ipv6 route a6::/126 a5::1
+ipv6 route a8::/126 a5::1
+ipv6 route a9::/126 a5::1
+
+!--V2
+ip route 17.0.2.0 255.255.254.0 17.0.0.13
+ip route 17.0.4.0 255.255.254.0 17.0.0.21
+ip route 17.0.8.0 255.255.254.0 17.0.0.21
+ip route 17.0.10.0 255.255.254.0 17.0.0.21
+
+ipv6 route abcd:abcd:ab:1b::/64 a3::1
+ipv6 route abcd:abcd:ab:2b::/64 a5::1
+ipv6 route abcd:abcd:ab:4b::/64 a5::1
+ipv6 route abcd:abcd:ab:5b::/64 a5::1
+!--V3
+ip route 17.0.0.48 255.255.255.240 17.0.0.13
+ip route 17.0.0.64 255.255.255.240 17.0.0.21
+ip route 17.0.0.80 255.255.255.240 17.0.0.21
+ip route 17.0.0.112 255.255.255.240 17.0.0.21
+ip route 17.0.0.128 255.255.255.240 17.0.0.21
+
+ipv6 route abcd:abcd:ab:1c::/64 a3::1
+ipv6 route abcd:abcd:ab:2c::/64 a5::1
+ipv6 route abcd:abcd:ab:3c::/64 a5::1
+ipv6 route abcd:abcd:ab:5c::/64 a5::1
+ipv6 route abcd:abcd:ab:6c::/64 a5::1
+!--V4
+ip route 17.1.0.0 255.255.0.0 17.0.0.21
+ip route 17.2.0.0 255.255.0.0 17.0.0.21
+ip route 17.4.0.0 255.255.0.0 17.0.0.21
+
+ipv6 route abcd:abcd:ab:1e::/64 a5::1
+ipv6 route abcd:abcd:ab:2e::/64 a5::1
+ipv6 route abcd:abcd:ab:4e::/64 a5::1
+!--V5
+ip route 17.0.12.0 255.255.252.0 17.0.0.13
+ip route 17.0.16.0 255.255.252.0 17.0.0.21
+ip route 17.0.20.0 255.255.252.0 17.0.0.21
+
+ipv6 route abcd:abcd:ab:1f::/64 a3::1
+ipv6 route abcd:abcd:ab:2f::/64 a5::1
+ipv6 route abcd:abcd:ab:3f::/64 a5::1
+
+R5
+en
+conf t
+ipv6 unicast-routing
+int Eth0/0/0 
+ip add 17.0.0.34 255.255.255.252
+ipv6 add a8::2/126
+no shut
+int Eth0/1/0
+ip add 17.0.0.37 255.255.255.252
+ipv6 add a9::1/126
+no shut
+int Eth0/3/0
+ip add 17.0.0.26 255.255.255.252
+ipv6 add a6::2/126
+no shut
+int Fa0/0
+no shut
+
+int Fa0/0.2
+encapsulation dot1Q 2
+ip add 17.0.9.254 255.255.254.0
+ipv6 add abcd:abcd:ab:4b::1/64
+ipv6 nd managed-config-flag
+ipv6 dhcp server Vlan2_6
+no shut
+int Fa0/0.3
+encapsulation dot1Q 3
+ip add 17.0.0.126 255.255.255.240
+ipv6 add abcd:abcd:ab:5c::1/64
+ipv6 nd managed-config-flag
+ipv6 dhcp server Vlan3_6
+no shut
+int Fa0/0.4
+encapsulation dot1Q 4
+ip add 17.4.255.254 255.255.0.0
+ipv6 add abcd:abcd:ab:4e::1/64
+ipv6 nd managed-config-flag
+ipv6 dhcp server Vlan4_6
+no shut
+
+ip dhcp pool Vlan2_4
+network 17.0.8.0 255.255.254.0
+default-router 17.0.9.254
+ipv6 dhcp pool Vlan2_6
+add prefix abcd:abcd:ab:4b::/64
+
+ip dhcp pool Vlan3_4
+network 17.0.0.112 255.255.255.240
+default-router 17.0.0.126
+ipv6 dhcp pool Vlan3_6
+add prefix abcd:abcd:ab:5c::/64
+
+ip dhcp pool Vlan4_4
+network 17.4.0.0 255.255.0.0
+default-router 17.4.255.254
+ipv6 dhcp pool Vlan4_6
+add prefix abcd:abcd:ab:4e::/64
+exit
+
+!---------------ip routes----------------
+!--routers
+ip route 17.0.0.4 255.255.255.252 17.0.0.33
+ip route 17.0.0.8 255.255.255.252 17.0.0.33
+ip route 17.0.0.12 255.255.255.252 17.0.0.33
+ip route 17.0.0.16 255.255.255.252 17.0.0.33
+ip route 17.0.0.20 255.255.255.252 17.0.0.33
+ip route 17.0.0.28 255.255.255.252 17.0.0.33
+
+
+ipv6 route a1::/126 a8::1
+ipv6 route a2::/126 a8::1
+ipv6 route a3::/126 a8::1
+ipv6 route a4::/126 a8::1
+ipv6 route a5::/126 a8::1
+ipv6 route a7::/126 a8::1
+
+
+!--V2
+ip route 17.0.2.0 255.255.254.0 17.0.0.33
+ip route 17.0.4.0 255.255.254.0 17.0.0.33
+ip route 17.0.6.0 255.255.254.0 17.0.0.33
+ip route 17.0.10.0 255.255.254.0 17.0.0.38
+
+ipv6 route abcd:abcd:ab:1b::/64 a8::1
+ipv6 route abcd:abcd:ab:2b::/64 a8::1
+ipv6 route abcd:abcd:ab:3b::/64 a8::1
+ipv6 route abcd:abcd:ab:5b::/64 a9::2
+!--V3
+ip route 17.0.0.48 255.255.255.240 17.0.0.33
+ip route 17.0.0.64 255.255.255.240 17.0.0.33
+ip route 17.0.0.80 255.255.255.240 17.0.0.33
+ip route 17.0.0.96 255.255.255.240 17.0.0.33
+ip route 17.0.0.128 255.255.255.240 17.0.0.38
+
+ipv6 route abcd:abcd:ab:1c::/64 a8::1
+ipv6 route abcd:abcd:ab:2c::/64 a8::1
+ipv6 route abcd:abcd:ab:3c::/64 a8::1
+ipv6 route abcd:abcd:ab:4c::/64 a8::1
+ipv6 route abcd:abcd:ab:6c::/64 a9::2
+!--V4
+ip route 17.1.0.0 255.255.0.0 17.0.0.33
+ip route 17.2.0.0 255.255.0.0 17.0.0.33
+ip route 17.3.0.0 255.255.0.0 17.0.0.33
+
+ipv6 route abcd:abcd:ab:1e::/64 a8::1
+ipv6 route abcd:abcd:ab:2e::/64 a8::1
+ipv6 route abcd:abcd:ab:3e::/64 a8::1
+!--V5
+ip route 17.0.12.0 255.255.252.0 17.0.0.33
+ip route 17.0.16.0 255.255.252.0 17.0.0.33
+ip route 17.0.20.0 255.255.252.0 17.0.0.38
+
+ipv6 route abcd:abcd:ab:1f::/64 a8::1
+ipv6 route abcd:abcd:ab:2f::/64 a8::1
+ipv6 route abcd:abcd:ab:3f::/64 a9::2
+
+R6
+en
+conf t
+ipv6 unicast-routing
+int Eth0/1/0
+ip add 17.0.0.38 255.255.255.252
+ipv6 add a9::2/126
+no shut
+int Fa0/0
+no shut
+
+int Fa0/0.2
+encapsulation dot1Q 2
+ip add 17.0.11.254 255.255.254.0
+ipv6 add abcd:abcd:ab:5b::1/64
+ipv6 nd managed-config-flag
+ipv6 dhcp server Vlan2_6
+no shut
+int Fa0/0.3
+encapsulation dot1Q 3
+ip add 17.0.0.142 255.255.255.240
+ipv6 add abcd:abcd:ab:6c::1/64
+ipv6 nd managed-config-flag
+ipv6 dhcp server Vlan3_6
+no shut
+int Fa0/0.5
+encapsulation dot1Q 5
+ip add 17.0.23.254 255.255.252.0
+ipv6 add abcd:abcd:ab:3f::1/64
+ipv6 nd managed-config-flag
+ipv6 dhcp server Vlan5_6
+no shut
+
+ip dhcp pool Vlan2_4
+network 17.0.10.0 255.255.254.0
+default-router 17.0.11.254
+ipv6 dhcp pool Vlan2_6
+add prefix abcd:abcd:ab:5b::/64
+
+ip dhcp pool Vlan3_4
+network 17.0.0.128 255.255.255.240
+default-router 17.0.0.142
+ipv6 dhcp pool Vlan3_6
+add prefix abcd:abcd:ab:6c::/64
+
+ip dhcp pool Vlan5_4
+network 17.0.20.0 255.255.252.0
+default-router 17.0.23.254
+ipv6 dhcp pool Vlan5_6
+add prefix abcd:abcd:ab:3f::/64
+exit
+
+!---------------ip routes----------------
+!--routers
+ip route 17.0.0.4 255.255.255.252 17.0.0.37
+ip route 17.0.0.8 255.255.255.252 17.0.0.37
+ip route 17.0.0.12 255.255.255.252 17.0.0.37
+ip route 17.0.0.16 255.255.255.252 17.0.0.37
+ip route 17.0.0.20 255.255.255.252 17.0.0.37
+ip route 17.0.0.24 255.255.255.252 17.0.0.37
+ip route 17.0.0.28 255.255.255.252 17.0.0.37
+ip route 17.0.0.32 255.255.255.252 17.0.0.37
+
+ipv6 route a1::/126 a9::1
+ipv6 route a2::/126 a9::1
+ipv6 route a3::/126 a9::1
+ipv6 route a4::/126 a9::1
+ipv6 route a5::/126 a9::1
+ipv6 route a6::/126 a9::1
+ipv6 route a7::/126 a9::1
+ipv6 route a8::/126 a9::1
+
+!--V2
+ip route 17.0.2.0 255.255.254.0 17.0.0.37
+ip route 17.0.4.0 255.255.254.0 17.0.0.37
+ip route 17.0.6.0 255.255.254.0 17.0.0.37
+ip route 17.0.8.0 255.255.254.0 17.0.0.37
+
+ipv6 route abcd:abcd:ab:1b::/64 a9::1
+ipv6 route abcd:abcd:ab:2b::/64 a9::1
+ipv6 route abcd:abcd:ab:3b::/64 a9::1
+ipv6 route abcd:abcd:ab:4b::/64 a9::1
+!--V3
+ip route 17.0.0.48 255.255.255.240 17.0.0.37
+ip route 17.0.0.64 255.255.255.240 17.0.0.37
+ip route 17.0.0.80 255.255.255.240 17.0.0.37
+ip route 17.0.0.96 255.255.255.240 17.0.0.37
+ip route 17.0.0.112 255.255.255.240 17.0.0.37
+
+ipv6 route abcd:abcd:ab:1c::/64 a9::1
+ipv6 route abcd:abcd:ab:2c::/64 a9::1
+ipv6 route abcd:abcd:ab:3c::/64 a9::1
+ipv6 route abcd:abcd:ab:4c::/64 a9::1
+ipv6 route abcd:abcd:ab:5c::/64 a9::1
+!--V4
+ip route 17.1.0.0 255.255.0.0 17.0.0.37
+ip route 17.2.0.0 255.255.0.0 17.0.0.37
+ip route 17.3.0.0 255.255.0.0 17.0.0.37
+ip route 17.4.0.0 255.255.0.0 17.0.0.37
+
+ipv6 route abcd:abcd:ab:1e::/64 a9::1
+ipv6 route abcd:abcd:ab:2e::/64 a9::1
+ipv6 route abcd:abcd:ab:3e::/64 a9::1
+ipv6 route abcd:abcd:ab:4e::/64 a9::1
+!--V5
+ip route 17.0.12.0 255.255.252.0 17.0.0.37
+ip route 17.0.16.0 255.255.252.0 17.0.0.37
+
+ipv6 route abcd:abcd:ab:1f::/64 a9::1
+ipv6 route abcd:abcd:ab:2f::/64 a9::1
+
+!---------------- switch config ----------------
+
+SW1
+en
+conf t
+vlan 2
+name dos
+vlan 3
+name tres
+vlan 5
+name cinco
+
+int fa0/2
+switchport mode trunk
+no shut
+int fa0/3
+switchport mode access
+switchport access vlan 5
+no shut
+int fa0/4
+switchport mode access
+switchport access vlan 3
+no shut
+int fa0/5
+switchport mode access
+switchport access vlan 2
+no shut
+
+SW2
+en
+conf t
+vlan 2
+name dos
+vlan 3
+name tres
+vlan 5
+name cinco
+
+int fa0/1
+switchport mode trunk
+int fa0/2
+switchport mode trunk
+no shut
+int fa0/3
+switchport mode access
+switchport access vlan 5
+no shut
+int fa0/4
+switchport mode access
+switchport access vlan 5
+no shut
+
+
+SW3
+en
+conf t
+vlan 2
+name dos
+vlan 3
+name tres
+vlan 4 
+name cuatro
+vlan 5
+name cinco
+
+int fa0/1
+switchport mode trunk
+int fa0/2
+switchport mode trunk
+int fa0/3
+switchport mode trunk
+
+int fa0/4
+switchport mode access
+switchport access vlan 2
+no shut
+
+SW4
+en
+conf t
+vlan 2
+name dos
+vlan 4 
+name cuatro
+vlan 5
+name cinco
+
+
+int fa0/2
+switchport mode trunk
+int fa0/3
+switchport mode access
+switchport access vlan 4
+no shut
+int fa0/4
+switchport mode access
+switchport access vlan 2
+no shut
+int fa0/5
+switchport mode access
+switchport access vlan 5
+no shut
+
+Sw5
+en
+conf t
+vlan 3
+name tres
+vlan 5
+name cinco
+
+
+int fa0/3
+switchport mode trunk
+
+int fa0/4
+switchport mode access
+switchport access vlan 5
+no shut
+int fa0/5
+switchport mode access
+switchport access vlan 3
+no shut
+int fa0/6
+switchport mode access
+switchport access vlan 3
+no shut
+
+SW6
+en
+conf t
+vlan 3
+name tres
+vlan 4
+name cuatro
+
+
+int fa0/1
+switchport mode trunk
+
+int fa0/2
+switchport mode access
+switchport access vlan 4
+no shut
+int fa0/3
+switchport mode access
+switchport access vlan 3
+no shut
+int fa0/4
+switchport mode access
+switchport access vlan 3
+no shut
+
+SW7
+en
+conf t
+vlan 2
+name dos
+vlan 3
+name tres
+vlan 4
+name cuatro
+
+
+int fa0/1
+switchport mode trunk
+
+int fa0/2
+switchport mode access
+switchport access vlan 3
+no shut
+int fa0/3
+switchport mode access
+switchport access vlan 2
+no shut
+int fa0/4
+switchport mode access
+switchport access vlan 4
+no shut
+
+SW8
+en
+conf t
+vlan 2
+name dos
+vlan 3
+name tres
+vlan 4
+name cuatro
+
+
+int fa0/1
+switchport mode trunk
+int fa0/3
+switchport mode trunk
+
+int fa0/2
+switchport mode access
+switchport access vlan 3
+no shut
+int fa0/4
+switchport mode access
+switchport access vlan 4
+no shut
+
+SW9
+en
+conf t
+vlan 2
+name dos
+vlan 3
+name tres
+vlan 4
+name cuatro
+
+
+
+int fa0/3
+switchport mode trunk
+
+int fa0/4
+switchport mode access
+switchport access vlan 2
+no shut
+int fa0/5
+switchport mode access
+switchport access vlan 2
+no shut
+int fa0/6
+switchport mode access
+switchport access vlan 4
+no shut
+
+SW10
+en
+conf t
+vlan 2
+name dos
+vlan 3
+name tres
+vlan 5
+name cinco
+
+
+
+int fa0/1
+switchport mode trunk
+
+int fa0/3
+switchport mode access
+switchport access vlan 2
+no shut
+int fa0/4
+switchport mode access
+switchport access vlan 3
+no shut
+int fa0/5
+switchport mode access
+switchport access vlan 5
+no shut

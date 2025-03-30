@@ -1,0 +1,857 @@
+R1
+en
+conf t
+hostname R1
+int eth 0/0/0
+ip add 14.0.0.5 255.255.255.252
+no shut
+int eth 0/1/0
+ip add 14.0.0.9 255.255.255.252
+no shut
+int eth 0/3/0
+ip add 14.0.0.13 255.255.255.252
+no shut
+
+router ospf 10
+router-id 1.1.1.1
+redistribute connected subnets
+network 14.0.0.4 0.0.0.3 area 0
+network 14.0.0.8 0.0.0.3 area 0
+network 14.0.0.12 0.0.0.3 area 0
+exit
+
+
+
+R2 
+en
+conf t
+hostname R2
+int eth 0/0/0
+ip add 14.0.0.6 255.255.255.252
+no shut
+int eth 0/1/0
+ip add 14.0.0.25 255.255.255.252
+no shut
+int eth 0/3/0
+ip add 14.0.0.17 255.255.255.252
+no shut
+int eth 0/2/0
+ip add 14.0.0.29 255.255.255.252
+no shut
+int fa0/1
+ip add 14.0.0.21 255.255.255.252
+no shut
+
+router ospf 10
+router-id 2.2.3.2 
+redistribute connected subnets
+redistribute static subnets
+network 14.0.0.4 0.0.0.3 area 0
+network 14.0.0.28 0.0.0.3 area 2
+network 14.0.0.24 0.0.0.3 area 2
+network 14.0.0.20 0.0.0.3 area 2
+network 14.0.0.16 0.0.0.3 area 2
+exit
+
+!----------ip route------
+ip route 14.0.0.20 255.255.255.252 14.0.0.22
+ip route 14.0.0.24 255.255.255.252 14.0.0.26
+
+
+
+exit
+
+
+
+
+ip domain-name ulsa.com 
+crypto key generate rsa
+y
+1024
+service password-encryption
+enable secret abcd1234
+ip ssh ver 2
+line vty 0 4
+transport input ssh
+login local
+exit
+username admin privilege 15 secret adminabcd
+exit
+
+R3
+en
+conf t
+hostname R3
+int eth 0/0/0
+ip add 14.0.0.45 255.255.255.252
+no shut
+int eth 0/1/0
+ip add 14.0.0.26 255.255.255.252
+no shut
+int eth 0/2/0
+ip add 14.0.0.37 255.255.255.252
+no shut
+int eth 0/3/0
+ip add 14.0.0.41 255.255.255.252
+no shut
+int fa0/0
+ip add 14.0.0.33 255.255.255.252
+no shut
+
+router ospf 10
+router-id 3.3.5.3
+redistribute connected subnets
+redistribute static subnets
+network 14.0.0.24 0.0.0.3 area 2
+network 14.0.0.44 0.0.0.3 area 2
+network 14.0.0.40 0.0.0.3 area 2
+network 14.0.0.36 0.0.0.3 area 3
+network 14.0.0.32 0.0.0.3 area 3
+exit
+
+!----------ip route------
+ip route 14.0.0.32 255.255.255.252 14.0.0.34
+ip route 14.2.0.0 255.255.128.0 14.0.0.34
+ip route 14.0.16.0 255.255.252.0 14.0.0.34
+ip route 14.6.0.0 255.255.0.0 14.0.0.34
+exit
+
+ip domain-name ulsa.com 
+crypto key generate rsa
+y
+1024
+service password-encryption
+enable secret abcd1234
+ip ssh ver 2
+line vty 0 4
+transport input ssh
+login local
+exit
+username admin privilege 15 secret adminabcd
+exit
+
+R4
+en
+conf t
+hostname R4
+int eth 0/0/0
+ip add 14.0.0.49 255.255.255.252
+no shut
+int eth 0/2/0
+ip add 14.0.0.38 255.255.255.252
+no shut
+int eth 0/3/0
+ip add 14.0.0.14 255.255.255.252
+no shut
+int fa0/0
+no shut
+
+int fa0/0.2
+encapsulation dot1q 2
+ip add 14.2.255.254 255.255.128.0
+no shut
+int fa0/0.5
+encapsulation dot1q 5
+ip add 14.0.3.254 255.255.255.0
+no shut
+
+ip dhcp pool vlan2_4
+network 14.2.128.0 255.255.128.0
+default-router 14.2.255.254
+exit
+ip dhcp pool vlan5_4
+network 14.0.3.0 255.255.255.0
+default-router 14.0.3.254
+exit
+
+router ospf 10
+router-id 3.3.2.3
+redistribute connected subnets
+redistribute static subnets
+network 14.0.0.12 0.0.0.3 area 0
+network 14.0.0.48 0.0.0.3 area 2
+network 14.0.0.36 0.0.0.3 area 3
+network 14.2.128.0 0.0.127.255 area 3
+network 14.0.3.0 0.0.127.255 area 3
+exit
+
+!----------ip route------
+
+exit
+
+ip domain-name ulsa.com 
+crypto key generate rsa
+y
+1024
+service password-encryption
+enable secret abcd1234
+ip ssh ver 2
+line vty 0 4
+transport input ssh
+login local
+exit
+username admin privilege 15 secret adminabcd
+exit
+
+R5
+en
+conf t
+hostname R5
+int eth 0/0/0
+ip add 14.0.0.50 255.255.255.252
+no shut
+int eth 0/1/0
+ip add 14.0.0.10 255.255.255.252
+no shut
+int eth 0/2/0
+ip add 14.0.0.30 255.255.255.252
+no shut
+int eth 0/3/0
+ip add 14.0.0.42 255.255.255.252
+no shut
+int fa0/1
+ip add 14.0.0.53 255.255.255.252
+no shut
+
+router ospf 10
+router-id 2.2.4.2
+redistribute connected subnets
+redistribute static subnets
+network 14.0.0.8 0.0.0.3 area 0
+network 14.0.0.28 0.0.0.3 area 2
+network 14.0.0.40 0.0.0.3 area 2
+network 14.0.0.48 0.0.0.3 area 2
+network 14.0.0.52 0.0.0.3 area 2
+exit
+
+!----------ip route------
+
+exit
+
+ip domain-name ulsa.com 
+crypto key generate rsa
+y
+1024
+service password-encryption
+enable secret abcd1234
+ip ssh ver 2
+line vty 0 4
+transport input ssh
+login local
+exit
+username admin privilege 15 secret adminabcd
+exit
+
+R6
+    en
+    conf t
+    hostname R6
+    int eth 0/0/0
+    ip add 14.0.0.46 255.255.255.252
+    no shut
+    int fa0/1
+    ip add 14.0.0.22 255.255.255.252
+    no shut
+    int eth 0/1/0
+    ip add 14.0.0.57 255.255.255.252
+    no shut
+
+    router ospf 10
+    router-id 2.2.5.2
+    redistribute connected subnets
+    redistribute static subnets
+    network 14.0.0.44 0.0.0.3 area 2
+    network 14.0.0.20 0.0.0.3 area 2
+    network 14.0.0.57 0.0.0.3 area 2
+    exit
+
+!----------ip route------
+ip route 14.0.0.56 255.255.255.252 14.0.0.58
+ip route 14.1.0.0 255.255.128.0 14.0.0.58
+ip route 14.0.8.0 255.255.252.0 14.0.0.58
+ip route 14.4.0.0 255.255.0.0 14.0.0.58
+ip route 14.0.2.0 255.255.255.0 14.0.0.58
+exit
+
+
+
+SWC1 
+en
+conf t
+ip routing
+hostname SWC1
+vlan 2
+name dos
+vlan 3
+name tres
+vlan 4
+name cuatro
+vlan 5
+name cinco
+int gi1/0/1
+no switchport
+ip add 14.0.0.18 255.255.255.252
+no shut  
+
+int vlan 2
+ip add 14.0.255.254 255.255.128.0
+no shut
+int vlan 3 
+ip add 14.0.7.254 255.255.252.0
+no shut
+int vlan 4
+ip add 14.3.255.254 255.255.0.0
+no shut
+int vlan 5
+ip add 14.0.1.254 255.255.255.0
+no shut
+
+ip dhcp pool vlan2_4
+network 14.0.128.0 255.255.128.0
+default-router 14.0.255.254
+exit
+ip dhcp pool vlan3_4
+network 14.0.4.0 255.255.252.0
+default-router 14.0.7.254
+exit
+ip dhcp pool vlan4_4 
+network 14.3.0.0 255.255.0.0
+default-router 14.3.255.254
+exit
+ip dhcp pool vlan5_4 
+network 14.0.1.0 255.255.255.0
+default-router 14.0.1.254
+exit
+
+int gi1/0/2
+switchport mode trunk
+exit
+
+router ospf 10
+router-id 2.2.6.2
+redistribute connected subnets
+redistribute static subnets
+network 14.0.0.16 0.0.0.3 area 2
+network 14.0.128.0 0.0.127.255 area 2
+network 14.0.4.0 0.0.3.255 area 2
+network 14.3.0.0 0.0.255.255 area 2
+network 14.0.1.0 0.0.0.255 area 2
+exit
+
+ip domain-name ulsa.com 
+crypto key generate rsa
+y
+1024
+service password-encryption
+enable secret abcd1234
+ip ssh ver 2
+line vty 0 4
+transport input ssh
+login local
+exit
+username admin privilege 15 secret adminabcd
+exit
+
+SWC2
+en
+conf t
+ip routing
+hostname SWC2
+vlan 2 
+name dos
+vlan 3
+name tres
+vlan 4
+name cuatro
+vlan 5
+name cinco
+
+int gi1/0/1
+no switchport
+ip add 15.0.0.58 255.255.255.252
+no shut
+
+int vlan 2
+ip add 14.1.127.254 255.255.128.0
+no shut
+int vlan 3 
+ip add 14.0.11.254 255.255.252.0
+no shut
+int vlan 4
+ip add 14.4.255.254 255.255.0.0
+no shut
+int vlan 5
+ip add 14.0.2.254 255.255.255.0
+no shut
+
+ip dhcp pool vlan2_4
+network 14.1.0.0 255.255.128.0
+default-router 14.1.127.254
+exit
+ip dhcp pool vlan3_4
+network 14.0.8.0 255.255.252.0
+default-router 14.0.11.254
+exit
+ip dhcp pool vlan4_4 
+network 14.4.0.0 255.255.0.0
+default-router 14.4.255.254
+exit
+ip dhcp pool vlan5_4
+network 14.0.2.0 255.255.255.0
+default-router 14.0.2.254
+exit
+
+int gi1/0/2
+switchport mode trunk
+exit
+
+router ospf 10
+router-id 2.2.7.2
+redistribute connected subnets
+redistribute static subnets
+network 14.0.0.56 0.0.0.3 area 2 
+network 14.1.0.0 0.0.127.255 area 2
+network 14.0.8.0 0.0.3.255 area 2
+network 14.4.0.0 0.0.255.255 area 2
+network 14.0.2.0 0.0.0.255 area 2
+exit
+
+ip domain-name ulsa.com 
+crypto key generate rsa
+y
+1024
+service password-encryption
+enable secret abcd1234
+ip ssh ver 2
+line vty 0 4
+transport input ssh
+login local
+exit
+username admin privilege 15 secret adminabcd
+exit
+
+
+SWC3
+    en
+    conf t
+    ip routing
+    hostname SWC3
+    int vlan 1
+    ip add 192.168.3.254 255.255.255.0
+    vlan 2
+    name dos
+    vlan 3
+    name tres
+    vlan 4
+    name cuatro
+    vlan 6
+    name invitados
+    vlan 7
+    name alumnos
+    vlan 8 
+    name docentes
+    vlan 9
+    name nativa
+
+    int gi1/0/1
+    no switchport
+    ip add 14.0.0.54 255.255.255.252
+    no shut
+
+    int vlan 2
+    ip add 14.1.255.254 255.255.128.0
+    no shut
+    int vlan 3
+    ip add 14.0.15.254 255.255.252.0
+    no shut
+    int vlan 4
+    ip add 14.5.255.254 255.255.0.0
+    no shut
+    int vlan 6
+    ip add 60.0.0.254 255.255.255.0
+    no shut
+    int vlan 7
+    ip add 70.0.0.254 255.255.255.0
+    no shut
+    int vlan 8
+    ip add 80.0.0.254 255.255.255.0
+    no shut
+    int vlan 9
+    ip add 14.0.0.78 255.255.255.240
+    no shut
+
+
+    ip dhcp pool vlan2_4
+    network 14.1.128.0 255.255.128.0
+    default-router 14.1.255.254
+    exit
+    ip dhcp pool vlan3_4
+    network 14.0.12.0 255.255.252.0
+    default-router 14.0.15.254
+    exit
+    ip dhcp pool vlan4_4
+    network 14.5.0.0 255.255.0.0
+    default-router 14.5.255.254
+    exit
+    ip dhcp pool invitados
+    network 60.0.0.0 255.255.255.0
+    default-router 60.0.0.254
+    exit
+    ip dhcp pool alumnos
+    network 70.0.0.0 255.255.255.0
+    default-router 70.0.0.254
+    exit
+    ip dhcp pool docentes
+    network 80.0.0.0 255.255.255.0
+    default-router 80.0.0.254
+    exit  
+    ip dhcp pool Vlannativa
+    network 14.0.0.64 255.255.255.240
+    default-router 14.0.0.78
+    exit
+
+    int gi1/0/2
+    switchport trunk native vlan 9
+    switchport mode trunk
+    exit
+    int gi1/0/3 
+    switchport trunk native vlan 9
+    switchport mode trunk
+    exit
+    int gi1/0/4
+    switchport trunk native vlan 9
+    switchport mode trunk
+    int gi1/0/5 
+    switchport mode access
+    switchport access vlan 9
+    exit
+    int gi1/0/6
+    no switchport
+    ip add 192.168.1.254 255.255.255.0
+    no shut 
+
+    router ospf 10
+    router-id 2.2.8.2
+    redistribute connected subnets
+
+    network 14.0.0.52 0.0.0.3 area 2
+    network 14.1.128.0 0.0.127.255 area 2
+    network 14.0.12.0 0.0.3.255 area 2
+    network 14.5.0.0 0.0.255.255 area 2
+    network 60.0.0.0 0.0.0.255 area 2
+    network 70.0.0.0 0.0.0.255 area 2
+    network 80.0.0.0 0.0.0.255 area 2
+    network 14.0.0.64 0.0.0.15 area 2
+    exit
+
+
+
+
+
+SWC4
+en
+conf t
+ip routing
+hostname SWC4
+vlan 2
+name dos
+vlan 3
+name tres
+vlan 4
+name cuatro
+
+int gi1/0/1
+no switchport
+ip add 14.0.0.34 255.255.255.252
+no shut
+
+int vlan 2
+ip add 14.2.127.254 255.255.128.0
+no shut
+int vlan 3
+ip add 14.0.19.254 255.255.252.0
+no shut
+int vlan 4
+ip add 14.6.255.254 255.255.0.0
+no shut
+
+ip dhcp pool vlan2_4
+network 14.2.0.0 255.255.128.0
+default-router 14.2.127.254
+exit
+ip dhcp pool vlan3_4 
+network 14.0.16.0 255.255.252.0
+default-router 14.0.19.254
+exit
+ip dhcp pool vlan4_4
+network 14.6.0.0 255.255.0.0
+default-router 14.6.255.254
+exit
+
+int gi1/0/2
+switchport mode trunk
+exit
+
+router ospf 10
+router-id 3.3.4.3
+redistribute connected subnets
+redistribute static subnets
+network 14.0.0.32 0.0.0.3 area 3
+network 14.2.0.0 0.0.127.255 area 3
+network 14.0.16.0 0.0.3.255 area 3
+network 14.6.0.0 0.0.255.255 area 3
+exit
+
+
+!-------------------------------switches--------------------------------
+sw1 
+en
+conf t
+hostname sw1
+vlan 2
+name dos
+vlan 4
+name cuatro
+vlan 5
+name cinco
+vlan 3
+name tres
+
+
+int gi0/2
+switchport mode trunk
+exit
+int fa0/1
+switchport mode trunk
+exit
+int fa0/2
+switchport mode access
+switchport access vlan 4
+int fa0/3
+switchport mode access
+switchport access vlan 2
+
+
+
+SW2
+en
+conf t
+hostname SW2
+vlan 2
+name dos
+vlan 3
+name tres
+vlan 5
+name cinco
+
+int fa0/1
+switchport mode trunk
+int fa0/2
+switchport mode access
+switchport access vlan 5
+int fa0/3
+switchport mode access
+switchport access vlan 3
+int fa0/4
+switchport mode access
+switchport access vlan 2
+
+sw3 
+en
+conf t 
+hostname sw3
+spanning-tree vlan 1 priority 4096
+vlan 2
+name dos
+vlan 3
+name tres
+vlan 4
+name cuatro
+vlan 5
+name cinco
+
+int gi0/2
+switchport mode trunk
+int fa0/3 
+switchport mode access
+switchport access vlan 3
+int fa0/4
+switchport mode access
+switchport access vlan 2
+int fa0/1
+switchport mode trunk
+int fa0/2
+switchport mode trunk
+
+sw4
+en
+conf t
+hostname sw4
+vlan 4
+name cuatro
+vlan 5
+name cinco
+
+int fa0/1
+switchport mode trunk
+int fa0/2
+switchport mode access
+switchport access vlan 5
+int fa0/3
+switchport mode trunk
+int fa0/4
+switchport mode access
+switchport access vlan 4
+
+
+SW5
+en
+conf t
+hostname sw5
+vlan 2
+name dos
+vlan 5
+name cinco
+
+int fa0/3
+switchport mode trunk
+int fa0/4
+switchport mode access
+switchport access vlan 2
+int fa0/5
+switchport mode access
+switchport access vlan 5
+in fa0/2
+switchport mode trunk
+
+sw6
+en
+conf t
+hostname sw6
+vlan 2
+name dos
+vlan 3
+name tres
+vlan 4
+name cuatro
+
+int range fa0/1-3
+switchport mode trunk
+channel-group 1 mode active
+exit
+int fa0/4
+switchport mode access
+switchport access vlan 4
+int fa0/5
+switchport mode access
+switchport access vlan 3
+
+sw7
+en
+conf t
+hostname sw7
+vlan 2
+name dos
+vlan 3
+name tres
+vlan 4
+name cuatro
+
+int range fa0/1-3
+switchport mode trunk
+channel-group 1 mode passive
+exit
+int fa0/4
+switchport mode access
+switchport access vlan 4
+int fa0/5
+switchport mode access
+switchport access vlan 2
+int fa0/6
+switchport mode access
+switchport access vlan 3
+
+sw8
+en
+conf t
+hostname sw8
+vlan 2
+name dos
+vlan 5
+name cinco
+
+int fa0/1
+switchport mode trunk
+int fa0/2
+switchport mode access
+switchport access vlan 2
+int fa0/3
+switchport mode access
+switchport access vlan 5
+int fa0/4
+switchport mode access
+switchport access vlan 5
+
+
+
+
+
+
+SW1
+en
+conf t
+vlan 2
+name dos
+vlan 3 
+name tres
+vlan 4
+name cuatro
+vlan 6
+name invitados
+vlan 7
+name alumnos
+vlan 8
+name docentes
+vlan 9
+name nativa
+exit
+
+int gi0/2
+switchport trunk native vlan 9
+switchport mode trunk
+int fa0/1
+switchport trunk native vlan 9
+switchport mode trunk
+
+
+SW9
+en
+conf t
+vlan 2
+name dos
+vlan 3
+name tres
+vlan 4
+name cuatro
+vlan 6
+name invitados
+vlan 7
+name alumnos
+vlan 8
+name docentes
+vlan 9
+name nativa
+
+int gi0/2
+switchport trunk native vlan 9
+switchport mode trunk
+int fa0/1
+switchport trunk native vlan 9
+switchport mode trunk
+int fa0/2
+switchport mode access
+switchport access vlan 2
+int fa0/3
+switchport mode access
+switchport access vlan 3
+

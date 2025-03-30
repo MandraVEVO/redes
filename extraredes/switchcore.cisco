@@ -1,0 +1,69 @@
+R1
+en
+conf t
+int Fa0/0
+ip add 192.168.1.1 /24
+
+SWcore
+en
+conf t
+vlan 2
+name VLAN2
+
+int fa0/1
+no switchport
+ip add 192.168.1.2 /24
+no shut
+exit
+int VLAN2
+ip add 192.168.2.254 255.255.255.0
+no shut
+exit
+
+ip dhcp pool VLAN2
+network 192.168.2.0 255.255.255.0
+default-router 192.168.2.254
+
+!--------- ejercicio
+R1
+en
+conf t 
+int fa0/0
+ip add 192.168.1.5 255.255.255.252
+no shut
+
+SWcore
+en
+conf t
+vlan 50
+name cincuenta
+vlan 30 
+name treinta
+exit
+int gi1/0/1
+no switchport
+ip add  192.168.1.6 255.255.255.252
+no shut
+exit
+int vlan 50
+ip add 50.0.0.254 255.255.255.0
+no shut
+int vlan 30
+ip add 30.0.0.254 255.255.255.0
+no shut
+exit
+
+ip dhcp pool vcincuenta
+network 50.0.0.0 255.255.255.0
+default-router 50.0.0.254
+exit
+ip dhcp pool vtreinta
+network 30.0.0.0 255.255.255.0
+default-router 30.0.0.254 
+exit
+int Gi1/0/2
+switchport access vlan 50
+int Gi1/0/3
+switchport access vlan 30
+int Gi1/0/4
+switchport access vlan 50

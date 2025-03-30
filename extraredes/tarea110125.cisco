@@ -1,0 +1,2452 @@
+R1
+en
+conf t
+ipv6 unicast-routing
+int Eth0/0/0
+ip add 21.0.0.5 255.255.255.252
+ipv6 add a1::1/126
+no shut
+int Eth0/1/0
+ip add 21.0.0.9 255.255.255.252
+ipv6 add a2::1/126
+no shut
+int Eth0/2/0
+ip add 21.0.0.17 255.255.255.252
+ipv6 add a4::1/126
+no shut
+int Eth1/1
+ip add 21.0.0.13 255.255.255.252
+ipv6 add a3::1/126
+no shut
+
+int fa0/0
+no shut
+int fa0/0.2
+encapsulation dot1Q 2
+ip add 21.0.7.254 255.255.252.0
+ipv6 add abcd:ab:ac:1a::1/64
+ipv6 nd managed-config-flag
+ipv6 dhcp server Vlan2_6 
+no shut
+int fa0/0.3
+encapsulation dot1Q 3
+ip add 21.0.255.254 255.255.128.0
+ipv6 add abcd:ab:ac:1b::1/64
+ipv6 nd managed-config-flag
+ipv6 dhcp server Vlan3_6
+no shut
+int fa0/0.4
+encapsulation dot1Q 4
+ip add 21.7.255.254 255.252.0.0
+ipv6 add abcd:ab:ac:1c::1/64
+ipv6 nd managed-config-flag
+ipv6 dhcp server Vlan4_6
+no shut
+int fa0/0.5
+encapsulation dot1Q 5
+ip add 21.0.0.94 255.255.255.240
+ipv6 add abcd:ab:ac:1d::1/64
+ipv6 nd managed-config-flag
+ipv6 dhcp server Vlan5_6
+no shut
+
+ip dhcp pool Vlan2_4
+network 21.0.4.0 255.255.252.0
+default-router 21.0.7.254
+ipv6 dhcp pool Vlan2_6
+add prefix abcd:ab:ac:1a::/64
+exit
+ip dhcp pool Vlan3_4
+network 21.0.128.0 255.255.128.0
+default-router 21.0.255.254
+ipv6 dhcp pool Vlan3_6
+add prefix abcd:ab:ac:1b::/64
+exit
+ip dhcp pool Vlan4_4
+network 21.4.0.0 255.252.0.0
+default-router 21.7.255.254
+ipv6 dhcp pool Vlan4_6
+add prefix abcd:ab:ac:1c::/64
+exit
+ip dhcp pool Vlan5_4
+network 21.0.0.80 255.255.255.240
+default-router 21.0.0.94
+ipv6 dhcp pool Vlan5_6
+add prefix abcd:ab:ac:1d::/64
+exit
+
+!---ip routes
+!-routers y switchescore
+
+ip route 21.0.0.20 255.255.255.252 21.0.0.6
+ip route 21.0.0.24 255.255.255.252 21.0.0.6
+ip route 21.0.0.28 255.255.255.252 21.0.0.10
+ip route 21.0.0.32 255.255.255.252 21.0.0.10
+ip route 21.0.0.36 255.255.255.252 21.0.0.10
+ip route 21.0.0.40 255.255.255.252 21.0.0.10
+ip route 21.0.0.44 255.255.255.252 21.0.0.10
+ip route 21.0.0.48 255.255.255.252 21.0.0.10
+ip route 21.0.0.52 255.255.255.252 21.0.0.10
+ip route 21.0.0.56 255.255.255.252 21.0.0.10
+ip route 21.0.0.60 255.255.255.252 21.0.0.10
+ip route 21.0.0.64 255.255.255.252 21.0.0.10
+ip route 21.0.0.68 255.255.255.252 21.0.0.6
+ip route 21.0.0.72 255.255.255.252 21.0.0.6
+ip route 21.0.0.76 255.255.255.252 21.0.0.10
+
+
+ipv6 route a5::/126 a1::2/126
+ipv6 route a6::/126 a1::2/126
+ipv6 route a7::/126 a2::2/126
+ipv6 route a8::/126 a2::2/126
+ipv6 route a9::/126 a2::2/126
+ipv6 route a10::/126 a2::2/126
+ipv6 route a11::/126 a2::2/126
+ipv6 route a12::/126 a2::2/126
+ipv6 route a13::/126 a2::2/126
+ipv6 route a14::/126 a2::2/126
+ipv6 route a15::/126 a2::2/126
+ipv6 route a16::/126 a2::2/126
+ipv6 route a17::/126 a1::2/126
+ipv6 route a18::/126 a1::2/126
+ipv6 route a19::/126 a2::2/126
+
+
+!-v2
+ip route 21.0.8.0 255.255.252.0 21.0.0.10
+ip route 21.0.12.0 255.255.252.0 21.0.0.10
+ip route 21.0.16.0 255.255.252.0 21.0.0.10
+
+ipv6 route abcd:ab:ac:2a::/64 a2::2
+ipv6 route abcd:ab:ac:3a::/64 a2::2
+ipv6 route abcd:ab:ac:4a::/64 a2::2
+
+!-v3
+ip route 21.1.0.0 255.255.128.0 21.0.0.6
+ip route 21.1.128.0 255.255.128.0 21.0.0.10
+ip route 21.2.0.0 255.255.128.0 21.0.0.10
+ip route 21.2.128.0 255.255.128.0 21.0.0.6
+
+ipv6 route abcd:ab:ac:3b::/64 a2::2
+ipv6 route abcd:ab:ac:4b::/64 a2::2
+
+!-v4
+ip route 21.8.0.0 255.252.0.0 21.0.0.6
+ip route 21.12.0.0 255.252.0.0 21.0.0.10
+ip route 21.16.0.0 255.252.0.0 21.0.0.10
+
+ipv6 route abcd:ab:ac:3c::/64 a2::2
+ipv6 route abcd:ab:ac:4c::/64 a2::2
+
+!-v5
+ip route 21.0.0.96 255.255.255.240 21.0.0.6
+ip route 21.0.0.112 255.255.255.240 21.0.0.10
+ip route 21.0.0.128 255.255.255.240 21.0.0.10
+
+ipv6 route abcd:ab:ac:2d::/64 a1::2
+ipv6 route abcd:ab:ac:3d::/64 a2::2
+ipv6 route abcd:ab:ac:4d::/64 a2::2
+
+!-v6
+ip route 21.0.2.0 255.255.254.0 21.0.0.6
+ip route 21.0.24.0 255.255.254.0 21.0.0.6
+ip route 21.0.26.0 255.255.254.0 21.0.0.10
+ip route 21.0.28.0 255.255.254.0 21.0.0.10
+ip route 21.0.30.0 255.255.254.0 21.0.0.10
+ip route 21.0.32.0 255.255.254.0 21.0.0.10
+ip route 21.0.34.0 255.255.254.0 21.0.0.10
+ip route 21.0.36.0 255.255.254.0 21.0.0.6
+
+ipv6 route abcd:ab:ac:1e::/64 a1::2
+ipv6 route abcd:ab:ac:3e::/64 a2::2
+ipv6 route abcd:ab:ac:4e::/64 a2::2
+ipv6 route abcd:ab:ac:5e::/64 a2::2
+ipv6 route abcd:ab:ac:6e::/64 a2::2
+ipv6 route abcd:ab:ac:7e::/64 a2::2
+ipv6 route abcd:ab:ac:8e::/64 a1::2
+
+!-v7
+ip route 21.24.0.0 255.248.0.0 21.0.0.10
+ip route 21.32.0.0 255.248.0.0 21.0.0.10
+ip route 21.40.0.0 255.248.0.0 21.0.0.10
+ip route 21.48.0.0 255.248.0.0 21.0.0.10
+ip route 21.56.0.0 255.248.0.0 21.0.0.6
+
+ipv6 route abcd:ab:ac:1f::/64 a2::2
+ipv6 route abcd:ab:ac:2f::/64 a2::2
+ipv6 route abcd:ab:ac:3f::/64 a2::2
+ipv6 route abcd:ab:ac:4f::/64 a2::2
+
+!-wlan
+ip route 10.0.0.0 255.255.255.0 21.0.0.10
+ip route 10.0.1.0 255.255.255.0 21.0.0.10
+ip route 20.0.0.0 255.255.255.0 21.0.0.10
+ip route 30.0.0.0 255.255.255.0 21.0.0.10
+ip route 40.0.0.0 255.255.255.0 21.0.0.10
+ip route 50.0.0.0 255.255.255.0 21.0.0.10
+
+
+
+R2
+en
+conf t
+ipv6 unicast-routing
+int Eth0/0/0
+ip add 21.0.0.6 255.255.255.252
+ipv6 add a1::2/126
+no shut
+int Eth0/1/0
+ip add 21.0.0.25 255.255.255.252
+ipv6 add a6::1/126
+no shut
+int Eth0/2/0
+ip add 21.0.0.23 255.255.255.252
+ipv6 add a5::1/126
+no shut
+int fa0/1
+ip add 21.0.0.73 255.255.255.252
+no shut
+
+int fa0/0
+no shut
+int fa0/0.3
+encapsulation dot1Q 3
+ip add 21.1.127.254 255.255.128.0
+standby 1 ip 21.1.127.252
+standby 1 priority 150
+standby 1 preempt
+no shut
+exit
+int fa0/0.4
+encapsulation dot1Q 4
+ip add 21.11.255.254 255.252.0.0
+standby 1 ip 21.11.255.252
+standby 1 priority 150
+standby 1 preempt
+no shut
+exit
+int fa0/0.6
+encapsulation dot1Q 6
+ip add 21.0.25.254 255.255.254.0
+standby 1 ip 21.0.25.252
+standby 1 priority 150
+standby 1 preempt
+no shut
+exit
+
+!---ip routes
+!-routers y switchescore
+ip route 21.0.0.8 255.255.255.252 21.0.0.22
+ip route 21.0.0.12 255.255.255.252 21.0.0.22
+ip route 21.0.0.16 255.255.255.252 21.0.0.22
+ip route 21.0.0.28 255.255.255.252 21.0.0.22
+ip route 21.0.0.32 255.255.255.252 21.0.0.22
+ip route 21.0.0.36 255.255.255.252 21.0.0.22
+ip route 21.0.0.40 255.255.255.252 21.0.0.22
+ip route 21.0.0.44 255.255.255.252 21.0.0.22
+ip route 21.0.0.48 255.255.255.252 21.0.0.22
+ip route 21.0.0.52 255.255.255.252 21.0.0.22
+ip route 21.0.0.56 255.255.255.252 21.0.0.22
+ip route 21.0.0.60 255.255.255.252 21.0.0.22
+ip route 21.0.0.64 255.255.255.252 21.0.0.22
+ip route 21.0.0.68 255.255.255.252 21.0.0.26
+ip route 21.0.0.76 255.255.255.252 21.0.0.22
+
+ipv6 route a2::/126 a5::2
+ipv6 route a3::/126 a5::2
+ipv6 route a4::/126 a5::2
+ipv6 route a7::/126 a5::2
+ipv6 route a8::/126 a5::2
+ipv6 route a9::/126 a5::2
+ipv6 route a10::/126 a5::2
+ipv6 route a11::/126 a5::2
+ipv6 route a12::/126 a5::2
+ipv6 route a13::/126 a5::2
+ipv6 route a14::/126 a5::2
+ipv6 route a15::/126 a5::2
+ipv6 route a16::/126 a5::2
+ipv6 route a17::/126 a6::2
+ipv6 route a19::/126 a5::2
+
+
+!-v2
+ip route 21.0.4.0 255.255.252.0 21.0.0.22
+ip route 21.0.8.0 255.255.252.0 21.0.0.22
+ip route 21.0.12.0 255.255.252.0 21.0.0.22
+ip route 21.0.16.0 255.255.252.0 21.0.0.22
+
+ipv6 route abcd:ab:ac:1a::/64 a5::2
+ipv6 route abcd:ab:ac:2a::/64 a5::2
+ipv6 route abcd:ab:ac:3a::/64 a5::2
+ipv6 route abcd:ab:ac:4a::/64 a5::2
+
+!-v3
+ip route 21.0.128.0 255.255.128.0 21.0.0.22
+ip route 21.1.0.0 255.255.128.0 21.0.0.22
+ip route 21.1.128.0 255.255.128.0 21.0.0.22
+ip route 21.2.0.0 255.255.128.0 21.0.0.22
+ip route 21.2.128.0 255.255.128.0 21.0.0.22
+
+ipv6 route abcd:ab:ac:1b::/64 a5::2
+ipv6 route abcd:ab:ac:3b::/64 a5::2
+ipv6 route abcd:ab:ac:4b::/64 a5::2
+
+!-v4
+ip route 21.4.0.0 255.252.0.0 21.0.0.22
+ip route 21.8.0.0 255.252.0.0 21.0.0.22
+ip route 21.12.0.0 255.252.0.0 21.0.0.22
+ip route 21.16.0.0 255.252.0.0 21.0.0.22
+
+ipv6 route abcd:ab:ac:1c::/64 a5::2
+ipv6 route abcd:ab:ac:2c::/64 a5::2
+ipv6 route abcd:ab:ac:3c::/64 a5::2
+ipv6 route abcd:ab:ac:4c::/64 a5::2
+
+!-v5
+ip route 21.0.0.80 255.255.255.240 21.0.0.22
+ip route 21.0.0.112 255.255.255.240 21.0.0.22
+ip route 21.0.0.128 255.255.255.240 21.0.0.22
+
+ipv6 route abcd:ab:ac:1d::/64 a5::2
+ipv6 route abcd:ab:ac:3d::/64 a5::2
+ipv6 route abcd:ab:ac:4d::/64 a5::2
+
+!-v6
+ip route 21.0.24.0 255.255.254.0 21.0.0.22
+ip route 21.0.26.0 255.255.254.0 21.0.0.22
+ip route 21.0.28.0 255.255.254.0 21.0.0.22
+ip route 21.0.30.0 255.255.254.0 21.0.0.22
+ip route 21.0.32.0 255.255.254.0 21.0.0.22
+ip route 21.0.34.0 255.255.254.0 21.0.0.22
+ip route 21.0.36.0 255.255.254.0 21.0.0.26
+
+ipv6 route abcd:ab:ac:3e::/64 a5::2
+ipv6 route abcd:ab:ac:4e::/64 a5::2
+ipv6 route abcd:ab:ac:5e::/64 a5::2
+ipv6 route abcd:ab:ac:6e::/64 a5::2
+ipv6 route abcd:ab:ac:7e::/64 a5::2
+ipv6 route abcd:ab:ac:8e::/64 a5::2
+
+!-v7
+ip route 21.24.0.0 255.248.0.0 21.0.0.22
+ip route 21.32.0.0 255.248.0.0 21.0.0.22
+ip route 21.40.0.0 255.248.0.0 21.0.0.22
+ip route 21.48.0.0 255.248.0.0 21.0.0.22
+ip route 21.56.0.0 255.248.0.0 21.0.0.22
+
+ipv6 route abcd:ab:ac:1f::/64 a5::2
+ipv6 route abcd:ab:ac:2f::/64 a5::2
+ipv6 route abcd:ab:ac:3f::/64 a5::2
+ipv6 route abcd:ab:ac:4f::/64 a5::2
+
+!-wlan
+ip route 10.0.0.0 255.255.255.0 21.0.0.22
+ip route 10.0.1.0 255.255.255.0 21.0.0.22
+ip route 20.0.0.0 255.255.255.0 21.0.0.22
+ip route 30.0.0.0 255.255.255.0 21.0.0.22
+ip route 40.0.0.0 255.255.255.0 21.0.0.22
+ip route 50.0.0.0 255.255.255.0 21.0.0.22
+
+
+R3
+en
+conf t
+ipv6 unicast-routing
+int Eth0/0/0
+ip add 21.0.0.33 255.255.255.252
+ipv6 add a8::1/126
+no shut
+int Eth0/1/0
+ip add 21.0.0.10 255.255.255.252
+ipv6 add a2::2/126
+no shut
+int Eth0/2/0
+ip add 21.0.0.22 255.255.255.252
+ipv6 add a5::2/126
+no shut
+int fa0/1
+ip add 21.0.0.77 255.255.255.252
+ipv6 add a19::1/126
+no shut
+int Eth1/1
+ip add 21.0.0.37 255.255.255.252
+ipv6 add a9::1/126
+no shut
+int Eth1/2
+ip add 21.0.0.29 255.255.255.252
+ipv6 add a7::2/126
+no shut
+
+int fa0/0
+no shut
+int fa0/0.3
+encapsulation dot1Q 3
+ip add 21.1.127.253 255.255.128.0
+standby 1 ip 21.1.127.252
+no shut
+exit
+int fa0/0.4
+encapsulation dot1Q 4
+ip add 21.11.255.253 255.252.0.0
+standby 1 ip 21.11.255.252
+no shut
+exit
+int fa0/0.6
+encapsulation dot1Q 6
+ip add 21.0.25.253 255.255.254.0
+standby 1 ip 21.0.25.252
+no shut
+exit
+
+ip dhcp pool tres
+network 21.1.0.0 255.255.128.0
+default-router 21.1.127.252
+exit
+ip dhcp pool cuatro
+network 21.8.0.0 255.252.0.0
+default-router 21.11.255.252
+exit
+ip dhcp pool seis
+network 21.0.24.0 255.255.254.0
+default-router 21.0.25.252
+exit
+
+!---ip routes
+!-routers y switchescore
+ip route 21.0.0.4 255.255.255.252 21.0.0.34
+ip route 21.0.0.12 255.255.255.252 21.0.0.34
+ip route 21.0.0.16 255.255.255.252 21.0.0.34
+ip route 21.0.0.24 255.255.255.252 21.0.0.34
+
+ip route 21.0.0.40 255.255.255.252 21.0.0.34
+ip route 21.0.0.44 255.255.255.252 21.0.0.34
+ip route 21.0.0.48 255.255.255.252 21.0.0.34
+ip route 21.0.0.52 255.255.255.252 21.0.0.34
+ip route 21.0.0.56 255.255.255.252 21.0.0.34
+ip route 21.0.0.60 255.255.255.252 21.0.0.34
+ip route 21.0.0.64 255.255.255.252 21.0.0.34
+ip route 21.0.0.68 255.255.255.252 21.0.0.34
+ip route 21.0.0.72 255.255.255.252 21.0.0.34
+
+ipv6 route a1::/126 a8::2
+ipv6 route a3::/126 a8::2
+ipv6 route a4::/126 a8::2
+ipv6 route a6::/126 a8::2
+
+ipv6 route a10::/126 a8::2
+ipv6 route a11::/126 a8::2
+ipv6 route a12::/126 a8::2
+ipv6 route a13::/126 a8::2
+ipv6 route a14::/126 a8::2
+ipv6 route a15::/126 a8::2
+ipv6 route a16::/126 a8::2
+ipv6 route a17::/126 a8::2
+ipv6 route a18::/126 a8::2
+
+
+!-v2
+ip route 21.0.4.0 255.255.252.0 21.0.0.34
+ip route 21.0.8.0 255.255.252.0 21.0.0.34
+ip route 21.0.12.0 255.255.252.0 21.0.0.34
+ip route 21.0.16.0 255.255.252.0 21.0.0.34
+
+ipv6 route abcd:ab:ac:1a::/64 a8::2
+ipv6 route abcd:ab:ac:2a::/64 a8::2
+ipv6 route abcd:ab:ac:3a::/64 a8::2
+ipv6 route abcd:ab:ac:4a::/64 a8::2
+
+!-v3
+ip route 21.0.128.0 255.255.128.0 21.0.0.34
+ip route 21.1.0.0 255.255.128.0 21.0.0.34
+ip route 21.1.128.0 255.255.128.0 21.0.0.34
+ip route 21.2.0.0 255.255.128.0 21.0.0.34
+ip route 21.2.128.0 255.255.128.0 21.0.0.34
+
+ipv6 route abcd:ab:ac:1b::/64 a8::2
+ipv6 route abcd:ab:ac:3b::/64 a8::2
+ipv6 route abcd:ab:ac:4b::/64 a8::2
+
+!-v4
+ip route 21.4.0.0 255.252.0.0 21.0.0.34
+ip route 21.8.0.0 255.252.0.0 21.0.0.34
+ip route 21.12.0.0 255.252.0.0 21.0.0.34
+ip route 21.16.0.0 255.252.0.0 21.0.0.34
+
+ipv6 route abcd:ab:ac:1c::/64 a8::2
+ipv6 route abcd:ab:ac:3c::/64 a8::2
+ipv6 route abcd:ab:ac:4c::/64 a8::2
+
+!-v5
+ip route 21.0.0.80 255.255.255.240 21.0.0.34
+ip route 21.0.0.96 255.255.255.240 21.0.0.34
+ip route 21.0.0.112 255.255.255.240 21.0.0.34
+ip route 21.0.0.128 255.255.255.240 21.0.0.34
+
+ipv6 route abcd:ab:ac:1d::/64 a8::2
+ipv6 route abcd:ab:ac:2d::/64 a8::2
+ipv6 route abcd:ab:ac:3d::/64 a8::2
+ipv6 route abcd:ab:ac:4d::/64 a8::2
+
+!-v6
+ip route 21.0.2.0 255.255.254.0 21.0.0.34
+ip route 21.0.24.0 255.255.254.0 21.0.0.34
+ip route 21.0.26.0 255.255.254.0 21.0.0.34
+ip route 21.0.28.0 255.255.254.0 21.0.0.34
+ip route 21.0.30.0 255.255.254.0 21.0.0.34
+ip route 21.0.32.0 255.255.254.0 21.0.0.34
+ip route 21.0.34.0 255.255.254.0 21.0.0.34
+ip route 21.0.36.0 255.255.254.0 21.0.0.34
+
+ipv6 route abcd:ab:ac:1e::/64 a8::2
+ipv6 route abcd:ab:ac:2e::/64 a8::2
+ipv6 route abcd:ab:ac:3e::/64 a8::2
+ipv6 route abcd:ab:ac:4e::/64 a8::2
+ipv6 route abcd:ab:ac:5e::/64 a8::2
+ipv6 route abcd:ab:ac:6e::/64 a8::2
+ipv6 route abcd:ab:ac:7e::/64 a8::2
+ipv6 route abcd:ab:ac:8e::/64 a8::2
+
+!-v7
+ip route 21.24.0.0 255.248.0.0 21.0.0.34
+ip route 21.32.0.0 255.248.0.0 21.0.0.34
+ip route 21.40.0.0 255.248.0.0 21.0.0.34
+ip route 21.48.0.0 255.248.0.0 21.0.0.34
+ip route 21.56.0.0 255.248.0.0 21.0.0.34
+
+ipv6 route abcd:ab:ac:1f::/64 a8::2
+ipv6 route abcd:ab:ac:2f::/64 a8::2
+ipv6 route abcd:ab:ac:3f::/64 a8::2
+ipv6 route abcd:ab:ac:4f::/64 a8::2
+
+!-wlan
+ip route 10.0.0.0 255.255.255.0 21.0.0.34
+ip route 10.0.1.0 255.255.255.0 21.0.0.34
+ip route 20.0.0.0 255.255.255.0 21.0.0.34
+ip route 30.0.0.0 255.255.255.0 21.0.0.34
+ip route 40.0.0.0 255.255.255.0 21.0.0.34
+ip route 50.0.0.0 255.255.255.0 21.0.0.34
+
+
+R4
+en
+conf t
+ipv6 unicast-routing
+int Eth0/0/0
+ip add 21.0.0.34 255.255.255.252
+ipv6 add a8::2/126
+no shut
+int Eth0/1/0
+ip add 21.0.0.45 255.255.255.252
+ipv6 add a11::1/126
+no shut
+int Eth1/2
+ip add 21.0.0.41 255.255.255.252
+ipv6 add a10::1/126
+no shut
+
+int fa0/0
+no shut
+int fa0/0.2
+encapsulation dot1Q 2
+ip add 21.0.11.254 255.255.252.0
+ipv6 add abcd:ab:ac:2a::1/64
+ipv6 nd managed-config-flag
+ipv6 dhcp server Vlan2_6
+no shut
+int fa0/0.3
+encapsulation dot1Q 3
+ip add 21.1.255.254 255.255.128.0
+ipv6 add abcd:ab:ac:3b::1/64
+ipv6 nd managed-config-flag
+ipv6 dhcp server Vlan3_6
+no shut
+int fa0/0.4
+encapsulation dot1Q 4
+ip add 21.15.255.254 255.252.0.0
+ipv6 add abcd:ab:ac:3c::1/64
+ipv6 nd managed-config-flag
+ipv6 dhcp server Vlan4_6
+no shut
+int fa0/0.6
+encapsulation dot1Q 6
+ip add 21.0.27.254 255.255.254.0
+ipv6 add abcd:ab:ac:3e::1/64
+ipv6 nd managed-config-flag
+ipv6 dhcp server Vlan6_6
+no shut
+int fa0/0.7
+encapsulation dot1Q 7
+ip add 21.31.255.254 255.248.0.0
+ipv6 add abcd:ab:ac:1f::1/64
+ipv6 nd managed-config-flag
+ipv6 dhcp server Vlan7_6
+no shut
+
+ip dhcp pool Vlan2_4
+network 21.0.8.0 255.255.252.0
+default-router 21.0.11.254
+ipv6 dhcp pool Vlan2_6
+add prefix abcd:ab:ac:2a::/64
+exit
+ip dhcp pool Vlan3_4
+network 21.1.128.0 255.255.128.0
+default-router 21.1.255.254
+ipv6 dhcp pool Vlan3_6
+add prefix abcd:ab:ac:3b::/64
+exit
+ip dhcp pool Vlan4_4
+network 21.12.0.0 255.252.0.0
+default-router 21.15.255.254
+ipv6 dhcp pool Vlan4_6
+add prefix abcd:ab:ac:3c::/64
+exit
+ip dhcp pool Vlan6_4
+network 21.0.26.0 255.255.254.0
+default-router 21.0.27.254
+ipv6 dhcp pool Vlan6_6
+add prefix abcd:ab:ac:3e::/64
+exit
+ip dhcp pool Vlan7_4
+network 21.24.0.0 255.248.0.0
+default-router 21.31.255.254
+ipv6 dhcp pool Vlan7_6
+add prefix abcd:ab:ac:1f::/64
+exit
+!---ip routes
+!-routers y switchescore
+ip route 21.0.0.4 255.255.255.252 21.0.0.46
+ip route 21.0.0.8 255.255.255.252 21.0.0.46
+ip route 21.0.0.12 255.255.255.252 21.0.0.46
+ip route 21.0.0.16 255.255.255.252 21.0.0.46
+ip route 21.0.0.20 255.255.255.252 21.0.0.46
+ip route 21.0.0.24 255.255.255.252 21.0.0.46
+ip route 21.0.0.28 255.255.255.252 21.0.0.46
+ip route 21.0.0.36 255.255.255.252 21.0.0.46
+ip route 21.0.0.48 255.255.255.252 21.0.0.46
+ip route 21.0.0.52 255.255.255.252 21.0.0.46
+ip route 21.0.0.56 255.255.255.252 21.0.0.46
+ip route 21.0.0.60 255.255.255.252 21.0.0.46
+ip route 21.0.0.64 255.255.255.252 21.0.0.46
+ip route 21.0.0.68 255.255.255.252 21.0.0.46
+ip route 21.0.0.72 255.255.255.252 21.0.0.46
+ip route 21.0.0.76 255.255.255.252 21.0.0.46
+
+ipv6 route a1::/126 a11::2
+ipv6 route a2::/126 a11::2
+ipv6 route a3::/126 a11::2
+ipv6 route a4::/126 a11::2
+ipv6 route a5::/126 a11::2
+ipv6 route a6::/126 a11::2
+ipv6 route a7::/126 a11::2
+ipv6 route a9::/126 a11::2
+
+ipv6 route a12::/126 a11::2
+ipv6 route a13::/126 a11::2
+ipv6 route a14::/126 a11::2
+ipv6 route a15::/126 a11::2
+ipv6 route a16::/126 a11::2
+ipv6 route a17::/126 a11::2
+ipv6 route a18::/126 a11::2
+ipv6 route a19::/126 a11::2
+
+
+!-v2
+ip route 21.0.4.0 255.255.252.0 21.0.0.46
+ip route 21.0.12.0 255.255.252.0 21.0.0.46
+ip route 21.0.16.0 255.255.252.0 21.0.0.46
+
+ipv6 route abcd:ab:ac:1a::/64 a11::2
+ipv6 route abcd:ab:ac:3a::/64 a11::2
+ipv6 route abcd:ab:ac:4a::/64 a11::2
+
+!-v3
+ip route 21.0.128.0 255.255.128.0 21.0.0.46
+ip route 21.1.0.0 255.255.128.0 21.0.0.46
+ip route 21.2.0.0 255.255.128.0 21.0.0.46
+ip route 21.2.128.0 255.255.128.0 21.0.0.46
+
+ipv6 route abcd:ab:ac:1b::/64 a11::2
+ipv6 route abcd:ab:ac:4b::/64 a11::2
+
+!-v4
+ip route 21.4.0.0 255.252.0.0 21.0.0.46
+ip route 21.8.0.0 255.252.0.0 21.0.0.46
+ip route 21.16.0.0 255.252.0.0 21.0.0.46
+
+ipv6 route abcd:ab:ac:1c::/64 a11::2
+ipv6 route abcd:ab:ac:4c::/64 a11::2
+
+!-v5
+ip route 21.0.0.80 255.255.255.240 21.0.0.46
+ip route 21.0.0.96 255.255.255.240 21.0.0.46
+ip route 21.0.0.112 255.255.255.240 21.0.0.46
+ip route 21.0.0.128 255.255.255.240 21.0.0.46
+
+ipv6 route abcd:ab:ac:1d::/64 a11::2
+ipv6 route abcd:ab:ac:2d::/64 a11::2
+ipv6 route abcd:ab:ac:3d::/64 a11::2
+ipv6 route abcd:ab:ac:4d::/64 a11::2
+
+!-v6
+ip route 21.0.2.0 255.255.254.0 21.0.0.46
+ip route 21.0.24.0 255.255.254.0 21.0.0.46
+ip route 21.0.28.0 255.255.254.0 21.0.0.46
+ip route 21.0.30.0 255.255.254.0 21.0.0.46
+ip route 21.0.32.0 255.255.254.0 21.0.0.46
+ip route 21.0.34.0 255.255.254.0 21.0.0.46
+ip route 21.0.36.0 255.255.254.0 21.0.0.46
+
+ipv6 route abcd:ab:ac:1e::/64 a11::2
+ipv6 route abcd:ab:ac:4e::/64 a11::2
+ipv6 route abcd:ab:ac:5e::/64 a11::2
+ipv6 route abcd:ab:ac:6e::/64 a11::2
+ipv6 route abcd:ab:ac:7e::/64 a11::2
+ipv6 route abcd:ab:ac:8e::/64 a11::2
+
+!-v7
+ip route 21.32.0.0 255.248.0.0 21.0.0.46
+ip route 21.40.0.0 255.248.0.0 21.0.0.46
+ip route 21.48.0.0 255.248.0.0 21.0.0.46
+ip route 21.56.0.0 255.248.0.0 21.0.0.46
+
+ipv6 route abcd:ab:ac:2f::/64 a11::2
+ipv6 route abcd:ab:ac:3f::/64 a11::2
+ipv6 route abcd:ab:ac:4f::/64 a11::2
+
+!-wlan
+ip route 10.0.0.0 255.255.255.0 21.0.0.46
+ip route 10.0.1.0 255.255.255.0 21.0.0.46
+ip route 20.0.0.0 255.255.255.0 21.0.0.46
+ip route 30.0.0.0 255.255.255.0 21.0.0.46
+ip route 40.0.0.0 255.255.255.0 21.0.0.46
+ip route 50.0.0.0 255.255.255.0 21.0.0.46
+
+
+R5
+en
+conf t
+ipv6 unicast-routing
+int eth0/1/0
+ip add 21.0.0.46 255.255.255.252
+ipv6 add a11::2/126
+no shut
+int Eth1/1
+ip add 21.0.0.38 255.255.255.252
+ipv6 add a9::2/126
+no shut
+int eth0/0/0
+ip add 21.0.0.49 255.255.255.252
+ipv6 add a12::1/126
+no shut
+int eth0/3/0
+ip add 21.0.0.61 255.255.255.252
+ipv6 add a15::1/126
+no shut
+
+int fa0/0
+no shut
+int fa0/0.2
+encapsulation dot1Q 2
+ip add 21.0.15.254 255.255.252.0
+ipv6 add abcd:ab:ac:3a::1/64
+ipv6 nd managed-config-flag
+ipv6 dhcp server Vlan2_6
+no shut
+int fa0/0.6
+encapsulation dot1Q 6
+ip add 21.0.29.254 255.255.254.0
+ipv6 add abcd:ab:ac:4e::1/64
+ipv6 nd managed-config-flag
+ipv6 dhcp server Vlan6_6
+no shut
+int fa0/0.7
+encapsulation dot1Q 7
+ip add 21.39.255.254 255.248.0.0
+ipv6 add abcd:ab:ac:2f::1/64
+ipv6 nd managed-config-flag
+ipv6 dhcp server Vlan7_6
+no shut
+
+ip dhcp pool Vlan2_4
+default-router 21.0.15.254
+network 21.0.12.0 255.255.252.0
+ipv6 dhcp pool Vlan2_6
+add prefix abcd:ab:ac:3a::/64
+exit
+ip dhcp pool Vlan6_4
+default-router 21.0.29.254
+network 21.0.28.0 255.255.254.0
+ipv6 dhcp pool Vlan6_6
+add prefix abcd:ab:ac:4e::/64
+exit
+ip dhcp pool Vlan7_4
+default-router 21.39.255.254
+network 21.32.0.0 255.248.0.0
+ipv6 dhcp pool Vlan7_6
+add prefix abcd:ab:ac:2f::/64 
+
+!---ip routes
+!-routers y switchescore
+ip route 21.0.0.4 255.255.255.252 21.0.0.50
+ip route 21.0.0.8 255.255.255.252 21.0.0.50
+ip route 21.0.0.12 255.255.255.252 21.0.0.50
+ip route 21.0.0.16 255.255.255.252 21.0.0.50
+ip route 21.0.0.20 255.255.255.252 21.0.0.50
+ip route 21.0.0.24 255.255.255.252 21.0.0.50
+ip route 21.0.0.28 255.255.255.252 21.0.0.50
+ip route 21.0.0.32 255.255.255.252 21.0.0.37
+ip route 21.0.0.40 255.255.255.252 21.0.0.50
+ip route 21.0.0.52 255.255.255.252 21.0.0.50
+ip route 21.0.0.56 255.255.255.252 21.0.0.62
+ip route 21.0.0.64 255.255.255.252 21.0.0.62
+ip route 21.0.0.68 255.255.255.252 21.0.0.50
+ip route 21.0.0.72 255.255.255.252 21.0.0.50
+ip route 21.0.0.76 255.255.255.252 21.0.0.50
+
+ipv6 route a1::/126 a12::2
+ipv6 route a2::/126 a12::2
+ipv6 route a3::/126 a12::2
+ipv6 route a4::/126 a12::2
+ipv6 route a5::/126 a12::2
+ipv6 route a6::/126 a12::2
+ipv6 route a7::/126 a12::2
+ipv6 route a8::/126 a9::1
+ipv6 route a10::/126 a12::2
+ipv6 route a13::/126 a12::2
+ipv6 route a14::/126 a15::2
+ipv6 route a16::/126 a15::2
+ipv6 route a17::/126 a12::2
+ipv6 route a18::/126 a12::2
+ipv6 route a19::/126 a12::2
+
+
+!-v2
+ip route 21.0.4.0 255.255.252.0 21.0.0.50
+ip route 21.0.8.0 255.255.252.0 21.0.0.37
+ip route 21.0.16.0 255.255.252.0 21.0.0.62
+
+ipv6 route abcd:ab:ac:1a::/64 a12::2
+ipv6 route abcd:ab:ac:2a::/64 a9::1
+ipv6 route abcd:ab:ac:4a::/64 a15::2
+
+!-v3
+ip route 21.0.128.0 255.255.128.0 21.0.0.50
+ip route 21.1.0.0 255.255.128.0 21.0.0.50
+ip route 21.1.128.0 255.255.128.0 21.0.0.37
+ip route 21.2.0.0 255.255.128.0 21.0.0.62
+ip route 21.2.128.0 255.255.128.0 21.0.0.50
+
+ipv6 route abcd:ab:ac:1b::/64 a12::2
+ipv6 route abcd:ab:ac:3b::/64 a9::1
+ipv6 route abcd:ab:ac:4b::/64 a15::2
+
+!-v4
+ip route 21.4.0.0 255.252.0.0 21.0.0.50
+ip route 21.8.0.0 255.252.0.0 21.0.0.50
+ip route 21.16.0.0 255.252.0.0 21.0.0.62
+
+ipv6 route abcd:ab:ac:1c::/64 a12::2
+ipv6 route abcd:ab:ac:4c::/64 a15::2
+!-v5
+ip route 21.0.0.80 255.255.255.240 21.0.0.50
+ip route 21.0.0.96 255.255.255.240 21.0.0.50
+ip route 21.0.0.112 255.255.255.240 21.0.0.50
+ip route 21.0.0.128 255.255.255.240 21.0.0.62
+
+ipv6 route abcd:ab:ac:1d::/64 a12::2
+ipv6 route abcd:ab:ac:2d::/64 a12::2
+ipv6 route abcd:ab:ac:3d::/64 a12::2
+ipv6 route abcd:ab:ac:4d::/64 a15::2
+
+!-v6
+ip route 21.0.2.0 255.255.254.0 21.0.0.50
+ip route 21.0.24.0 255.255.254.0 21.0.0.50
+ip route 21.0.26.0 255.255.254.0 21.0.0.37
+ip route 21.0.30.0 255.255.254.0 21.0.0.50
+ip route 21.0.32.0 255.255.254.0 21.0.0.50
+ip route 21.0.34.0 255.255.254.0 21.0.0.62
+ip route 21.0.36.0 255.255.254.0 21.0.0.50
+
+ipv6 route abcd:ab:ac:1e::/64 a12::2
+ipv6 route abcd:ab:ac:3e::/64 a9::1
+ipv6 route abcd:ab:ac:5e::/64 a12::2
+ipv6 route abcd:ab:ac:6e::/64 a12::2
+ipv6 route abcd:ab:ac:7e::/64 a15::2
+ipv6 route abcd:ab:ac:8e::/64 a12::2
+
+!-v7
+ip route 21.24.0.0 255.248.0.0 21.0.0.37
+ip route 21.40.0.0 255.248.0.0 21.0.0.50
+ip route 21.48.0.0 255.248.0.0 21.0.0.62
+ip route 21.56.0.0 255.248.0.0 21.0.0.50
+
+ipv6 route abcd:ab:ac:1f::/64 a9::1
+ipv6 route abcd:ab:ac:3f::/64 a12::2
+ipv6 route abcd:ab:ac:4f::/64 a15::2
+
+!-wlan
+ip route 10.0.0.0 255.255.255.0 21.0.0.50
+ip route 10.0.1.0 255.255.255.0 21.0.0.62
+ip route 20.0.0.0 255.255.255.0 21.0.0.50
+ip route 30.0.0.0 255.255.255.0 21.0.0.50
+ip route 40.0.0.0 255.255.255.0 21.0.0.62
+ip route 50.0.0.0 255.255.255.0 21.0.0.62
+
+
+R6
+en
+conf t
+int eth0/1/0
+ip add 21.0.0.53 255.255.255.252
+ipv6 add a13::1/126
+no shut
+int Eth1/1
+ip add 21.0.0.14 255.255.255.252
+ipv6 add a3::2/126
+no shut
+int fa0/1
+ip add 21.0.0.78 255.255.255.252
+ipv6 add a19::2/126
+no shut
+int Eth1/2
+ip add 21.0.0.42 255.255.255.252
+ipv6 add a10::2/126
+no shut
+int eth0/0/0
+ip add 21.0.0.50 255.255.255.252
+ipv6 add a12::2/126
+no shut
+int eth0/2/0
+ip add 21.0.0.57 255.255.255.252
+ipv6 add a14::2/126
+no shut
+
+int fa0/0
+no shut
+int fa0/0.5
+encapsulation dot1Q 5
+ip add 21.0.0.126 255.255.255.240
+ipv6 add abcd:ab:ac:3d::1/64
+ipv6 nd managed-config-flag
+ipv6 dhcp server Vlan5_6
+no shut
+int fa0/0.6
+encapsulation dot1Q 6
+ip add 21.0.31.254 255.255.252.0
+ipv6 add abcd:ab:ac:5e::1/64
+ipv6 nd managed-config-flag
+ipv6 dhcp server Vlan6_6
+no shut
+int fa0/0.7
+encapsulation dot1Q 7
+ip add 21.47.255.254 255.248.0.0
+ipv6 add abcd:ab:ac:3f::1/64
+ipv6 nd managed-config-flag
+ipv6 dhcp server Vlan7_6
+no shut
+
+ip dhcp pool Vlan5_4
+default-router 21.0.0.126
+network 21.0.0.112 255.255.255.240
+ipv6 dhcp pool Vlan5_6
+add prefix abcd:ab:ac:3d::/64
+ip dhcp pool Vlan6_4
+default-router 21.0.31.254
+network 21.0.30.0 255.255.252.0
+ipv6 dhcp pool Vlan6_6
+add prefix abcd:ab:ac:5e::/64
+ip dhcp pool Vlan7_4
+default-router 21.47.255.254
+network 21.40.0.0 255.248.0.0
+ipv6 dhcp pool Vlan7_6
+add prefix abcd:ab:ac:3f::/64
+exit
+
+!---ip routes
+!-routers y switchescore
+ip route 21.0.0.4 255.255.255.252 21.0.0.13
+ip route 21.0.0.8 255.255.255.252 21.0.0.13
+ip route 21.0.0.16 255.255.255.252 21.0.0.54
+ip route 21.0.0.20 255.255.255.252 21.0.0.13
+ip route 21.0.0.24 255.255.255.252 21.0.0.13
+ip route 21.0.0.28 255.255.255.252 21.0.0.54
+ip route 21.0.0.32 255.255.255.252 21.0.0.77
+ip route 21.0.0.36 255.255.255.252 21.0.0.77
+ip route 21.0.0.44 255.255.255.252 21.0.0.41
+
+ip route 21.0.0.60 255.255.255.252 21.0.0.41
+ip route 21.0.0.64 255.255.255.252 21.0.0.41
+ip route 21.0.0.68 255.255.255.252 21.0.0.13
+ip route 21.0.0.72 255.255.255.252 21.0.0.13
+
+ipv6 route a1::/126 a3::1
+ipv6 route a2::/126 a3::1
+ipv6 route a4::/126 a13::2
+ipv6 route a5::/126 a3::1
+ipv6 route a6::/126 a3::1
+ipv6 route a7::/126 a13::2
+ipv6 route a8::/126 a19::1
+ipv6 route a9::/126 a19::1
+ipv6 route a11::/126 a10::1
+
+ipv6 route a15::/126 a10::1
+ipv6 route a16::/126 a10::1
+ipv6 route a17::/126 a3::1
+ipv6 route a18::/126 a3::1
+
+
+!-v2
+ip route 21.0.4.0 255.255.252.0 21.0.0.13
+ip route 21.0.8.0 255.255.252.0 21.0.0.41
+ip route 21.0.12.0 255.255.252.0 21.0.0.41
+ip route 21.0.16.0 255.255.252.0 21.0.0.41
+
+ipv6 route abcd:ab:ac:1a::/64 a3::1
+ipv6 route abcd:ab:ac:2a::/64 a10::1
+ipv6 route abcd:ab:ac:3a::/64 a10::1
+ipv6 route abcd:ab:ac:4a::/64 a10::1
+
+!-v3
+ip route 21.0.128.0 255.255.128.0 21.0.0.13
+ip route 21.1.0.0 255.255.128.0 21.0.0.13
+ip route 21.1.128.0 255.255.128.0 21.0.0.41
+ip route 21.2.0.0 255.255.128.0 21.0.0.41
+ip route 21.2.128.0 255.255.128.0 21.0.0.13
+
+ipv6 route abcd:ab:ac:1b::/64 a3::1
+ipv6 route abcd:ab:ac:3b::/64 a10::1
+ipv6 route abcd:ab:ac:4b::/64 a10::1
+
+!-v4
+ip route 21.4.0.0 255.252.0.0 21.0.0.13
+ip route 21.8.0.0 255.252.0.0 21.0.0.13
+ip route 21.12.0.0 255.252.0.0 21.0.0.41
+ip route 21.16.0.0 255.252.0.0 21.0.0.41
+
+ipv6 route abcd:ab:ac:1c::/64 a3::1
+ipv6 route abcd:ab:ac:3c::/64 a10::1
+ipv6 route abcd:ab:ac:4c::/64 a10::1
+
+!-v5
+ip route 21.0.0.80 255.255.255.240 21.0.0.13
+ip route 21.0.0.96 255.255.255.240 21.0.0.13
+ip route 21.0.0.128 255.255.255.240 21.0.0.41
+
+ipv6 route abcd:ab:ac:1d::/64 a3::1
+ipv6 route abcd:ab:ac:2d::/64 a3::1
+ipv6 route abcd:ab:ac:4d::/64 a10::1
+
+!-v6
+ip route 21.0.2.0 255.255.254.0 21.0.0.13
+ip route 21.0.24.0 255.255.254.0 21.0.0.13
+ip route 21.0.26.0 255.255.254.0 21.0.0.41
+ip route 21.0.28.0 255.255.254.0 21.0.0.41
+ip route 21.0.32.0 255.255.254.0 21.0.0.54
+ip route 21.0.34.0 255.255.254.0 21.0.0.41
+ip route 21.0.36.0 255.255.254.0 21.0.0.13
+
+ipv6 route abcd:ab:ac:1e::/64 a3::1
+ipv6 route abcd:ab:ac:3e::/64 a10::1
+ipv6 route abcd:ab:ac:4e::/64 a10::1
+ipv6 route abcd:ab:ac:6e::/64 a13::2
+ipv6 route abcd:ab:ac:7e::/64 a10::1
+ipv6 route abcd:ab:ac:8e::/64 a3::1
+
+!-v7
+ip route 21.24.0.0 255.248.0.0 21.0.0.41
+ip route 21.32.0.0 255.248.0.0 21.0.0.41
+ip route 21.48.0.0 255.248.0.0 21.0.0.41
+ip route 21.56.0.0 255.248.0.0 21.0.0.13
+
+ipv6 route abcd:ab:ac:1f::/64 a10::1
+ipv6 route abcd:ab:ac:2f::/64 a10::1
+ipv6 route abcd:ab:ac:4f::/64 a10::1
+
+!-wlan
+ip route 10.0.0.0 255.255.255.0 21.0.0.54
+ip route 10.0.1.0 255.255.255.0 21.0.0.41
+ip route 20.0.0.0 255.255.255.0 21.0.0.54
+ip route 30.0.0.0 255.255.255.0 21.0.0.54
+ip route 40.0.0.0 255.255.255.0 21.0.0.41
+ip route 50.0.0.0 255.255.255.0 21.0.0.41
+
+
+R7
+en
+conf t
+int eth0/2/0
+ip add 21.0.0.18 255.255.255.252
+ipv6 add a4::2/126
+no shut
+int Eth1/2
+ip add 21.0.0.30 255.255.255.252
+ipv6 add a7::1/126
+no shut
+int eth0/1/0
+ip add 21.0.0.54 255.255.255.252
+ipv6 add a13::2/126
+no shut
+int fa0/1
+ip add 192.168.1.254 255.255.255.252
+no shut
+
+int fa0/0
+no shut
+int fa0/0.6
+encapsulation dot1Q 6
+ip add 21.0.33.254 255.255.254.0
+ipv6 add abcd:ab:ac:6e::1/64
+no shut
+
+int fa0/0.10
+encapsulation dot1Q 10 native
+ip add 10.0.0.254 255.255.255.0
+no shut
+int fa0/0.20
+encapsulation dot1Q 20
+ip add 20.0.0.254 255.255.255.0
+no shut
+int fa0/0.30
+encapsulation dot1Q 30
+ip add 30.0.0.254 255.255.255.0
+no shut
+exit
+
+ip dhcp pool Vlannativa
+network 10.0.0.0 255.255.255.0
+default-router 10.0.0.254
+exit
+ip dhcp pool Vlaninvitados
+network 20.0.0.0 255.255.255.0
+default-router 20.0.0.254
+exit
+ip dhcp pool Vlanadmon
+network 30.0.0.0 255.255.255.0
+default-router 30.0.0.254
+exit
+
+ip dhcp pool Vlan6_4
+default-router 21.0.33.254
+network 21.0.32.0 255.255.254.0
+ipv6 dhcp pool Vlan6_6
+add prefix abcd:ab:ac:6e::/64
+exit
+!---ip routes
+!-routers y switchescore
+ip route 21.0.0.4 255.255.255.252 21.0.0.17
+ip route 21.0.0.8 255.255.255.252 21.0.0.17
+ip route 21.0.0.12 255.255.255.252 21.0.0.17
+ip route 21.0.0.20 255.255.255.252 21.0.0.17
+ip route 21.0.0.24 255.255.255.252 21.0.0.17
+ip route 21.0.0.32 255.255.255.252 21.0.0.29
+ip route 21.0.0.36 255.255.255.252 21.0.0.29
+ip route 21.0.0.40 255.255.255.252 21.0.0.29
+ip route 21.0.0.44 255.255.255.252 21.0.0.29
+ip route 21.0.0.48 255.255.255.252 21.0.0.29
+ip route 21.0.0.56 255.255.255.252 21.0.0.29
+ip route 21.0.0.60 255.255.255.252 21.0.0.29
+ip route 21.0.0.64 255.255.255.252 21.0.0.29
+ip route 21.0.0.68 255.255.255.252 21.0.0.17
+ip route 21.0.0.72 255.255.255.252 21.0.0.17
+ip route 21.0.0.76 255.255.255.252 21.0.0.29
+
+ipv6 route a1::/126 a4::1
+ipv6 route a2::/126 a4::1
+ipv6 route a3::/126 a4::1
+ipv6 route a5::/126 a4::1
+ipv6 route a6::/126 a4::1
+ipv6 route a8::/126 a7::2
+ipv6 route a9::/126 a7::2
+ipv6 route a10::/126 a7::2
+ipv6 route a11::/126 a7::2
+ipv6 route a12::/126 a7::2
+ipv6 route a14::/126 a7::2
+ipv6 route a15::/126 a7::2
+ipv6 route a16::/126 a7::2
+ipv6 route a17::/126 a4::1
+ipv6 route a18::/126 a4::1
+ipv6 route a19::/126 a7::2
+
+
+!-v2
+ip route 21.0.4.0 255.255.252.0 21.0.0.17
+ip route 21.0.8.0 255.255.252.0 21.0.0.29
+ip route 21.0.12.0 255.255.252.0 21.0.0.29
+ip route 21.0.16.0 255.255.252.0 21.0.0.29
+
+ipv6 route abcd:ab:ac:1a::/64 a4::1
+ipv6 route abcd:ab:ac:2a::/64 a7::2
+ipv6 route abcd:ab:ac:3a::/64 a7::2
+ipv6 route abcd:ab:ac:4a::/64 a7::2
+
+!-v3
+ip route 21.0.128.0 255.255.128.0 21.0.0.17
+ip route 21.1.0.0 255.255.128.0 21.0.0.17
+ip route 21.1.128.0 255.255.128.0 21.0.0.29
+ip route 21.2.0.0 255.255.128.0 21.0.0.29
+ip route 21.2.128.0 255.255.128.0 21.0.0.17
+
+ipv6 route abcd:ab:ac:1b::/64 a4::1
+ipv6 route abcd:ab:ac:3b::/64 a7::2
+ipv6 route abcd:ab:ac:4b::/64 a7::2
+
+!-v4
+ip route 21.4.0.0 255.252.0.0 21.0.0.17
+ip route 21.8.0.0 255.252.0.0 21.0.0.17
+ip route 21.12.0.0 255.252.0.0 21.0.0.29
+ip route 21.16.0.0 255.252.0.0 21.0.0.29
+
+ipv6 route abcd:ab:ac:1c::/64 a4::1
+ipv6 route abcd:ab:ac:3c::/64 a7::2
+ipv6 route abcd:ab:ac:4c::/64 a7::2
+
+!-v5
+ip route 21.0.0.80 255.255.255.240 21.0.0.17
+ip route 21.0.0.96 255.255.255.240 21.0.0.17
+ip route 21.0.0.112 255.255.255.240 21.0.0.29
+ip route 21.0.0.128 255.255.255.240 21.0.0.29
+
+ipv6 route abcd:ab:ac:1d::/64 a4::1
+ipv6 route abcd:ab:ac:2d::/64 a4::1
+ipv6 route abcd:ab:ac:3d::/64 a7::2
+ipv6 route abcd:ab:ac:4d::/64 a7::2
+
+!-v6
+ip route 21.0.2.0 255.255.254.0 21.0.0.17
+ip route 21.0.24.0 255.255.254.0 21.0.0.17
+ip route 21.0.26.0 255.255.254.0 21.0.0.29
+ip route 21.0.28.0 255.255.254.0 21.0.0.29
+ip route 21.0.30.0 255.255.254.0 21.0.0.29
+ip route 21.0.34.0 255.255.254.0 21.0.0.29
+ip route 21.0.36.0 255.255.254.0 21.0.0.17
+
+ipv6 route abcd:ab:ac:1e::/64 a4::1
+ipv6 route abcd:ab:ac:3e::/64 a7::2
+ipv6 route abcd:ab:ac:4e::/64 a7::2
+ipv6 route abcd:ab:ac:5e::/64 a7::2
+ipv6 route abcd:ab:ac:7e::/64 a7::2
+ipv6 route abcd:ab:ac:8e::/64 a4::1
+
+!-v7
+ip route 21.24.0.0 255.248.0.0 21.0.0.29
+ip route 21.32.0.0 255.248.0.0 21.0.0.29
+ip route 21.40.0.0 255.248.0.0 21.0.0.29
+ip route 21.48.0.0 255.248.0.0 21.0.0.29
+ip route 21.56.0.0 255.248.0.0 21.0.0.17
+
+ipv6 route abcd:ab:ac:1f::/64 a7::2
+ipv6 route abcd:ab:ac:2f::/64 a:7::2
+ipv6 route abcd:ab:ac:3f::/64 a7::2
+ipv6 route abcd:ab:ac:4f::/64 a7::2
+
+!-wlan
+ip route 10.0.1.0 255.255.255.0 21.0.0.29
+ip route 40.0.0.0 255.255.255.0 21.0.0.29
+ip route 50.0.0.0 255.255.255.0 21.0.0.29
+
+
+
+R8
+en
+conf t
+ipv6 unicast-routing
+int eth0/2/0
+ip add 21.0.0.58 255.255.255.252
+ipv6 add a14::1/126
+no shut
+int eth0/3/0
+ip add 21.0.0.62 255.255.255.252
+ipv6 add a15::2/126
+no shut
+int eth0/0/0
+ip add 21.0.0.65 255.255.255.252
+ipv6 add a16::1/126
+no shut
+
+int fa0/0   
+no shut
+int fa0/0.5
+encapsulation dot1Q 5
+ip add 21.0.0.142 255.255.255.240
+ipv6 add abcd:ab:ac:4d::1/64
+ipv6 nd managed-config-flag
+ipv6 dhcp server Vlan5_6
+no shut
+int fa0/0.7
+encapsulation dot1Q 7
+ip add 21.55.255.254 255.248.0.0
+ipv6 add abcd:ab:ac:4f::1/64
+ipv6 nd managed-config-flag
+ipv6 dhcp server Vlan7_6
+no shut
+exit
+
+ip dhcp pool Vlan5_4
+default-router 21.0.0.142
+network 21.0.0.128 255.255.255.240
+ipv6 dhcp pool Vlan5_6
+add prefix abcd:ab:ac:4d::/64
+exit
+ip dhcp pool Vlan7_4
+default-router 21.55.255.254
+network 21.48.0.0 255.248.0.0
+ipv6 dhcp pool Vlan7_6
+add prefix abcd:ab:ac:4f::/64
+exit
+!---ip routes
+!-routers y switchescore
+ip route 21.0.0.4 255.255.255.252 21.0.0.57
+ip route 21.0.0.8 255.255.255.252 21.0.0.57
+ip route 21.0.0.12 255.255.255.252 21.0.0.57
+ip route 21.0.0.16 255.255.255.252 21.0.0.57
+ip route 21.0.0.20 255.255.255.252 21.0.0.57
+ip route 21.0.0.24 255.255.255.252 21.0.0.57
+ip route 21.0.0.28 255.255.255.252 21.0.0.57
+ip route 21.0.0.32 255.255.255.252 21.0.0.57
+ip route 21.0.0.36 255.255.255.252 21.0.0.57
+ip route 21.0.0.40 255.255.255.252 21.0.0.57
+ip route 21.0.0.44 255.255.255.252 21.0.0.57
+ip route 21.0.0.48 255.255.255.252 21.0.0.57
+ip route 21.0.0.52 255.255.255.252 21.0.0.57
+ip route 21.0.0.68 255.255.255.252 21.0.0.57
+ip route 21.0.0.72 255.255.255.252 21.0.0.57
+ip route 21.0.0.76 255.255.255.252 21.0.0.57
+
+ipv6 route a1::/126 a14::2
+ipv6 route a2::/126 a14::2
+ipv6 route a3::/126 a14::2
+ipv6 route a4::/126 a14::2
+ipv6 route a5::/126 a14::2
+ipv6 route a6::/126 a14::2
+ipv6 route a7::/126 a14::2
+ipv6 route a8::/126 a14::2
+ipv6 route a9::/126 a14::2
+ipv6 route a10::/126 a14::2
+ipv6 route a11::/126 a14::2
+ipv6 route a12::/126 a14::2
+ipv6 route a13::/126 a14::2
+
+ipv6 route a17::/126 a14::2
+ipv6 route a18::/126 a14::2
+ipv6 route a19::/126 a14::2
+
+
+!-v2
+ip route 21.0.4.0 255.255.252.0 21.0.0.57
+ip route 21.0.8.0 255.255.252.0 21.0.0.57
+ip route 21.0.12.0 255.255.252.0 21.0.0.57
+ip route 21.0.16.0 255.255.252.0 21.0.0.57
+
+ipv6 route abcd:ab:ac:1a::/64 a14::2
+ipv6 route abcd:ab:ac:2a::/64 a14::2
+ipv6 route abcd:ab:ac:3a::/64 a14::2
+ipv6 route abcd:ab:ac:4a::/64 a14::2
+
+!-v3
+ip route 21.0.128.0 255.255.128.0 21.0.0.57
+ip route 21.1.0.0 255.255.128.0 21.0.0.57
+ip route 21.1.128.0 255.255.128.0 21.0.0.57
+ip route 21.2.0.0 255.255.128.0 21.0.0.57
+ip route 21.2.128.0 255.255.128.0 21.0.0.57
+
+ipv6 route abcd:ab:ac:1b::/64 a14::2
+ipv6 route abcd:ab:ac:3b::/64 a14::2
+ipv6 route abcd:ab:ac:4b::/64 a14::2
+
+!-v4
+ip route 21.4.0.0 255.252.0.0 21.0.0.57
+ip route 21.8.0.0 255.252.0.0 21.0.0.57
+ip route 21.12.0.0 255.252.0.0 21.0.0.57
+ip route 21.16.0.0 255.252.0.0 21.0.0.57
+
+ipv6 route abcd:ab:ac:1c::/64 a14::2
+ipv6 route abcd:ab:ac:3c::/64 a14::2
+ipv6 route abcd:ab:ac:4c::/64 a14::2
+
+!-v5
+ip route 21.0.0.80 255.255.255.240 21.0.0.57
+ip route 21.0.0.96 255.255.255.240 21.0.0.57
+ip route 21.0.0.112 255.255.255.240 21.0.0.57
+
+ipv6 route abcd:ab:ac:1d::/64 a14::2
+ipv6 route abcd:ab:ac:2d::/64 a14::2
+ipv6 route abcd:ab:ac:3d::/64 a14::2
+
+!-v6
+ip route 21.0.2.0 255.255.254.0 21.0.0.57
+ip route 21.0.24.0 255.255.254.0 21.0.0.57
+ip route 21.0.26.0 255.255.254.0 21.0.0.57
+ip route 21.0.28.0 255.255.254.0 21.0.0.57
+ip route 21.0.30.0 255.255.254.0 21.0.0.57
+ip route 21.0.32.0 255.255.254.0 21.0.0.57
+ip route 21.0.34.0 255.255.254.0 21.0.0.57
+ip route 21.0.36.0 255.255.254.0 21.0.0.57
+
+ipv6 route abcd:ab:ac:1e::/64 a14::2
+ipv6 route abcd:ab:ac:3e::/64 a14::2
+ipv6 route abcd:ab:ac:4e::/64 a14::2
+ipv6 route abcd:ab:ac:5e::/64 a14::2
+ipv6 route abcd:ab:ac:6e::/64 a14::2
+ipv6 route abcd:ab:ac:7e::/64 a14::2
+ipv6 route abcd:ab:ac:8e::/64 a14::2
+
+!-v7
+ip route 21.24.0.0 255.248.0.0 21.0.0.57
+ip route 21.32.0.0 255.248.0.0 21.0.0.57
+ip route 21.40.0.0 255.248.0.0 21.0.0.57
+ip route 21.56.0.0 255.248.0.0 21.0.0.57
+
+ipv6 route abcd:ab:ac:1f::/64 a14::2
+ipv6 route abcd:ab:ac:2f::/64 a14::2
+ipv6 route abcd:ab:ac:3f::/64 a14::2
+
+!-wlan
+ip route 10.0.0.0 255.255.255.0 21.0.0.57
+ip route 10.0.1.0 255.255.255.0 21.0.0.57
+ip route 20.0.0.0 255.255.255.0 21.0.0.57
+ip route 30.0.0.0 255.255.255.0 21.0.0.57
+ip route 40.0.0.0 255.255.255.0 21.0.0.57
+ip route 50.0.0.0 255.255.255.0 21.0.0.57
+
+
+R9
+en
+conf t
+ipv6 unicast-routing
+int eth0/1/0
+ip add 192.168.2.254 255.255.255.0
+no shut
+int eth0/0/0
+ip add 21.0.0.66 255.255.255.252
+ipv6 add a16::2/126
+no shut
+
+int fa0/0
+no shut
+
+int fa0/0.10
+encapsulation dot1Q 10 native
+ip add 10.0.1.254 255.255.255.0
+no shut
+int fa0/0.40
+encapsulation dot1Q 40
+ip add 40.0.0.254 255.255.255.0
+no shut 
+int fa0/0.50
+encapsulation dot1Q 50
+ip add 50.0.0.254 255.255.255.0
+no shut
+
+int fa0/0.2
+encapsulation dot1Q 2
+ip add 21.0.19.254 255.255.252.0
+ipv6 add abcd:ab:ac:4a::1/64
+ipv6 nd managed-config-flag
+ipv6 dhcp server Vlan2_6
+no shut
+int fa0/0.3
+encapsulation dot1Q 3
+ip add 21.2.127.254 255.255.128.0
+ipv6 add abcd:ab:ac:4b::1/64
+ipv6 nd managed-config-flag
+ipv6 dhcp server Vlan3_6
+no shut
+exit
+
+int fa0/1
+no shut
+int fa0/1.4
+encapsulation dot1Q 4
+ip add 21.19.255.254 255.252.0.0
+ipv6 add abcd:ab:ac:4c::1/64
+ipv6 nd managed-config-flag
+ipv6 dhcp server Vlan4_6
+no shut
+int fa0/1.6
+encapsulation dot1Q 6
+ip add 21.0.35.254 255.255.254.0
+ipv6 add abcd:ab:ac:7e::1/64
+ipv6 nd managed-config-flag
+ipv6 dhcp server Vlan6_6
+no shut
+
+ip dhcp pool Vlannativa
+network 10.0.1.0 255.255.255.0
+default-router 10.0.1.254
+exit
+ip dhcp pool Vlanalumno
+network 40.0.0.0 255.255.255.0
+default-router 40.0.0.254
+exit
+ip dhcp pool Vlandocente
+network 50.0.0.0 255.255.255.0
+default-router 50.0.0.254
+exit
+
+
+ip dhcp pool Vlan2_4
+default-router 21.0.19.254
+network 21.0.16.0 255.255.252.0
+ipv6 dhcp pool Vlan2_6
+add prefix abcd:ab:ac:4a::/64
+exit
+ip dhcp pool Vlan3_4
+default-router 21.2.127.254
+network 21.2.0.0 255.255.128.0
+ipv6 dhcp pool Vlan3_6
+add prefix abcd:ab:ac:4b::/64
+exit
+ip dhcp pool Vlan4_4
+default-router 21.19.255.254
+network 21.16.0.0 255.252.0.0
+ipv6 dhcp pool Vlan4_6
+add prefix abcd:ab:ac:4c::/64
+exit
+ip dhcp pool Vlan6_4
+default-router 21.0.35.254
+network 21.0.34.0 255.255.254.0
+ipv6 dhcp pool Vlan6_6
+add prefix abcd:ab:ac:7e::/64
+exit
+!---ip routes
+!-routers y switchescore
+ip route 21.0.0.4 255.255.255.252 21.0.0.65
+ip route 21.0.0.8 255.255.255.252 21.0.0.65
+ip route 21.0.0.12 255.255.255.252 21.0.0.65
+ip route 21.0.0.16 255.255.255.252 21.0.0.65
+ip route 21.0.0.20 255.255.255.252 21.0.0.65
+ip route 21.0.0.24 255.255.255.252 21.0.0.65
+ip route 21.0.0.28 255.255.255.252 21.0.0.65
+ip route 21.0.0.32 255.255.255.252 21.0.0.65
+ip route 21.0.0.36 255.255.255.252 21.0.0.65
+ip route 21.0.0.40 255.255.255.252 21.0.0.65
+ip route 21.0.0.44 255.255.255.252 21.0.0.65
+ip route 21.0.0.48 255.255.255.252 21.0.0.65
+ip route 21.0.0.52 255.255.255.252 21.0.0.65
+ip route 21.0.0.56 255.255.255.252 21.0.0.65
+ip route 21.0.0.60 255.255.255.252 21.0.0.65
+ip route 21.0.0.68 255.255.255.252 21.0.0.65
+ip route 21.0.0.72 255.255.255.252 21.0.0.65
+ip route 21.0.0.76 255.255.255.252 21.0.0.65
+
+ipv6 route a1::/126 a16::1
+ipv6 route a2::/126 a16::1
+ipv6 route a3::/126 a16::1
+ipv6 route a4::/126 a16::1
+ipv6 route a5::/126 a16::1
+ipv6 route a6::/126 a16::1
+ipv6 route a7::/126 a16::1
+ipv6 route a8::/126 a16::1
+ipv6 route a9::/126 a16::1
+ipv6 route a10::/126 a16::1
+ipv6 route a11::/126 a16::1
+ipv6 route a12::/126 a16::1
+ipv6 route a13::/126 a16::1
+ipv6 route a14::/126 a16::1
+ipv6 route a15::/126 a16::1
+ipv6 route a17::/126 a16::1
+ipv6 route a18::/126 a16::1
+ipv6 route a19::/126 a16::1
+
+
+!-v2
+ip route 21.0.4.0 255.255.252.0 21.0.0.65
+ip route 21.0.8.0 255.255.252.0 21.0.0.65
+ip route 21.0.12.0 255.255.252.0 21.0.0.65
+
+ipv6 route abcd:ab:ac:1a::/64 a16::1
+ipv6 route abcd:ab:ac:2a::/64 a16::1
+ipv6 route abcd:ab:ac:3a::/64 a16::1
+
+!-v3
+ip route 21.0.128.0 255.255.128.0 21.0.0.65
+ip route 21.1.0.0 255.255.128.0 21.0.0.65
+ip route 21.1.128.0 255.255.128.0 21.0.0.65
+ip route 21.2.128.0 255.255.128.0 21.0.0.65
+
+ipv6 route abcd:ab:ac:1b::/64 a16::1
+ipv6 route abcd:ab:ac:3b::/64 a16::1
+
+!-v4
+ip route 21.4.0.0 255.252.0.0 21.0.0.65
+ip route 21.8.0.0 255.252.0.0 21.0.0.65
+ip route 21.12.0.0 255.252.0.0 21.0.0.65
+
+ipv6 route abcd:ab:ac:1c::/64 a16::1
+ipv6 route abcd:ab:ac:3c::/64 a16::1
+
+!-v5
+ip route 21.0.0.80 255.255.255.240 21.0.0.65
+ip route 21.0.0.96 255.255.255.240 21.0.0.65
+ip route 21.0.0.112 255.255.255.240 21.0.0.65
+ip route 21.0.0.128 255.255.255.240 21.0.0.65
+
+ipv6 route abcd:ab:ac:1d::/64 a16::1
+ipv6 route abcd:ab:ac:2d::/64 a16::1
+ipv6 route abcd:ab:ac:3d::/64 a16::1
+ipv6 route abcd:ab:ac:4d::/64 a16::1
+
+!-v6
+ip route 21.0.2.0 255.255.254.0 21.0.0.65
+ip route 21.0.24.0 255.255.254.0 21.0.0.65
+ip route 21.0.26.0 255.255.254.0 21.0.0.65
+ip route 21.0.28.0 255.255.254.0 21.0.0.65
+ip route 21.0.30.0 255.255.254.0 21.0.0.65
+ip route 21.0.32.0 255.255.254.0 21.0.0.65
+ip route 21.0.36.0 255.255.254.0 21.0.0.65
+
+ipv6 route abcd:ab:ac:1e::/64 a16::1
+ipv6 route abcd:ab:ac:2e::/64 a16::1
+ipv6 route abcd:ab:ac:3e::/64 a16::1
+ipv6 route abcd:ab:ac:4e::/64 a16::1
+ipv6 route abcd:ab:ac:5e::/64 a16::1
+ipv6 route abcd:ab:ac:6e::/64 a16::1
+ipv6 route abcd:ab:ac:8e::/64 a16::1
+
+!-v7
+ip route 21.24.0.0 255.248.0.0 21.0.0.65
+ip route 21.32.0.0 255.248.0.0 21.0.0.65
+ip route 21.40.0.0 255.248.0.0 21.0.0.65
+ip route 21.48.0.0 255.248.0.0 21.0.0.65
+ip route 21.56.0.0 255.248.0.0 21.0.0.65
+
+ipv6 route abcd:ab:ac:1f::/64 a16::1
+ipv6 route abcd:ab:ac:2f::/64 a16::1
+ipv6 route abcd:ab:ac:3f::/64 a16::1
+ipv6 route abcd:ab:ac:4f::/64 a16::1
+
+!-wlan
+ip route 10.0.0.0 255.255.255.0 21.0.0.65
+ip route 20.0.0.0 255.255.255.0 21.0.0.65
+ip route 30.0.0.0 255.255.255.0 21.0.0.65
+
+
+R10
+en
+conf t
+ipv6 unicast-routing
+int eth0/1/0
+ip add 21.0.0.26 255.255.255.252
+ipv6 add a6::2/126
+no shut
+int fa0/0
+ip add 21.0.0.69 255.255.255.252
+no shut
+
+!---ip routes
+!-routers y switchescore
+ip route 21.0.0.4 255.255.255.252 21.0.0.25
+ip route 21.0.0.8 255.255.255.252 21.0.0.25
+ip route 21.0.0.12 255.255.255.252 21.0.0.25
+ip route 21.0.0.16 255.255.255.252 21.0.0.25
+ip route 21.0.0.20 255.255.255.252 21.0.0.25
+ip route 21.0.0.28 255.255.255.252 21.0.0.25
+ip route 21.0.0.32 255.255.255.252 21.0.0.25
+ip route 21.0.0.36 255.255.255.252 21.0.0.25
+ip route 21.0.0.40 255.255.255.252 21.0.0.25
+ip route 21.0.0.44 255.255.255.252 21.0.0.25
+ip route 21.0.0.48 255.255.255.252 21.0.0.25
+ip route 21.0.0.52 255.255.255.252 21.0.0.25
+ip route 21.0.0.56 255.255.255.252 21.0.0.25
+ip route 21.0.0.60 255.255.255.252 21.0.0.25
+ip route 21.0.0.64 255.255.255.252 21.0.0.25
+ip route 21.0.0.72 255.255.255.252 21.0.0.25
+ip route 21.0.0.76 255.255.255.252 21.0.0.25
+
+ipv6 route a1::/126 a6::1
+ipv6 route a2::/126 a6::1
+ipv6 route a3::/126 a6::1
+ipv6 route a4::/126 a6::1
+ipv6 route a5::/126 a6::1
+ipv6 route a7::/126 a6::1
+ipv6 route a8::/126 a6::1
+ipv6 route a9::/126 a6::1
+ipv6 route a10::/126 a6::1
+ipv6 route a11::/126 a6::1
+ipv6 route a12::/126 a6::1
+ipv6 route a13::/126 a6::1
+ipv6 route a14::/126 a6::1
+ipv6 route a15::/126 a6::1
+ipv6 route a16::/126 a6::1
+ipv6 route a18::/126 a6::1
+ipv6 route a19::/126 a6::1
+
+
+!-v2
+ip route 21.0.4.0 255.255.252.0 21.0.0.25
+ip route 21.0.8.0 255.255.252.0 21.0.0.25
+ip route 21.0.12.0 255.255.252.0 21.0.0.25
+ip route 21.0.16.0 255.255.252.0 21.0.0.25
+
+ipv6 route abcd:ab:ac:1a::/64 a6::1
+ipv6 route abcd:ab:ac:2a::/64 a6::1
+ipv6 route abcd:ab:ac:3a::/64 a6::1
+ipv6 route abcd:ab:ac:4a::/64 a6::1
+
+!-v3
+ip route 21.0.128.0 255.255.128.0 21.0.0.25
+ip route 21.1.0.0 255.255.128.0 21.0.0.25
+ip route 21.1.128.0 255.255.128.0 21.0.0.25
+ip route 21.2.0.0 255.255.128.0 21.0.0.25
+ip route 21.2.128.0 255.255.128.0 21.0.0.25
+
+ipv6 route abcd:ab:ac:1b::/64 a6::1
+ipv6 route abcd:ab:ac:3b::/64 a6::1
+ipv6 route abcd:ab:ac:4b::/64 a6::1
+
+!-v4
+ip route 21.4.0.0 255.252.0.0 21.0.0.25
+ip route 21.8.0.0 255.252.0.0 21.0.0.25
+ip route 21.12.0.0 255.252.0.0 21.0.0.25
+ip route 21.16.0.0 255.252.0.0 21.0.0.25
+
+ipv6 route abcd:ab:ac:1c::/64 a6::1
+ipv6 route abcd:ab:ac:3c::/64 a6::1
+ipv6 route abcd:ab:ac:4c::/64 a6::1
+
+!-v5
+ip route 21.0.0.80 255.255.255.240 21.0.0.25
+ip route 21.0.0.96 255.255.255.240 21.0.0.25
+ip route 21.0.0.112 255.255.255.240 21.0.0.25
+ip route 21.0.0.128 255.255.255.240 21.0.0.25
+
+ipv6 route abcd:ab:ac:1d::/64 a6::1
+ipv6 route abcd:ab:ac:2d::/64 a6::1
+ipv6 route abcd:ab:ac:3d::/64 a6::1
+ipv6 route abcd:ab:ac:4d::/64 a6::1
+
+!-v6
+ip route 21.0.2.0 255.255.254.0 21.0.0.25
+ip route 21.0.24.0 255.255.254.0 21.0.0.25
+ip route 21.0.26.0 255.255.254.0 21.0.0.25
+ip route 21.0.28.0 255.255.254.0 21.0.0.25
+ip route 21.0.30.0 255.255.254.0 21.0.0.25
+ip route 21.0.32.0 255.255.254.0 21.0.0.25
+ip route 21.0.34.0 255.255.254.0 21.0.0.25
+ip route 21.0.36.0 255.255.254.0 21.0.0.25
+
+ipv6 route abcd:ab:ac:1e::/64 a6::1
+ipv6 route abcd:ab:ac:2e::/64 a6::1
+ipv6 route abcd:ab:ac:3e::/64 a6::1
+ipv6 route abcd:ab:ac:4e::/64 a6::1
+ipv6 route abcd:ab:ac:5e::/64 a6::1
+ipv6 route abcd:ab:ac:6e::/64 a6::1
+ipv6 route abcd:ab:ac:7e::/64 a6::1
+ipv6 route abcd:ab:ac:8e::/64 a6::1
+
+!-v7
+ip route 21.24.0.0 255.248.0.0 21.0.0.25
+ip route 21.32.0.0 255.248.0.0 21.0.0.25
+ip route 21.40.0.0 255.248.0.0 21.0.0.25
+ip route 21.48.0.0 255.248.0.0 21.0.0.25
+ip route 21.56.0.0 255.248.0.0 21.0.0.25
+
+ipv6 route abcd:ab:ac:1f::/64 a6::1
+ipv6 route abcd:ab:ac:2f::/64 a6::1
+ipv6 route abcd:ab:ac:3f::/64 a6::1
+ipv6 route abcd:ab:ac:4f::/64 a6::1
+
+!-wlan
+ip route 10.0.0.0 255.255.255.0 21.0.0.25
+ip route 10.0.1.0 255.255.255.0 21.0.0.25
+ip route 20.0.0.0 255.255.255.0 21.0.0.25
+ip route 30.0.0.0 255.255.255.0 21.0.0.25
+ip route 40.0.0.0 255.255.255.0 21.0.0.25
+ip route 50.0.0.0 255.255.255.0 21.0.0.25
+
+
+SWCORE1
+en
+conf t
+vlan 6
+name seis
+vlan 7
+name siete
+exit
+
+int gi1/0/1 
+no switchport
+ip add 21.0.0.70 255.255.255.252
+no shut
+exit
+int vlan 6
+ip add 21.0.37.254 255.255.254.0
+no shut
+int vlan 7
+ip add 21.63.255.254 255.248.0.0
+no shut
+
+ip dhcp pool 6
+network 21.0.36.0 255.255.254.0
+default-router 21.0.37.254
+exit
+ip dhcp pool 7
+network 21.56.0.0 255.248.0.0
+default-router 21.63.255.254 
+exit
+
+int gi1/0/2
+switchport mode trunk
+
+!---ip routes
+!-routers y switchescore
+ip route 21.0.0.4 255.255.255.252 21.0.0.69
+ip route 21.0.0.8 255.255.255.252 21.0.0.69
+ip route 21.0.0.12 255.255.255.252 21.0.0.69
+ip route 21.0.0.16 255.255.255.252 21.0.0.69
+ip route 21.0.0.20 255.255.255.252 21.0.0.69
+ip route 21.0.0.24 255.255.255.252 21.0.0.69
+ip route 21.0.0.28 255.255.255.252 21.0.0.69
+ip route 21.0.0.32 255.255.255.252 21.0.0.69
+ip route 21.0.0.36 255.255.255.252 21.0.0.69
+ip route 21.0.0.40 255.255.255.252 21.0.0.69
+ip route 21.0.0.44 255.255.255.252 21.0.0.69
+ip route 21.0.0.48 255.255.255.252 21.0.0.69
+ip route 21.0.0.52 255.255.255.252 21.0.0.69
+ip route 21.0.0.56 255.255.255.252 21.0.0.69
+ip route 21.0.0.60 255.255.255.252 21.0.0.69
+ip route 21.0.0.64 255.255.255.252 21.0.0.69
+ip route 21.0.0.72 255.255.255.252 21.0.0.69
+ip route 21.0.0.76 255.255.255.252 21.0.0.69
+
+!-v2
+ip route 21.0.4.0 255.255.252.0 21.0.0.69
+ip route 21.0.8.0 255.255.252.0 21.0.0.69
+ip route 21.0.12.0 255.255.252.0 21.0.0.69
+ip route 21.0.16.0 255.255.252.0 21.0.0.69
+
+
+!-v3
+ip route 21.0.128.0 255.255.128.0 21.0.0.69
+ip route 21.1.0.0 255.255.128.0 21.0.0.69
+ip route 21.1.128.0 255.255.128.0 21.0.0.69
+ip route 21.2.0.0 255.255.128.0 21.0.0.69
+ip route 21.2.128.0 255.255.128.0 21.0.0.69
+
+
+
+!-v4
+ip route 21.4.0.0 255.252.0.0 21.0.0.69
+ip route 21.8.0.0 255.252.0.0 21.0.0.69
+ip route 21.12.0.0 255.252.0.0 21.0.0.69
+ip route 21.16.0.0 255.252.0.0 21.0.0.69
+
+
+
+!-v5
+ip route 21.0.0.80 255.255.255.240 21.0.0.69
+ip route 21.0.0.96 255.255.255.240 21.0.0.69
+ip route 21.0.0.112 255.255.255.240 21.0.0.69
+ip route 21.0.0.128 255.255.255.240 21.0.0.69
+
+
+
+!-v6
+ip route 21.0.2.0 255.255.254.0 21.0.0.69
+ip route 21.0.24.0 255.255.254.0 21.0.0.69
+ip route 21.0.26.0 255.255.254.0 21.0.0.69
+ip route 21.0.28.0 255.255.254.0 21.0.0.69
+ip route 21.0.30.0 255.255.254.0 21.0.0.69
+ip route 21.0.32.0 255.255.254.0 21.0.0.69
+ip route 21.0.34.0 255.255.254.0 21.0.0.69
+ip route 21.0.36.0 255.255.254.0 21.0.0.69
+
+
+!-v7
+ip route 21.24.0.0 255.248.0.0 21.0.0.69
+ip route 21.32.0.0 255.248.0.0 21.0.0.69
+ip route 21.40.0.0 255.248.0.0 21.0.0.69
+ip route 21.48.0.0 255.248.0.0 21.0.0.69
+ip route 21.56.0.0 255.248.0.0 21.0.0.69
+
+
+
+!-wlan
+ip route 10.0.0.0 255.255.255.0 21.0.0.69
+ip route 10.0.1.0 255.255.255.0 21.0.0.69
+ip route 20.0.0.0 255.255.255.0 21.0.0.69
+ip route 30.0.0.0 255.255.255.0 21.0.0.69
+ip route 40.0.0.0 255.255.255.0 21.0.0.69
+ip route 50.0.0.0 255.255.255.0 21.0.0.69
+
+
+SWCORE2
+en
+conf t
+vlan 3
+name tres
+vlan 5
+name cinco
+vlan 6
+name seis
+exit
+
+int gi1/0/1 
+no switchport
+ip add 21.0.0.74 255.255.255.252
+no shut
+exit
+int vlan 3
+ip add 21.2.255.254 255.255.128.0
+no shut
+int vlan 5
+ip add 21.0.0.110 255.255.255.240
+no shut
+int vlan 6
+ip add 21.0.3.254 255.255.254.0
+no shut
+exit
+
+ip dhcp pool 3
+network 21.2.128.0 255.255.128.0
+default-router 21.2.255.254
+exit
+ip dhcp pool 5
+network 21.0.0.96 255.255.255.240
+default-router 21.0.0.110
+exit
+ip dhcp pool 6
+network 21.0.2.0 255.255.254.0
+default-router 21.0.3.254
+exit
+
+
+int gi1/0/2
+switchport mode trunk
+!---ip routes
+!-routers y switchescore
+ip route 21.0.0.4 255.255.255.252 21.0.0.73
+ip route 21.0.0.8 255.255.255.252 21.0.0.73
+ip route 21.0.0.12 255.255.255.252 21.0.0.73
+ip route 21.0.0.16 255.255.255.252 21.0.0.73
+ip route 21.0.0.20 255.255.255.252 21.0.0.73
+ip route 21.0.0.24 255.255.255.252 21.0.0.73
+ip route 21.0.0.28 255.255.255.252 21.0.0.73
+ip route 21.0.0.32 255.255.255.252 21.0.0.73
+ip route 21.0.0.36 255.255.255.252 21.0.0.73
+ip route 21.0.0.40 255.255.255.252 21.0.0.73
+ip route 21.0.0.44 255.255.255.252 21.0.0.73
+ip route 21.0.0.48 255.255.255.252 21.0.0.73
+ip route 21.0.0.52 255.255.255.252 21.0.0.73
+ip route 21.0.0.56 255.255.255.252 21.0.0.73
+ip route 21.0.0.60 255.255.255.252 21.0.0.73
+ip route 21.0.0.64 255.255.255.252 21.0.0.73
+ip route 21.0.0.68 255.255.255.252 21.0.0.73
+ip route 21.0.0.76 255.255.255.252 21.0.0.73
+
+!-v2
+ip route 21.0.4.0 255.255.252.0 21.0.0.73
+ip route 21.0.8.0 255.255.252.0 21.0.0.73
+ip route 21.0.12.0 255.255.252.0 21.0.0.73
+ip route 21.0.16.0 255.255.252.0 21.0.0.73
+
+
+
+!-v3
+ip route 21.0.128.0 255.255.128.0 21.0.0.73
+ip route 21.1.0.0 255.255.128.0 21.0.0.73
+ip route 21.1.128.0 255.255.128.0 21.0.0.73
+ip route 21.2.0.0 255.255.128.0 21.0.0.73
+ip route 21.2.128.0 255.255.128.0 21.0.0.73
+
+!-v4
+ip route 21.4.0.0 255.252.0.0 21.0.0.73
+ip route 21.8.0.0 255.252.0.0 21.0.0.73
+ip route 21.12.0.0 255.252.0.0 21.0.0.73
+ip route 21.16.0.0 255.252.0.0 21.0.0.73
+
+
+!-v5
+ip route 21.0.0.80 255.255.255.240 21.0.0.73
+ip route 21.0.0.96 255.255.255.240 21.0.0.73
+ip route 21.0.0.112 255.255.255.240 21.0.0.73
+ip route 21.0.0.128 255.255.255.240 21.0.0.73
+
+!-v6
+ip route 21.0.2.0 255.255.254.0 21.0.0.73
+ip route 21.0.24.0 255.255.254.0 21.0.0.73
+ip route 21.0.26.0 255.255.254.0 21.0.0.73
+ip route 21.0.28.0 255.255.254.0 21.0.0.73
+ip route 21.0.30.0 255.255.254.0 21.0.0.73
+ip route 21.0.32.0 255.255.254.0 21.0.0.73
+ip route 21.0.34.0 255.255.254.0 21.0.0.73
+ip route 21.0.36.0 255.255.254.0 21.0.0.73
+
+
+!-v7
+ip route 21.24.0.0 255.248.0.0 21.0.0.73
+ip route 21.32.0.0 255.248.0.0 21.0.0.73
+ip route 21.40.0.0 255.248.0.0 21.0.0.73
+ip route 21.48.0.0 255.248.0.0 21.0.0.73
+ip route 21.56.0.0 255.248.0.0 21.0.0.73
+
+
+
+!-wlan
+ip route 10.0.0.0 255.255.255.0 21.0.0.73
+ip route 10.0.1.0 255.255.255.0 21.0.0.73
+ip route 20.0.0.0 255.255.255.0 21.0.0.73
+ip route 30.0.0.0 255.255.255.0 21.0.0.73
+ip route 40.0.0.0 255.255.255.0 21.0.0.73
+ip route 50.0.0.0 255.255.255.0 21.0.0.73
+
+
+!-------SWITCHES
+SW1
+en
+conf t
+vlan 2
+name dos
+vlan 3
+name tres
+vlan 4
+name cuatro
+vlan 5
+name cinco
+
+int range fa0/1-3
+switchport mode trunk
+channel-group 1 mode active
+exit
+int fa0/4
+switchport mode trunk
+int fa0/5
+switchport access vlan 3
+
+SW2
+en
+conf t
+vlan 2
+name dos
+vlan 4
+name cuatro
+vlan 5
+name cinco
+
+int range fa0/1-3
+switchport mode trunk
+channel-group 1 mode passive
+exit
+int fa0/4
+switchport access vlan 5
+no shut
+int fa0/5
+switchport access vlan 4
+no shut
+int fa0/6
+switchport access vlan 2
+no shut
+
+SW3
+en
+conf t
+vlan 3
+name tres
+vlan 4
+name cuatro
+vlan 6
+name seis
+
+int fa0/1
+switchport mode trunk
+int fa0/2
+switchport mode trunk
+int fa0/3
+switchport mode trunk
+int fa0/4
+switchport mode access
+switchport access vlan 4
+int fa0/5
+switchport mode access
+switchport access vlan 3
+
+SW4
+en
+conf t
+vlan 3
+name tres
+vlan 4
+name cuatro
+vlan 6
+name seis
+
+
+int fa0/3
+switchport mode trunk
+int fa0/1
+switchport mode access
+switchport access vlan 4
+int fa0/4
+switchport mode access
+switchport access vlan 6
+int fa0/2
+switchport mode access
+switchport access vlan 3
+
+SW5
+en
+conf t
+spanning-tree vlan 1 priority 4096
+vlan 2
+name dos
+vlan 3
+name tres
+vlan 4
+name cuatro
+vlan 6
+name seis
+vlan 7
+name siete
+
+int fa0/1
+switchport mode trunk
+int fa0/2 
+switchport mode trunk
+int fa0/4
+switchport mode trunk
+int fa0/5
+switchport mode access
+switchport access vlan 7
+int fa0/3
+switchport mode access
+switchport access vlan 4
+
+SW6
+en
+conf t
+vlan 2
+name dos
+vlan 3
+name tres
+vlan 4
+name cuatro
+
+
+int fa0/1
+switchport mode access
+switchport access vlan 4
+int fa0/2 
+switchport mode access
+switchport access vlan 2
+int fa0/5
+switchport mode access
+switchport access vlan 3
+int fa0/3
+switchport mode trunk
+int fa0/4
+switchport mode trunk
+
+SW7
+en
+conf t
+
+vlan 3
+name tres
+vlan 6
+name seis
+
+
+int fa0/3
+switchport mode trunk
+int fa0/2 
+switchport mode trunk
+int fa0/4
+switchport mode access
+switchport access vlan 6
+int fa0/1
+switchport mode access
+switchport access vlan 3
+
+SW8
+en
+conf t
+vlan 2
+name dos
+vlan 6
+name seis
+vlan 7 
+name siete
+exit
+
+int range fa0/1-3
+switchport mode trunk
+channel-group 1 mode auto
+
+
+
+int fa0/4
+switchport mode trunk
+int fa0/5
+switchport access vlan 7
+int fa0/6
+switchport access vlan 2
+
+SW9
+en
+conf t
+vlan 2
+name dos
+vlan 6
+name seis
+vlan 7
+name siete
+
+int range fa0/1-3
+switchport mode trunk
+channel-group 1 mode desirable
+
+int fa0/4
+switchport mode access
+switchport access vlan 6
+int fa0/5
+switchport mode access
+switchport access vlan 2
+
+SW10
+en
+conf t
+vlan 5
+name cinco
+vlan 6
+name seis
+vlan 7
+name siete
+
+int fa0/1
+switchport mode trunk
+int fa0/2
+switchport mode access
+switchport access vlan 5
+int fa0/3
+switchport mode access
+switchport access vlan 6
+int fa0/4
+switchport mode access
+switchport access vlan 7
+
+SWCORE11
+en
+conf t
+vlan 10
+name nativa
+vlan 20
+name invitados
+vlan 30
+name admon
+vlan 6
+name seis
+
+int Gi1/0/1
+switchport trunk native vlan 10
+switchport mode trunk
+int Gi1/0/2
+switchport trunk native vlan 10
+switchport mode trunk
+int Gi1/0/3
+switchport trunk native vlan 10
+switchport mode trunk
+int Gi1/0/4
+switchport access vlan 10
+
+SW11
+en
+conf t
+vlan 10
+name nativa
+vlan 20
+name invitados
+vlan 30
+name admon
+vlan 6
+name seis
+
+int Gi0/1
+switchport trunk native vlan 10
+switchport mode trunk
+int fa0/1
+switchport trunk native vlan 10
+switchport mode trunk
+int gi0/2
+switchport trunk native vlan 10
+switchport mode trunk
+
+
+SW12
+    en
+    conf t
+    vlan 10
+    name nativa
+    vlan 20
+    name invitados
+    vlan 30
+    name admon
+    vlan 6
+    name seis
+
+
+    int fa0/1
+    switchport trunk native vlan 10
+    switchport mode trunk
+    int gi0/2
+    switchport trunk native vlan 10
+    switchport mode trunk
+    int fa0/2
+    switchport mode access
+    switchport access vlan 6
+    int fa0/3
+    switchport mode access
+    switchport access vlan 6
+SW13
+    en
+    conf t
+    vlan 5
+    name cinco
+    vlan 7
+    name siete
+
+
+    int fa0/1
+    switchport mode trunk
+    int fa0/2
+    switchport mode access
+    switchport access vlan 5
+    int fa0/3
+    switchport mode access
+    switchport access vlan 7
+    int fa0/4
+    switchport mode access
+    switchport access vlan 7
+sw14
+    en
+    conf t
+    vlan 4
+    name cuatro
+    vlan 6
+    name seis
+
+    int fa0/1
+    switchport mode trunk
+    int fa0/2
+    switchport mode access
+    switchport access vlan 4
+    int fa0/3
+    switchport mode access
+    switchport access vlan 4
+    int fa0/4
+    switchport mode access
+    switchport access vlan 6
+
+SWCORE22
+    en
+    conf t
+    vlan 10
+    name nativa
+    vlan 40
+    name alumnos
+    vlan 50
+    name docentes
+    vlan 2
+    name dos
+    vlan 3
+    name tres
+
+    int Gi1/0/1
+    switchport trunk native vlan 10
+    switchport mode trunk
+    int Gi1/0/2
+    switchport trunk native vlan 10
+    switchport mode trunk
+    int Gi1/0/3
+    switchport trunk native vlan 10
+    switchport mode trunk
+    int Gi1/0/4
+    switchport trunk native vlan 10
+    switchport mode trunk
+    int Gi1/0/5
+    switchport access vlan 10
+
+SW15
+    en
+    conf t
+    vlan 10
+    name nativa
+    vlan 40
+    name alumnos
+    vlan 50
+    name docentes
+    vlan 2
+    name dos
+    vlan 3
+    name tres
+
+    int Gi0/1
+    switchport trunk native vlan 10
+    switchport mode trunk
+    int fa0/1
+    switchport trunk native vlan 10
+    switchport mode trunk
+    int fa0/2
+    switchport mode access
+    switchport access vlan 3
+    int fa0/3
+    switchport mode access
+    switchport access vlan 2
+
+SW16
+en
+conf t
+vlan 7
+name siete
+vlan 6
+name seis
+
+int fa0/1
+switchport mode trunk
+int fa0/2
+switchport mode access
+switchport access vlan 6
+int fa0/3
+switchport mode access
+switchport access vlan 7
+
+sw17
+en
+conf t
+vlan 3
+name tres
+vlan 5
+name cinco
+vlan 6
+name seis
+
+int gi0/1
+switchport mode trunk
+int gi0/2   
+switchport mode trunk
+int fa0/1  
+switchport mode access
+switchport access vlan 6
+
+sw18
+en
+conf t
+vlan 3
+name tres
+vlan 5
+name cinco
+
+
+int gi0/2   
+switchport mode trunk
+int fa0/1  
+switchport mode access
+switchport access vlan 5
+int fa0/2
+switchport mode access
+switchport access vlan 3
+int fa0/3
+switchport mode access
+switchport access vlan 5
+
+
+

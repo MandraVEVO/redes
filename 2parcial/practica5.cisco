@@ -1,0 +1,175 @@
+R1
+en 
+conf t 
+int eth0/0/0
+ip add 16.0.0.5 255.255.255.252
+no shut
+int eth0/1/0
+ip add 16.0.0.9 255.255.255.252
+no shut
+int fa0/0
+no shut
+int fa0/0.2
+encapsulation dot1q 2
+ip add 16.0.7.254 255.255.252.0
+no shut
+int fa0/0.4
+encapsulation dot1q 4
+ip add 16.0.0.30 255.255.255.240
+no shut
+
+ip dhcp pool vlan2
+network 16.0.4.0 255.255.252.0
+default-router 16.0.7.254
+exit
+ip dhcp pool vlan4
+network 16.0.0.16 255.255.255.240
+default-router 16.0.0.30
+exit
+
+router ospf 10
+router-id 0.0.0.0
+redistribute connected subnets
+network 16.0.0.4 0.0.0.3 area 0
+network 16.0.0.8 0.0.0.3 area 0
+network 16.0.4.0 0.0.3.255 area 0
+network 16.0.0.16 0.0.255.255 area 0
+exit
+
+R2
+en
+conf t
+int eth0/0/0
+ip add 16.0.0.6 255.255.255.252
+no shut
+int eth0/2/0
+ip add 16.0.0.13 255.255.255.252
+no shut
+int fa0/0
+no shut
+int fa0/0.3
+encapsulation dot1q 3
+ip add 16.1.255.254 255.255.0.0
+no shut
+int fa0/0.4
+encapsulation dot1q 4
+ip add 16.0.0.46 255.255.255.240
+no shut
+int fa0/0.5
+encapsulation dot1q 5
+ip add 16.7.255.254 255.252.0.0
+no shut
+
+ip dhcp pool vlan3
+network 16.1.0.0 255.255.0.0
+default-router 16.1.255.254
+exit
+ip dhcp pool vlan4
+network 16.0.0.32 255.255.255.240 
+default-router 16.0.0.46
+exit
+ip dhcp pool vlan5
+network 16.4.0.0 255.252.0.0
+default-router 16.7.255.254
+exit
+
+router ospf 10
+router-id 0.0.0.0
+redistribute connected subnets
+network 16.0.0.4 0.0.0.3 area 0
+network 16.0.0.12 0.0.0.3 area 0
+network 16.1.0.0 0.0.255.255 area 0
+network 16.0.0.32 0.0.0.15 area 0
+network 16.4.0.0 0.3.255.255 area 0
+exit
+
+r3
+en
+conf t
+int eth0/1/0   
+ip add 16.0.0.10 255.255.255.252
+no shut
+int eth0/2/0
+ip add 16.0.0.14 255.255.255.252
+no shut
+int fa0/0
+no shut
+int fa0/0.3
+encapsulation dot1q 3
+ip add 16.2.255.254 255.255.0.0
+no shut
+int fa0/0.5
+encapsulation dot1q 5
+ip add 16.11.255.254 255.252.0.0
+no shut
+
+ip dhcp pool vlan3
+network 16.2.0.0 255.255.0.0
+default-router 16.2.255.254
+exit
+ip dhcp pool vlan5
+network 16.8.0.0 255.252.0.0
+default-router 16.11.255.254
+
+router ospf 10
+router-id 0.0.0.0
+redistribute connected subnets
+network 16.0.0.8 0.0.0.3 area 0
+network 16.0.0.12 0.0.0.3 area 0
+network 16.2.0.0 0.0.255.255 area 0
+network 16.8.0.0 0.3.255.255 area 0
+exit
+
+
+sw1
+en
+conf t
+vlan 2
+name dos
+vlan 4 
+name cuatro
+
+int fa0/1
+switchport mode trunk
+int fa0/2
+switchport access vlan 2
+int fa0/3
+switchport access vlan 2
+int fa0/4
+switchport access vlan 4
+
+sw2
+en
+conf t
+vlan 3
+name tres
+vlan 4
+name cuatro
+vlan 5 
+name cinco
+
+int fa0/1
+switchport mode trunk
+int fa0/2
+switchport access vlan 5
+int fa0/3
+switchport access vlan 3
+int fa0/4
+switchport access vlan 4
+
+sw3
+en
+conf t
+vlan 3
+name tres
+vlan 5 
+name cinco
+
+int fa0/1
+switchport mode trunk
+int fa0/2
+switchport access vlan 5
+int fa0/3
+switchport access vlan 3
+int fa0/4
+switchport access vlan 5

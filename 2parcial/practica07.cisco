@@ -1,0 +1,190 @@
+R1
+en
+conf t
+hostname R1
+int eth0/0/0
+ip add 12.0.0.5 255.255.255.252
+no shut
+int eth0/1/0
+ip add 12.0.0.9 255.255.255.252
+no shut
+int fa0/0
+no shut
+int fa0/0.2
+encapsulation dot1q 2
+ip add 12.0.0.30 255.255.255.240
+no shut
+int fa0/0.3
+encapsulation dot1q 3
+ip add 12.0.7.254 255.255.252.0
+no shut
+
+ip dhcp pool vlan2_4
+network 12.0.0.16 255.255.255.240
+default-router 12.0.0.30
+exit
+ip dhcp pool vlan3_4
+network 12.0.4.0 255.255.252.0
+default-router 12.0.7.254
+exit
+
+router ospf 10
+redistribute connected subnets
+network 12.0.0.4 0.0.0.3 area 0
+network 12.0.0.8 0.0.0.3 area 0
+network 12.0.0.16 0.0.0.15 area 0
+network 12.0.4.0 0.0.3.255 area 0
+exit
+
+access-list 100 deny tcp 12.0.0.32 0.0.0.15 host 12.0.4.3 eq 443
+access-list 100 deny tcp 12.0.0.48 0.0.0.15 host 12.0.4.3 eq 443
+access-list 100 permit ip any any
+
+int fa0/0.3
+ip access-group 100 out
+
+
+R2
+en
+conf t
+hostname R2
+int eth0/0/0
+ip add 12.0.0.6 255.255.255.252
+no shut
+int eth0/2/0
+ip add 12.0.0.12 255.255.255.252
+no shut
+int fa0/0
+no shut
+int fa0/0.2
+encapsulation dot1q 2
+ip add 12.0.0.46 255.255.255.240
+no shut
+int fa0/0.4
+encapsulation dot1q 4
+ip add 12.0.1.254 255.255.255.0
+no shut
+
+
+ip dhcp pool vlan2_4
+network 12.0.0.32 255.255.255.240
+default-router 12.0.0.46
+exit
+ip dhcp pool vlan4_4
+network 12.0.1.0 255.255.255.0
+default-router 12.0.1.254
+exit
+
+
+router ospf 10
+redistribute connected subnets
+network 12.0.0.4 0.0.0.3 area 0
+network 12.0.0.12 0.0.0.3 area 0
+network 12.0.0.32 0.0.0.15 area 0
+network 12.0.1.0 0.0.0.255 area 0
+exit
+
+R3
+en
+conf t
+hostname R3
+int eth0/1/0
+ip add 12.0.0.10 255.255.255.252
+no shut 
+int eth0/2/0
+ip add 12.0.0.14 255.255.255.252
+no shut
+int fa0/0
+no shut
+int fa0/0.2
+encapsulation dot1q 2
+ip add 12.0.0.62 255.255.255.240
+no shut
+int fa0/0.3
+encapsulation dot1q 3
+ip add 12.0.11.254 255.255.252.0
+no shut
+
+ip dhcp pool vlan2_4
+network 12.0.0.48 255.255.255.240
+default-router 12.0.0.62
+exit
+ip dhcp pool vlan3_4
+network 12.0.8.0 255.255.252.0
+default-router 12.0.11.254
+exit
+
+router ospf 10
+redistribute connected subnets
+network 12.0.0.8 0.0.0.3 area 0
+network 12.0.0.12 0.0.0.3 area  0
+network 12.0.0.48 0.0.0.15 area 0
+network 12.0.8.0 0.0.3.255 area 0
+exit
+
+
+SW1
+en
+conf t
+vlan 2
+name dos
+vlan 3
+name tres
+vlan 4
+name cuatro
+
+int fa0/1
+switchport mode trunk
+int fa0/2
+switchport mode access
+switchport access vlan 2
+int fa0/3
+switchport mode access
+switchport access vlan 3
+int fa0/4
+switchport mode access
+switchport access vlan 3 
+
+
+SW2
+en
+conf t
+vlan 2
+name dos
+
+vlan 4
+name cuatro
+
+int fa0/1
+switchport mode trunk
+int fa0/2
+switchport mode access
+switchport access vlan 4
+int fa0/3
+switchport mode access
+switchport access vlan 4
+int fa0/4
+switchport mode access
+switchport access vlan 2 
+
+SW3
+en
+conf t
+vlan 2
+name dos
+vlan 3
+name tres
+
+
+int fa0/1
+switchport mode trunk
+int fa0/2
+switchport mode access
+switchport access vlan 2
+int fa0/3
+switchport mode access
+switchport access vlan 3
+int fa0/4
+switchport mode access
+switchport access vlan 3 
+

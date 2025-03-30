@@ -1,0 +1,111 @@
+R1
+enable
+conf terminal
+int Fa0/1
+ip add 15.0.0.1 255.255.255.252
+no shut
+int Fa0/0
+no shut
+int Fa0/0.2
+encapsulation dot1Q 2 
+ip add 15.0.7.254 255.255.252.0
+no shut
+int Fa0/0.3
+encapsulation dot1Q 3
+ip add 15.0.0.126 255.255.255.192
+no shut
+int Fa0/0.4
+encapsulation dot1Q 4
+ip add 15.0.0.30 255.255.255.240
+no shut
+
+
+------ip route-----
+ip route 15.0.8.0 255.255.252.0 15.0.0.2
+ip route 15.0.0.128 255.255.255.192 15.0.0.2
+ip route 15.0.0.32 255.255.255.240 15.0.0.2
+
+
+R2
+enable
+conf terminal
+int Fa0/1
+ip add 15.0.0.2 255.255.255.252
+no shut
+int Fa0/0
+no shut
+int Fa0/0.2
+encapsulation dot1Q 2 
+ip add 15.0.11.254 255.255.252.0
+no shut
+int Fa0/0.3
+encapsulation dot1Q 3
+ip add 15.0.0.190 255.255.255.192
+no shut
+int Fa0/0.4
+encapsulation dot1Q 4
+ip add 15.0.0.46 255.255.255.240
+no shut
+
+------ip route-----
+ip route 15.0.4.0 255.255.252.0 15.0.0.1
+ip route 15.0.0.64 255.255.255.192 15.0.0.1
+ip route 15.0.0.16 255.255.255.240 15.0.0.1
+
+
+
+
+SW1
+enable
+conf terminal
+vlan 2
+name dos
+int Fa0/2
+switchport mode access
+switchport access vlan 2
+no shut
+vlan 3
+name tres
+int Fa0/3
+switchport mode access
+switchport access vlan 3
+no shut
+vlan 4
+name cuatro
+int Fa0/4
+switchport mode access
+switchport access vlan 4
+no shut
+
+int Fa0/1
+switchport mode trunk
+int Fa0/5
+switchport mode trunk
+
+Sw2
+enable
+conf terminal
+
+vlan 2
+name dos
+int Fa0/2
+switchport mode access
+switchport access vlan 2
+no shut
+vlan 3
+name tres
+int Fa0/3
+switchport mode access
+switchport access vlan 3
+no shut
+vlan 4
+name cuatro
+int Fa0/4
+switchport mode access
+switchport access vlan 4
+no shut
+int Fa0/1
+switchport mode trunk
+
+
+

@@ -1,0 +1,2596 @@
+R1
+en
+conf t
+ipv6 unicast-routing
+hostname R1
+
+int eth0/0/0
+ip add 21.0.0.5 255.255.255.252
+ipv6 add a1::1/126
+no shut
+int eth0/2/0
+ip add 21.0.0.9 255.255.255.252
+ipv6 add a2::1/126
+no shut
+int eth1/1
+ip add 21.0.0.17 255.255.255.252
+ipv6 add a4::1/126
+no shut
+int eth0/3/0
+ip add 21.0.0.13 255.255.255.252
+ipv6 add a3::1/126
+no shut
+exit
+
+int fa0/0
+no shut
+int fa0/0.3
+encapsulation dot1Q 3
+ip add 21.2.255.254 255.255.0.0
+standby 1 ip 21.2.255.252
+standby 1 priority 150
+standby 1 preempt
+no shut
+exit
+
+
+int fa0/1
+no shut
+int fa0/1.3
+encapsulation dot1Q 3
+ip add 21.1.255.254 255.255.0.0
+ipv6 add a2:1b::1/64
+ipv6 nd managed-config-flag
+ipv6 dhcp server Vlan3_6
+no shut
+int fa0/1.5
+encapsulation dot1Q 5
+ip add 21.0.3.254 255.255.254.0
+ipv6 add a4:1d::1/64
+ipv6 nd managed-config-flag
+ipv6 dhcp server Vlan5_6
+no shut
+exit
+
+ip dhcp pool 3hsrp
+network 21.2.0.0 255.255.0.0
+default-router 21.2.255.252
+exit
+
+ip dhcp pool Vlan3_4
+default-router 21.1.255.254
+network 21.1.0.0 255.255.0.0
+ipv6 dhcp pool Vlan3_6
+add prefix a2:1b::/64
+exit
+ip dhcp pool Vlan5_4
+default-router 21.0.3.254
+network 21.0.2.0 255.255.254.0
+ipv6 dhcp pool Vlan5_6
+add prefix a4:1d::/64
+exit
+
+ip domain-name ulsa.com
+crypto key generate rsa
+y
+1024
+service password-encryption
+enable secret abcd1234
+ip ssh ver 2
+line vty 0 4
+transport input ssh
+login local
+exit
+username admin privilege 15 secret adminabcd
+exit
+
+!-ip route
+!--routers y switches core
+
+ip route 21.0.0.20 255.255.255.252 21.0.0.6
+ip route 21.0.0.24 255.255.255.252 21.0.0.10
+ip route 21.0.0.28 255.255.255.252 21.0.0.10
+ip route 21.0.0.32 255.255.255.252 21.0.0.10
+ip route 21.0.0.36 255.255.255.252 21.0.0.10
+ip route 21.0.0.40 255.255.255.252 21.0.0.10
+ip route 21.0.0.44 255.255.255.252 21.0.0.10
+ip route 21.0.0.48 255.255.255.252 21.0.0.10
+ip route 21.0.0.52 255.255.255.252 21.0.0.10
+ip route 21.0.0.56 255.255.255.252 21.0.0.10
+ip route 21.0.0.60 255.255.255.252 21.0.0.10
+ip route 21.0.0.64 255.255.255.252 21.0.0.10
+ip route 21.0.0.68 255.255.255.252 21.0.0.10
+ip route 21.0.0.72 255.255.255.252 21.0.0.10
+ip route 21.0.0.76 255.255.255.252 21.0.0.10
+ip route 21.0.0.80 255.255.255.252 21.0.0.10
+ip route 21.0.0.84 255.255.255.252 21.0.0.10
+
+
+ipv6 route a1::/126 a1::2
+ipv6 route a2::/126 a2::2
+ipv6 route a3::/126 a2::2
+ipv6 route a4::/126 a2::2
+ipv6 route a5::/126 a1::2
+ipv6 route a6::/126 a2::2
+ipv6 route a7::/126 a2::2
+ipv6 route a8::/126 a2::2
+ipv6 route a9::/126 a2::2
+ipv6 route a10::/126 a2::2
+ipv6 route a11::/126 a2::2
+ipv6 route a12::/126 a2::2
+ipv6 route a13::/126 a2::2
+ipv6 route a14::/126 a2::2
+ipv6 route a15::/126 a2::2
+ipv6 route a16::/126 a2::2
+ipv6 route a17::/126 a2::2
+ipv6 route a18::/126 a2::2
+ipv6 route a19::/126 a2::2
+ipv6 route a20::/126 a2::2
+ipv6 route a21::/126 a2::2
+
+!-vlan2
+ip route 21.4.0.0 255.252.0.0 21.0.0.6
+ip route 21.8.0.0 255.252.0.0 21.0.0.10
+ip route 21.12.0.0 255.252.0.0 21.0.0.10
+
+ipv6 route a1:1a::/64 a1::2
+ipv6 route a1:2a::/64 a2::2
+ipv6 route a1:3a::/64 a2::2
+
+!-vlan3
+ip route 21.2.0.0 255.255.0.0 21.0.0.6
+ip route 21.3.0.0 255.255.0.0 21.0.0.6
+ip route 21.16.0.0 255.255.0.0 21.0.0.10
+ip route 21.17.0.0 255.255.0.0 21.0.0.10
+ip route 21.18.0.0 255.255.0.0 21.0.0.10
+
+ 
+ipv6 route a2:3b::/64 a1::2
+ipv6 route a2:4b::/64 a1::2
+ipv6 route a2:5b::/64 a2::2
+ipv6 route a2:6b::/64 a2::2
+!-vlan4
+ip route 21.0.32.0 255.255.224.0 21.0.0.6
+ip route 21.0.64.0 255.255.224.0 21.0.0.10
+ip route 21.0.96.0 255.255.224.0 21.0.0.10
+ip route 21.0.128.0 255.255.224.0 21.0.0.10
+ip route 21.0.160.0 255.255.224.0 21.0.0.10
+
+ipv6 route a3:1c::/64 a1::2
+ipv6 route a3:2c::/64 a2::2
+ipv6 route a3:3c::/64 a2::2
+ipv6 route a3:4c::/64 a2::2
+ipv6 route a3:5c::/64 a2::2
+
+!-vlan5
+ip route 21.0.4.0 255.255.254.0 21.0.0.10
+ip route 21.0.6.0 255.255.254.0 21.0.0.10
+ip route 21.0.8.0 255.255.254.0 21.0.0.10
+ip route 21.0.10.0 255.255.254.0 21.0.0.10
+
+ipv6 route a4:2d::/64 a2::2
+ipv6 route a4:3d::/64 a2::2
+ipv6 route a4:4d::/64 a2::2
+ipv6 route a4:5d::/64 a2::2
+
+!-vlan6
+ip route 21.0.12.0 255.255.252.0 21.0.0.10
+ip route 21.0.16.0 255.255.252.0 21.0.0.10
+ip route 21.0.20.0 255.255.252.0 21.0.0.10
+
+ipv6 route a5:1e::/64 a2::2
+ipv6 route a5:2e::/64 a2::2
+ipv6 route a5:3e::/64 a2::2
+
+!-vlan7
+ip route 21.0.0.128 255.255.255.128 21.0.0.10
+ip route 21.0.1.0 255.255.255.128 21.0.0.10
+ip route 21.0.1.128 255.255.255.128 21.0.0.10
+ip route 21.0.24.0 255.255.255.128 21.0.0.10
+ip route 21.0.24.128 255.255.255.128 21.0.0.10
+
+ipv6 route a6:1f::/64 a2::2
+ipv6 route a6:2f::/64 a2::2
+ipv6 route a6:3f::/64 a2::2
+ipv6 route a6:4f::/64 a2::2
+ipv6 route a6:5f::/64 a2::2
+
+!-vlan8
+ip route 21.0.0.96 255.255.255.240 21.0.0.10
+ip route 21.0.0.112 255.255.255.240 21.0.0.10
+
+ipv6 route a7:1a::/64 a2::2
+ipv6 route a7:1a::/64 a2::2
+
+!wlan
+ip route 10.0.0.0 255.255.255.252 21.0.0.6
+ip route 10.0.1.0 255.255.255.252 21.0.0.10
+ip route 20.0.0.0 255.255.255.252 21.0.0.6
+ip route 30.0.0.0 255.255.255.252 21.0.0.6
+ip route 40.0.0.0 255.255.255.252 21.0.0.6
+ip route 50.0.0.0 255.255.255.252 21.0.0.10
+ip route 60.0.0.0 255.255.255.252 21.0.0.10
+
+
+
+R2
+en
+conf t
+ipv6 unicast-routing
+hostname R2
+int eth0/0/0
+ip add 21.0.0.6 255.255.255.252
+ipv6 add a1::2/126
+no shut
+int eth0/1/0
+ip add 21.0.0.21 255.255.255.252
+ipv6 add a5::1/126
+no shut
+int fa0/0
+no shut
+int fa0/0.3
+encapsulation dot1Q 3
+ip add 21.2.255.253 255.255.0.0
+standby 1 ip 21.2.255.252
+no shut
+exit
+
+int eth0/2/0
+ip add 192.168.1.254 255.255.255.0
+no shut
+exit
+
+int fa0/1   
+no shut
+int fa0/1.4
+encapsulation dot1Q 4
+ip add 21.0.63.254 255.255.224.0
+ipv6 add a3:1c::1/64
+ipv6 nd managed-config-flag
+ipv6 dhcp server Vlan4_6
+no shut
+int fa0/1.3
+encapsulation dot1Q 3
+ip add 21.3.255.254 255.255.0.0
+ipv6 add a2:3b::1/64
+ipv6 nd managed-config-flag
+ipv6 dhcp server Vlan3_6
+no shut
+int fa0/1.2
+encapsulation dot1Q 2
+ip add 21.7.255.254 255.252.0.0
+ipv6 add a1:1a::1/64
+ipv6 nd managed-config-flag
+ipv6 dhcp server Vlan2_6
+no shut
+int fa0/1.10
+encapsulation dot1Q 10 native
+ip add 10.0.0.254 255.255.255.0
+no shut
+int fa0/1.20
+encapsulation dot1Q 20
+ip add 20.0.0.254 255.255.255.0
+no shut
+int fa0/1.30
+encapsulation dot1Q 30
+ip add 30.0.0.254 255.255.255.0
+no shut
+int fa0/1.40
+encapsulation dot1Q 40
+ip add 40.0.0.254 255.255.255.0
+no shut
+exit
+
+ip dhcp pool 3hsrp
+network 21.2.0.0 255.255.0.0
+default-router 21.2.255.252
+exit
+
+ip dhcp pool Vlannativa
+network 10.0.0.0 255.255.255.0
+default-router 10.0.0.254
+exit
+ip dhcp pool Vlanposgrado
+network 20.0.0.0 255.255.255.0
+default-router 20.0.0.254
+exit
+ip dhcp pool Vlanadmon
+network 40.0.0.0 255.255.255.0
+default-router 40.0.0.254
+exit
+
+
+ip dhcp pool Vlan4_4
+default-router 21.0.63.254
+network 21.0.32.0 255.255.224.0
+ipv6 dhcp pool Vlan4_6
+add prefix a3:1c::/64
+ip dhcp pool Vlan3_4
+default-router 21.3.255.254
+network 21.3.0.0 255.255.0.0
+ipv6 dhcp pool Vlan3_6
+add prefix a2:3b::/64
+ip dhcp pool Vlan2_4
+default-router 21.7.255.254
+network 21.4.0.0 255.252.0.0
+ipv6 dhcp pool Vlan2_6
+add prefix a1:1a::/64
+exit
+
+ip domain-name ulsa.com 
+crypto key generate rsa
+y
+1024
+service password-encryption
+enable secret abcd1234
+ip ssh ver 2
+line vty 0 4
+transport input ssh
+login local
+exit
+username admin privilege 15 secret adminabcd
+exit
+
+!-ip route
+!-- Routers y switches core
+ip route 21.0.0.8 255.255.255.252 21.0.0.22
+ip route 21.0.0.12 255.255.255.252 21.0.0.22
+ip route 21.0.0.16 255.255.255.252 21.0.0.22
+ip route 21.0.0.24 255.255.255.252 21.0.0.22
+ip route 21.0.0.28 255.255.255.252 21.0.0.22
+ip route 21.0.0.32 255.255.255.252 21.0.0.22
+ip route 21.0.0.36 255.255.255.252 21.0.0.22
+ip route 21.0.0.40 255.255.255.252 21.0.0.22
+ip route 21.0.0.44 255.255.255.252 21.0.0.22
+ip route 21.0.0.48 255.255.255.252 21.0.0.22
+ip route 21.0.0.52 255.255.255.252 21.0.0.22
+ip route 21.0.0.56 255.255.255.252 21.0.0.22
+ip route 21.0.0.60 255.255.255.252 21.0.0.22
+ip route 21.0.0.64 255.255.255.252 21.0.0.22
+ip route 21.0.0.68 255.255.255.252 21.0.0.22
+ip route 21.0.0.72 255.255.255.252 21.0.0.22
+ip route 21.0.0.76 255.255.255.252 21.0.0.22
+ip route 21.0.0.80 255.255.255.252 21.0.0.22
+ip route 21.0.0.84 255.255.255.252 21.0.0.22
+
+ipv6 route a2::/126 a5::2
+ipv6 route a3::/126 a5::2
+ipv6 route a4::/126 a5::2
+ipv6 route a6::/126 a5::2
+ipv6 route a7::/126 a5::2
+ipv6 route a8::/126 a5::2
+ipv6 route a9::/126 a5::2
+ipv6 route a10::/126 a5::2
+ipv6 route a11::/126 a5::2
+ipv6 route a12::/126 a5::2
+ipv6 route a13::/126 a5::2
+ipv6 route a14::/126 a5::2
+ipv6 route a15::/126 a5::2
+ipv6 route a16::/126 a5::2
+ipv6 route a17::/126 a5::2
+ipv6 route a18::/126 a5::2
+ipv6 route a19::/126 a5::2
+ipv6 route a20::/126 a5::2
+ipv6 route a21::/126 a5::2
+
+
+!-vlan2
+ip route 21.8.0.0 255.252.0.0 21.0.0.22
+ip route 21.12.0.0 255.252.0.0 21.0.0.22
+
+ipv6 route a1:2a::/64 a5::2
+ipv6 route a1:3a::/64 a5::2
+
+
+!-vlan3
+ip route 21.1.0.0 255.255.0.0 21.0.0.22
+ip route 21.2.0.0 255.255.0.0 21.0.0.22
+ip route 21.16.0.0 255.255.0.0 21.0.0.22
+ip route 21.17.0.0 255.255.0.0 21.0.0.22
+ip route 21.18.0.0 255.255.0.0 21.0.0.22
+
+ipv6 route a2:1b::/64 a5::2
+ipv6 route a2:4b::/64 a5::2
+ipv6 route a2:5b::/64 a5::2
+ipv6 route a2:6b::/64 a5::2
+
+!-vlan4
+ip route 21.0.64.0 255.255.224.0 21.0.0.22
+ip route 21.0.96.0 255.255.224.0 21.0.0.22
+ip route 21.0.128.0 255.255.224.0 21.0.0.22
+ip route 21.0.160.0 255.255.224.0 21.0.0.22
+
+ipv6 route a3:2c::/64 a5::2
+ipv6 route a3:3c::/64 a5::2
+ipv6 route a3:4c::/64 a5::2
+ipv6 route a3:5c::/64 a5::2
+
+
+!-vlan5
+ip route 21.0.2.0 255.255.254.0 21.0.0.22
+ip route 21.0.4.0 255.255.254.0 21.0.0.22
+ip route 21.0.6.0 255.255.254.0 21.0.0.22
+ip route 21.0.8.0 255.255.254.0 21.0.0.22
+ip route 21.0.10.0 255.255.254.0 21.0.0.22
+
+ipv6 route a4:1d::/64 a5::2
+ipv6 route a4:2d::/64 a5::2
+ipv6 route a4:3d::/64 a5::2
+ipv6 route a4:4d::/64 a5::2
+ipv6 route a4:5d::/64 a5::2
+
+
+!-vlan6
+ip route 21.0.12.0 255.255.252.0 21.0.0.22
+ip route 21.0.16.0 255.255.252.0 21.0.0.22
+ip route 21.0.20.0 255.255.252.0 21.0.0.22
+
+ipv6 route a5:1e::/64 a5::2
+ipv6 route a5:2e::/64 a5::2
+ipv6 route a5:3e::/64 a5::2
+
+
+!-vlan7
+ip route 21.0.0.128 255.255.255.128 21.0.0.22
+ip route 21.0.1.0 255.255.255.128 21.0.0.22
+ip route 21.0.1.128 255.255.255.128 21.0.0.22
+ip route 21.0.24.0 255.255.255.128 21.0.0.22
+ip route 21.0.24.128 255.255.255.128 21.0.0.22
+
+ipv6 route a6:1f::/64 a5::2
+ipv6 route a6:2f::/64 a5::2
+ipv6 route a6:3f::/64 a5::2
+ipv6 route a6:4f::/64 a5::2
+ipv6 route a6:5f::/64 a5::2
+
+
+!-vlan 8
+ip route 21.0.0.96 255.255.255.240 21.0.0.22
+ip route 21.0.0.112 255.255.255.240 21.0.0.22
+
+ipv6 route a7:1a::/64 a5::2
+ipv6 route a7:1a::/64 a5::2
+
+!wlan
+ip route 10.0.0.0 255.255.255.252 21.0.0.22
+ip route 10.0.1.0 255.255.255.252 21.0.0.22
+ip route 50.0.0.0 255.255.255.252 21.0.0.22
+ip route 60.0.0.0 255.255.255.252 21.0.0.22
+
+
+
+
+R3
+en
+conf t
+ipv6 unicast-routing
+int eth0/2/0
+ip add 21.0.0.10 255.255.255.252
+ipv6 add a2::2/126
+no shut
+int eth0/1/0
+ip add 21.0.0.22 255.255.255.252
+ipv6 add a5::2/126
+no shut
+int eth0/0/0
+ip add 21.0.0.26 255.255.255.252
+ipv6 add a6::1/126
+no shut
+int eth0/3/0
+ip add 21.0.0.29 255.255.255.252
+ipv6 add a7::1/126
+no shut
+int fa0/0
+no shut
+int fa0/0.3
+encapsulation dot1Q 3
+ip add 21.16.255.254 255.255.0.0
+ipv6 add a2:4b::1/64
+ipv6 nd managed-config-flag
+ipv6 dhcp server Vlan3_6
+no shut
+int fa0/0.4
+encapsulation dot1Q 4
+ip add 21.0.95.254 255.255.224.0
+ipv6 add a3:2c::1/64
+ipv6 nd managed-config-flag
+ipv6 dhcp server Vlan4_6
+no shut
+exit
+
+ip dhcp pool 3
+default-router 21.16.255.254
+network 21.16.0.0 255.255.0.0
+ipv6 dhcp pool Vlan3_6
+add prefix a2:4b::/64
+exit
+ip dhcp pool 4
+default-router 21.0.95.254
+network 21.0.64.0 255.255.224.0
+ipv6 dhcp pool Vlan4_6
+add prefix a3:2c::/64
+exit
+
+hostname R3
+ip domain-name ulsa.com 
+crypto key generate rsa
+y
+1024
+service password-encryption
+enable secret abcd1234
+ip ssh ver 2
+line vty 0 4
+transport input ssh
+login local
+exit
+username admin privilege 15 secret adminabcd
+
+!-ip route
+!--routers y switches core
+ip route 21.0.0.4 255.255.255.252 21.0.0.30
+ip route 21.0.0.12 255.255.255.252 21.0.0.30
+ip route 21.0.0.16 255.255.255.252 21.0.0.30
+ip route 21.0.0.32 255.255.255.252 21.0.0.30
+ip route 21.0.0.36 255.255.255.252 21.0.0.30
+ip route 21.0.0.40 255.255.255.252 21.0.0.30
+ip route 21.0.0.44 255.255.255.252 21.0.0.30
+ip route 21.0.0.48 255.255.255.252 21.0.0.30
+ip route 21.0.0.52 255.255.255.252 21.0.0.30
+ip route 21.0.0.56 255.255.255.252 21.0.0.30
+ip route 21.0.0.60 255.255.255.252 21.0.0.30
+ip route 21.0.0.64 255.255.255.252 21.0.0.30
+ip route 21.0.0.68 255.255.255.252 21.0.0.30
+ip route 21.0.0.72 255.255.255.252 21.0.0.30
+ip route 21.0.0.76 255.255.255.252 21.0.0.30
+ip route 21.0.0.80 255.255.255.252 21.0.0.30
+ip route 21.0.0.84 255.255.255.252 21.0.0.30
+
+
+ipv6 route a1::/126 a7::2
+ipv6 route a3::/126 a7::2
+ipv6 route a4::/126 a7::2
+ipv6 route a8::/126 a7::2
+ipv6 route a9::/126 a7::2
+ipv6 route a10::/126 a7::2
+ipv6 route a11::/126 a7::2
+ipv6 route a12::/126 a7::2
+ipv6 route a13::/126 a7::2
+ipv6 route a14::/126 a7::2
+ipv6 route a15::/126 a7::2
+ipv6 route a16::/126 a7::2
+ipv6 route a17::/126 a7::2
+ipv6 route a18::/126 a7::2
+ipv6 route a19::/126 a7::2
+ipv6 route a20::/126 a7::2
+ipv6 route a21::/126 a7::2
+
+
+!-vlan2
+ip route 21.4.0.0 255.252.0.0 21.0.0.30
+ip route 21.8.0.0 255.252.0.0 21.0.0.30
+ip route 21.12.0.0 255.252.0.0 21.0.0.30
+
+
+ipv6 route a1:1a::/64 a7::2
+ipv6 route a1:2a::/64 a7::2
+ipv6 route a1:3a::/64 a7::2
+
+
+!-vlan3
+ip route 21.1.0.0 255.255.0.0 21.0.0.30
+ip route 21.2.0.0 255.255.0.0 21.0.0.30
+ip route 21.3.0.0 255.255.0.0 21.0.0.30
+ip route 21.17.0.0 255.255.0.0 21.0.0.30
+ip route 21.18.0.0 255.255.0.0 21.0.0.30
+
+
+ipv6 route a2:1b::/64 a7::2
+ipv6 route a2:3b::/64 a7::2
+ipv6 route a2:5b::/64 a7::2
+ipv6 route a2:6b::/64 a7::2
+
+!-vlan4
+ip route 21.0.32.0 255.255.224.0 21.0.0.30
+ip route 21.0.96.0 255.255.224.0 21.0.0.30
+ip route 21.0.128.0 255.255.224.0 21.0.0.30
+ip route 21.0.160.0 255.255.224.0 21.0.0.30
+
+
+ipv6 route a3:1c::/64 a7::2
+ipv6 route a3:3c::/64 a7::2
+ipv6 route a3:4c::/64 a7::2
+ipv6 route a3:5c::/64 a7::2
+
+
+!-vlan5
+ip route 21.0.2.0 255.255.254.0 21.0.0.30
+ip route 21.0.4.0 255.255.254.0 21.0.0.30
+ip route 21.0.6.0 255.255.254.0 21.0.0.30
+ip route 21.0.8.0 255.255.254.0 21.0.0.30
+ip route 21.0.10.0 255.255.254.0 21.0.0.30
+
+
+ipv6 route a4:1d::/64 a7::2
+ipv6 route a4:2d::/64 a7::2
+ipv6 route a4:3d::/64 a7::2
+ipv6 route a4:4d::/64 a7::2
+ipv6 route a4:5d::/64 a7::2
+
+
+!-vlan6
+ip route 21.0.12.0 255.255.252.0 21.0.0.30
+ip route 21.0.16.0 255.255.252.0 21.0.0.30
+ip route 21.0.20.0 255.255.252.0 21.0.0.30
+
+
+ipv6 route a5:1e::/64 a7::2
+ipv6 route a5:2e::/64 a7::2
+ipv6 route a5:3e::/64 a7::2
+
+
+!-vlan7
+ip route 21.0.0.128 255.255.255.128 21.0.0.30
+ip route 21.0.1.0 255.255.255.128 21.0.0.30
+ip route 21.0.1.128 255.255.255.128 21.0.0.30
+ip route 21.0.24.0 255.255.255.128 21.0.0.30
+ip route 21.0.24.128 255.255.255.128 21.0.0.30
+
+
+ipv6 route a6:1f::/64 a7::2
+ipv6 route a6:2f::/64 a7::2
+ipv6 route a6:3f::/64 a7::2
+ipv6 route a6:4f::/64 a7::2
+ipv6 route a6:5f::/64 a7::2
+
+
+!-vlan 8
+ip route 21.0.0.96 255.255.255.240 21.0.0.30
+ip route 21.0.0.112 255.255.255.240 21.0.0.30
+
+
+ipv6 route a7:1a::/64 a7::2
+ipv6 route a7:1a::/64 a7::2
+
+
+!wlan
+ip route 10.0.0.0 255.255.255.252 21.0.0.30
+ip route 10.0.1.0 255.255.255.252 21.0.0.30
+ip route 20.0.0.0 255.255.255.252 21.0.0.30
+ip route 30.0.0.0 255.255.255.252 21.0.0.30
+ip route 40.0.0.0 255.255.255.252 21.0.0.30
+ip route 50.0.0.0 255.255.255.252 21.0.0.30
+ip route 60.0.0.0 255.255.255.252 21.0.0.30
+
+
+
+
+R4
+en
+conf t
+int eth1/1
+ip add 21.0.0.18 255.255.255.252
+ipv6 add a4::2/126
+no shut
+int eth0/3/0
+ip add 21.0.0.30 255.255.255.252
+ipv6 add a7::2/126
+no shut
+int eth0/1/0
+ip add 21.0.0.34 255.255.255.252
+ipv6 add a8::1/126
+no shut
+int eth0/0/0
+ip add 21.0.0.39 255.255.255.252
+ipv6 add a9::1/126
+no shut
+int eth0/2/0
+ip add 21.0.0.41 255.255.255.252
+ipv6 add a10::1/126
+no shut
+int fa0/0
+ip add 21.0.0.81 255.255.255.252
+no shut
+
+
+
+hostname R4
+ip domain-name ulsa.com 
+crypto key generate rsa
+y
+1024
+service password-encryption
+enable secret abcd1234
+ip ssh ver 2
+line vty 0 4
+transport input ssh
+login local
+exit
+username admin privilege 15 secret adminabcd
+
+!-ip route
+!--routers y switches core
+ip route 21.0.0.4 255.255.255.252 21.0.0.17
+ip route 21.0.0.8 255.255.255.252 21.0.0.17
+ip route 21.0.0.12 255.255.255.252 21.0.0.33
+ip route 21.0.0.20 255.255.255.252 21.0.0.17
+ip route 21.0.0.24 255.255.255.252 21.0.0.33
+
+ip route 21.0.0.44 255.255.255.252 21.0.0.38
+ip route 21.0.0.48 255.255.255.252 21.0.0.38
+ip route 21.0.0.52 255.255.255.252 21.0.0.38
+ip route 21.0.0.56 255.255.255.252 21.0.0.38
+ip route 21.0.0.60 255.255.255.252 21.0.0.38
+ip route 21.0.0.64 255.255.255.252 21.0.0.38
+ip route 21.0.0.68 255.255.255.252 21.0.0.38
+ip route 21.0.0.72 255.255.255.252 21.0.0.38
+ip route 21.0.0.76 255.255.255.252 21.0.0.33
+ip route 21.0.0.84 255.255.255.252 21.0.0.38
+
+
+
+ipv6 route a1::/126 a4::1
+ipv6 route a2::/126 a4::1
+ipv6 route a3::/126 a8::2
+ipv6 route a5::/126 a4::1
+ipv6 route a6::/126 a8::2
+
+ipv6 route a11::/126 a9::2
+ipv6 route a12::/126 a9::2
+ipv6 route a13::/126 a9::2
+ipv6 route a14::/126 a9::2
+ipv6 route a15::/126 a9::2
+ipv6 route a16::/126 a9::2
+ipv6 route a17::/126 a9::2
+ipv6 route a18::/126 a9::2
+ipv6 route a19::/126 a8::2
+ipv6 route a21::/126 a9::2
+
+
+!-vlan2
+ip route 21.4.0.0 255.252.0.0 21.0.0.17
+ip route 21.8.0.0 255.252.0.0 21.0.0.38
+ip route 21.12.0.0 255.252.0.0 21.0.0.38
+
+
+ipv6 route a1:1a::/64 a4::1
+ipv6 route a1:2a::/64 a9::2
+ipv6 route a1:3a::/64 a9::2
+
+
+!-vlan3
+ip route 21.1.0.0 255.255.0.0 21.0.0.17
+ip route 21.2.0.0 255.255.0.0 21.0.0.17
+ip route 21.3.0.0 255.255.0.0 21.0.0.17
+ip route 21.16.0.0 255.255.0.0 21.0.0.17
+ip route 21.17.0.0 255.255.0.0 21.0.0.38
+ip route 21.18.0.0 255.255.0.0 21.0.0.38
+
+
+ipv6 route a2:1b::/64 a4::1
+ipv6 route a2:3b::/64 a4::1
+ipv6 route a2:4b::/64 a4::1
+ipv6 route a2:5b::/64 a9::2
+ipv6 route a2:6b::/64 a9::2
+
+!-vlan4
+ip route 21.0.32.0 255.255.224.0 21.0.0.17
+ip route 21.0.64.0 255.255.224.0 21.0.0.17
+ip route 21.0.96.0 255.255.224.0 21.0.0.38
+ip route 21.0.128.0 255.255.224.0 21.0.0.38
+ip route 21.0.160.0 255.255.224.0 21.0.0.38
+
+
+ipv6 route a3:1c::/64 a4::1
+ipv6 route a3:2c::/64 a4::1
+ipv6 route a3:3c::/64 a9::2
+ipv6 route a3:4c::/64 a9::2
+ipv6 route a3:5c::/64 a9::2
+
+
+!-vlan5
+ip route 21.0.2.0 255.255.254.0 21.0.0.17
+ip route 21.0.4.0 255.255.254.0 21.0.0.82
+ip route 21.0.6.0 255.255.254.0 21.0.0.33
+ip route 21.0.8.0 255.255.254.0 21.0.0.38
+ip route 21.0.10.0 255.255.254.0 21.0.0.38
+
+
+ipv6 route a4:1d::/64 a4::1
+ipv6 route a4:3d::/64 a8::2
+ipv6 route a4:4d::/64 a9::2
+ipv6 route a4:5d::/64 a9::2
+
+
+!-vlan6
+ip route 21.0.12.0 255.255.252.0 21.0.0.38
+ip route 21.0.16.0 255.255.252.0 21.0.0.38
+ip route 21.0.20.0 255.255.252.0 21.0.0.38
+
+
+ipv6 route a5:1e::/64 a9::2
+ipv6 route a5:2e::/64 a9::2
+ipv6 route a5:3e::/64 a9::2
+
+
+!-vlan7
+ip route 21.0.0.128 255.255.255.128 21.0.0.82
+ip route 21.0.1.0 255.255.255.128 21.0.0.33
+ip route 21.0.1.128 255.255.255.128 21.0.0.38
+ip route 21.0.24.0 255.255.255.128 21.0.0.38
+ip route 21.0.24.128 255.255.255.128 21.0.0.38
+
+ipv6 route a6:2f::/64 a8::2
+ipv6 route a6:3f::/64 a9::2
+ipv6 route a6:4f::/64 a9::2
+ipv6 route a6:5f::/64 a9::2
+
+
+!-vlan 8
+ip route 21.0.0.96 255.255.255.240 21.0.0.82
+ip route 21.0.0.112 255.255.255.240 21.0.0.33
+
+ipv6 route a7:1a::/64 a8::2
+!wlan
+ip route 10.0.0.0 255.255.255.252 21.0.0.17
+ip route 10.0.1.0 255.255.255.252 21.0.0.38
+ip route 20.0.0.0 255.255.255.252 21.0.0.17
+ip route 30.0.0.0 255.255.255.252 21.0.0.17
+ip route 40.0.0.0 255.255.255.252 21.0.0.17
+ip route 50.0.0.0 255.255.255.252 21.0.0.38
+ip route 60.0.0.0 255.255.255.252 21.0.0.38
+
+
+SWCORE22
+en
+conf t
+ip routing
+vlan 8
+name ocho
+vlan 7
+name siete
+vlan 5
+
+int gi1/0/1
+no switchport
+ip add 21.0.0.82 255.255.255.252
+no shut
+exit
+int vlan 8
+ip add 21.0.0.110 255.255.255.240
+no shut
+int vlan 7
+ip add 21.0.0.254 255.255.255.128
+no shut
+int vlan 5
+ip add 21.0.5.254 255.255.254.0
+no shut
+exit
+
+
+ip dhcp pool Vlan5_4
+default-router 21.0.5.254
+network 21.0.4.0 255.255.254.0
+exit
+ip dhcp pool Vlan7_4
+default-router 21.0.0.254
+network 21.0.0.128 255.255.255.128
+exit
+ip dhcp pool vlan8_4
+default-router 21.0.0.110
+network 21.0.0.96 255.255.255.240
+exit
+int gi1/0/2
+switchport mode trunk
+exit
+
+hostname R4
+ip domain-name ulsa.com 
+crypto key generate rsa
+y
+1024
+service password-encryption
+enable secret abcd1234
+ip ssh ver 2
+line vty 0 4
+transport input ssh
+login local
+exit
+username admin privilege 15 secret adminabcd
+!-ip route
+!-routers y switches core
+ip route 21.0.0.4 255.255.255.252 21.0.0.81
+ip route 21.0.0.8 255.255.255.252 21.0.0.81
+ip route 21.0.0.12 255.255.255.252 21.0.0.81
+ip route 21.0.0.16 255.255.255.252 21.0.0.81
+ip route 21.0.0.20 255.255.255.252 21.0.0.81
+ip route 21.0.0.24 255.255.255.252 21.0.0.81
+ip route 21.0.0.28 255.255.255.252 21.0.0.81
+ip route 21.0.0.32 255.255.255.252 21.0.0.81
+ip route 21.0.0.36 255.255.255.252 21.0.0.81
+ip route 21.0.0.40 255.255.255.252 21.0.0.81
+ip route 21.0.0.44 255.255.255.252 21.0.0.81
+ip route 21.0.0.48 255.255.255.252 21.0.0.81
+ip route 21.0.0.52 255.255.255.252 21.0.0.81
+ip route 21.0.0.56 255.255.255.252 21.0.0.81
+ip route 21.0.0.60 255.255.255.252 21.0.0.81
+ip route 21.0.0.64 255.255.255.252 21.0.0.81
+ip route 21.0.0.68 255.255.255.252 21.0.0.81
+ip route 21.0.0.72 255.255.255.252 21.0.0.81
+ip route 21.0.0.76 255.255.255.252 21.0.0.81
+ip route 21.0.0.84 255.255.255.252 21.0.0.81
+
+
+
+!-vlan2
+ip route 21.4.0.0 255.252.0.0 21.0.0.81
+ip route 21.8.0.0 255.252.0.0 21.0.0.81
+ip route 21.12.0.0 255.252.0.0 21.0.0.81
+
+
+
+!-vlan3
+ip route 21.1.0.0 255.255.0.0 21.0.0.81
+ip route 21.2.0.0 255.255.0.0 21.0.0.81
+ip route 21.3.0.0 255.255.0.0 21.0.0.81
+ip route 21.16.0.0 255.255.0.0 21.0.0.81
+ip route 21.17.0.0 255.255.0.0 21.0.0.81
+ip route 21.18.0.0 255.255.0.0 21.0.0.81
+
+
+
+!-vlan4
+ip route 21.0.32.0 255.255.224.0 21.0.0.81
+ip route 21.0.64.0 255.255.224.0 21.0.0.81
+ip route 21.0.96.0 255.255.224.0 21.0.0.81
+ip route 21.0.128.0 255.255.224.0 21.0.0.81
+ip route 21.0.160.0 255.255.224.0 21.0.0.81
+
+
+
+!-vlan5
+ip route 21.0.2.0 255.255.254.0 21.0.0.81
+ip route 21.0.6.0 255.255.254.0 21.0.0.81
+ip route 21.0.8.0 255.255.254.0 21.0.0.81
+ip route 21.0.10.0 255.255.254.0 21.0.0.81
+
+
+!-vlan6
+ip route 21.0.12.0 255.255.252.0 21.0.0.81
+ip route 21.0.16.0 255.255.252.0 21.0.0.81
+ip route 21.0.20.0 255.255.252.0 21.0.0.81
+
+
+
+!-vlan7
+ip route 21.0.1.0 255.255.255.128 21.0.0.81
+ip route 21.0.1.128 255.255.255.128 21.0.0.81
+ip route 21.0.24.0 255.255.255.128 21.0.0.81
+ip route 21.0.24.128 255.255.255.128 21.0.0.81
+
+
+
+!-vlan8
+ip route 21.0.0.112 255.255.255.240 21.0.0.81
+
+
+
+!wlan
+ip route 10.0.0.0 255.255.255.252 21.0.0.81
+ip route 10.0.1.0 255.255.255.252 21.0.0.81
+ip route 20.0.0.0 255.255.255.252 21.0.0.81
+ip route 30.0.0.0 255.255.255.252 21.0.0.81
+ip route 40.0.0.0 255.255.255.252 21.0.0.81
+ip route 50.0.0.0 255.255.255.252 21.0.0.81
+ip route 60.0.0.0 255.255.255.252 21.0.0.81
+
+
+
+R5
+en
+conf t
+int eth0/3/0
+ip add 21.0.0.14 255.255.255.252
+ipv6 add a3::2/126
+no shut
+int eth0/0/0
+ip add 21.0.0.25 255.255.255.252
+ipv6 add a6::2/126
+no shut
+int eth0/1/0
+ip add 21.0.0.33 255.255.255.252
+ipv6 add a8::2/126
+no shut
+int fa0/0
+ip add 21.0.0.78 255.255.255.252
+no shut
+exit
+
+hostname R5
+ip domain-name ulsa.com 
+crypto key generate rsa
+y
+1024
+service password-encryption
+enable secret abcd1234
+ip ssh ver 2
+line vty 0 4
+transport input ssh
+login local
+exit
+username admin privilege 15 secret adminabcd
+!-ip route
+!--routers y switches core
+ip route 21.0.0.4 255.255.255.252 21.0.0.13
+ip route 21.0.0.8 255.255.255.252 21.0.0.13
+ip route 21.0.0.16 255.255.255.252 21.0.0.13
+ip route 21.0.0.20 255.255.255.252 21.0.0.13
+ip route 21.0.0.28 255.255.255.252 21.0.0.13
+ip route 21.0.0.36 255.255.255.252 21.0.0.26
+ip route 21.0.0.40 255.255.255.252 21.0.0.26
+ip route 21.0.0.44 255.255.255.252 21.0.0.26
+ip route 21.0.0.48 255.255.255.252 21.0.0.26
+ip route 21.0.0.52 255.255.255.252 21.0.0.26
+ip route 21.0.0.56 255.255.255.252 21.0.0.26
+ip route 21.0.0.60 255.255.255.252 21.0.0.26
+ip route 21.0.0.64 255.255.255.252 21.0.0.26
+ip route 21.0.0.68 255.255.255.252 21.0.0.26
+ip route 21.0.0.72 255.255.255.252 21.0.0.26
+ip route 21.0.0.80 255.255.255.252 21.0.0.26
+ip route 21.0.0.84 255.255.255.252 21.0.0.26
+
+
+
+ipv6 route a1::/126 a3::1
+ipv6 route a2::/126 a3::1
+ipv6 route a4::/126 a3::1
+ipv6 route a5::/126 a3::1
+ipv6 route a7::/126 a3::1
+ipv6 route a9::/126 a6::1
+ipv6 route a10::/126 a6::1
+ipv6 route a11::/126 a6::1
+ipv6 route a12::/126 a6::1
+ipv6 route a13::/126 a6::1
+ipv6 route a14::/126 a6::1
+ipv6 route a15::/126 a6::1
+ipv6 route a16::/126 a6::1
+ipv6 route a17::/126 a6::1
+ipv6 route a18::/126 a6::1
+ipv6 route a20::/126 a6::1
+ipv6 route a21::/126 a6::1
+
+
+!-vlan2
+ip route 21.4.0.0 255.252.0.0 21.0.0.13
+ip route 21.8.0.0 255.252.0.0 21.0.0.26
+ip route 21.12.0.0 255.252.0.0 21.0.0.26
+
+ipv6 route a1:1a::/64 a3::1
+ipv6 route a1:2a::/64 a6::1
+ipv6 route a1:3a::/64 a6::1
+
+
+!-vlan3
+ip route 21.1.0.0 255.255.0.0 21.0.0.13
+ip route 21.2.0.0 255.255.0.0 21.0.0.13
+ip route 21.3.0.0 255.255.0.0 21.0.0.13
+ip route 21.16.0.0 255.255.0.0 21.0.0.13
+ip route 21.17.0.0 255.255.0.0 21.0.0.26
+ip route 21.18.0.0 255.255.0.0 21.0.0.26
+
+
+ipv6 route a2:1b::/64 a3::1
+ipv6 route a2:3b::/64 a3::1
+ipv6 route a2:4b::/64 a3::1
+ipv6 route a2:5b::/64 a6::1
+ipv6 route a2:6b::/64 a6::1
+
+!-vlan4
+ip route 21.0.32.0 255.255.224.0 21.0.0.13
+ip route 21.0.64.0 255.255.224.0 21.0.0.13
+ip route 21.0.96.0 255.255.224.0 21.0.0.26
+ip route 21.0.128.0 255.255.224.0 21.0.0.26
+ip route 21.0.160.0 255.255.224.0 21.0.0.26
+
+
+ipv6 route a3:1c::/64 a3::1
+ipv6 route a3:2c::/64 a3::1
+ipv6 route a3:3c::/64 a6::1
+ipv6 route a3:4c::/64 a6::1
+ipv6 route a3:5c::/64 a6::1
+
+!-vlan5
+ip route 21.0.2.0 255.255.254.0 21.0.0.13
+ip route 21.0.4.0 255.255.254.0 21.0.0.26
+ip route 21.0.6.0 255.255.254.0 21.0.0.77
+ip route 21.0.8.0 255.255.254.0 21.0.0.26
+ip route 21.0.10.0 255.255.254.0 21.0.0.26
+
+
+ipv6 route a4:1d::/64 a3::1
+ipv6 route a4:2d::/64 a6::1
+ipv6 route a4:4d::/64 a6::1
+ipv6 route a4:5d::/64 a6::1
+
+
+!-vlan6
+ip route 21.0.12.0 255.255.252.0 21.0.0.26
+ip route 21.0.16.0 255.255.252.0 21.0.0.26
+ip route 21.0.20.0 255.255.252.0 21.0.0.26
+
+
+ipv6 route a5:1e::/64 a6::1
+ipv6 route a5:2e::/64 a6::1
+ipv6 route a5:3e::/64 a6::1
+
+!-vlan7
+ip route 21.0.0.128 255.255.255.128 21.0.0.26
+ip route 21.0.1.0 255.255.255.128 21.0.0.77
+ip route 21.0.1.128 255.255.255.128 21.0.0.26
+ip route 21.0.24.0 255.255.255.128 21.0.0.26
+ip route 21.0.24.128 255.255.255.128 21.0.0.26
+
+
+ipv6 route a6:1f::/64 a6::1
+ipv6 route a6:3f::/64 a6::1
+ipv6 route a6:4f::/64 a6::1
+ipv6 route a6:5f::/64 a6::1
+
+
+!-vlan 8
+ip route 21.0.0.112 255.255.255.240 21.0.0.77
+ip route 21.0.0.96 255.255.255.240 21.0.0.26
+ipv6 route a7:1a::/64 a6::1
+
+!wlan
+ip route 10.0.0.0 255.255.255.252 21.0.0.13
+ip route 10.0.1.0 255.255.255.252 21.0.0.13
+ip route 20.0.0.0 255.255.255.252 21.0.0.13
+ip route 30.0.0.0 255.255.255.252 21.0.0.13
+ip route 40.0.0.0 255.255.255.252 21.0.0.13
+ip route 50.0.0.0 255.255.255.252 21.0.0.13
+ip route 60.0.0.0 255.255.255.252 21.0.0.13
+
+
+SWCORE11
+en
+conf t
+ip routing
+vlan 8
+name ocho
+vlan 7
+name siete
+vlan 5
+
+int gi1/0/1
+no switchport
+ip add 21.0.0.77 255.255.255.252
+no shut
+exit
+int vlan 8
+ip add 21.0.0.126 255.255.255.240
+no shut
+int vlan 7
+ip add 21.0.1.126 255.255.255.128
+no shut
+int vlan 5
+ip add 21.0.7.254 255.255.254.0
+no shut
+exit
+
+ip dhcp pool Vlan5_4
+default-router 21.0.7.254
+network 21.0.6.0 255.255.254.0
+ip dhcp pool vlan7_4
+default-router 21.0.1.126
+network 21.0.1.0 255.255.255.128
+ip dhcp pool vlan8_4
+default-router 21.0.0.126
+network 21.0.0.112 255.255.255.240
+
+
+
+int gi1/0/2
+switchport mode trunk
+exit
+
+hostname SWCORE11
+ip domain-name ulsa.com 
+crypto key generate rsa
+y
+1024
+service password-encryption
+enable secret abcd1234
+ip ssh ver 2
+line vty 0 4
+transport input ssh
+login local
+exit
+username admin privilege 15 secret adminabcd
+
+!--ip route
+!-routers y switches core
+ip route 21.0.0.4 255.255.255.252 21.0.0.78
+ip route 21.0.0.8 255.255.255.252 21.0.0.78
+ip route 21.0.0.12 255.255.255.252 21.0.0.78
+ip route 21.0.0.16 255.255.255.252 21.0.0.78
+ip route 21.0.0.20 255.255.255.252 21.0.0.78
+ip route 21.0.0.24 255.255.255.252 21.0.0.78
+ip route 21.0.0.28 255.255.255.252 21.0.0.78
+ip route 21.0.0.32 255.255.255.252 21.0.0.78
+ip route 21.0.0.36 255.255.255.252 21.0.0.78
+ip route 21.0.0.40 255.255.255.252 21.0.0.78
+ip route 21.0.0.44 255.255.255.252 21.0.0.78
+ip route 21.0.0.48 255.255.255.252 21.0.0.78
+ip route 21.0.0.52 255.255.255.252 21.0.0.78
+ip route 21.0.0.56 255.255.255.252 21.0.0.78
+ip route 21.0.0.60 255.255.255.252 21.0.0.78
+ip route 21.0.0.64 255.255.255.252 21.0.0.78
+ip route 21.0.0.68 255.255.255.252 21.0.0.78
+ip route 21.0.0.72 255.255.255.252 21.0.0.78
+ip route 21.0.0.80 255.255.255.252 21.0.0.78
+ip route 21.0.0.84 255.255.255.252 21.0.0.78
+
+
+!-vlan2
+ip route 21.4.0.0 255.252.0.0 21.0.0.78
+ip route 21.8.0.0 255.252.0.0 21.0.0.78
+ip route 21.12.0.0 255.252.0.0 21.0.0.78
+
+
+
+!-vlan3
+ip route 21.1.0.0 255.255.0.0 21.0.0.78
+ip route 21.2.0.0 255.255.0.0 21.0.0.78
+ip route 21.3.0.0 255.255.0.0 21.0.0.78
+ip route 21.16.0.0 255.255.0.0 21.0.0.78
+ip route 21.17.0.0 255.255.0.0 21.0.0.78
+ip route 21.18.0.0 255.255.0.0 21.0.0.78
+
+
+
+!-vlan4
+ip route 21.0.32.0 255.255.224.0 21.0.0.78
+ip route 21.0.64.0 255.255.224.0 21.0.0.78
+ip route 21.0.96.0 255.255.224.0 21.0.0.78
+ip route 21.0.128.0 255.255.224.0 21.0.0.78
+ip route 21.0.160.0 255.255.224.0 21.0.0.78
+
+
+
+!-vlan5
+ip route 21.0.2.0 255.255.254.0 21.0.0.78
+ip route 21.0.4.0 255.255.254.0 21.0.0.78
+ip route 21.0.8.0 255.255.254.0 21.0.0.78
+ip route 21.0.10.0 255.255.254.0 21.0.0.78
+
+
+!-vlan6
+ip route 21.0.12.0 255.255.252.0 21.0.0.78
+ip route 21.0.16.0 255.255.252.0 21.0.0.78
+ip route 21.0.20.0 255.255.252.0 21.0.0.78
+
+
+
+!-vlan7
+ip route 21.0.0.128 255.255.255.128 21.0.0.78
+ip route 21.0.1.128 255.255.255.128 21.0.0.78
+ip route 21.0.24.0 255.255.255.128 21.0.0.78
+ip route 21.0.24.128 255.255.255.128 21.0.0.78
+
+
+
+!-vlan8
+ip route 21.0.0.96 255.255.255.240 21.0.0.78
+
+
+
+!wlan
+ip route 10.0.0.0 255.255.255.252 21.0.0.78
+ip route 10.0.1.0 255.255.255.252 21.0.0.78
+ip route 20.0.0.0 255.255.255.252 21.0.0.78
+ip route 30.0.0.0 255.255.255.252 21.0.0.78
+ip route 40.0.0.0 255.255.255.252 21.0.0.78
+ip route 50.0.0.0 255.255.255.252 21.0.0.78
+ip route 60.0.0.0 255.255.255.252 21.0.0.78
+
+
+R6
+en
+conf t
+ipv6 unicast-routing
+int eth0/0/0
+ip add 21.0.0.38 255.255.255.252
+ipv6 add a9::2/126
+no shut
+int eth0/1/0
+ip add 21.0.0.45 255.255.255.252
+ipv6 add a11::1/126
+no shut
+int eth0/2/0
+ip add 21.0.0.49 255.255.255.252
+ipv6 add a12::1/126
+no shut
+int eth0/3/0
+ip add 21.0.0.53 255.255.255.252
+ipv6 add a13::1/126
+int fa0/0
+ip add 21.0.0.86 255.255.255.252
+no shut
+exit
+
+hostname R6
+ip domain-name ulsa.com 
+crypto key generate rsa
+y
+1024
+service password-encryption
+enable secret abcd1234
+ip ssh ver 2
+line vty 0 4
+transport input ssh
+login local
+exit
+username admin privilege 15 secret adminabcd
+
+!-ip routes
+
+SWCORE33
+en
+conf t
+ip routing
+vlan 4
+name cuatro
+vlan 5
+name cinco
+vlan 6
+name seis
+vlan 7
+name siete
+exit
+int gi1/0/1
+no switchport
+ip add 21.0.0.85 255.255.255.252
+no shut
+exit
+int vlan 4
+ip add 21.0.191.254 255.255.224.0
+no shut
+int vlan 5
+ip add 21.0.11.254 255.255.254.0
+no shut
+int vlan 6
+ip add 21.0.23.254 255.255.252.0
+no shut
+int vlan 7
+ip add 21.0.1.254 255.255.255.128
+no shut
+exit
+
+
+
+ip dhcp pool 4
+default-router 21.0.191.254
+network 21.0.160.0 255.255.224.0
+ip dhcp pool 5
+default-router 21.0.11.254
+network 21.0.10.0 255.255.254.0
+ip dhcp pool 6
+default-router 21.0.23.254
+network 21.0.20.0 255.255.252.0
+ip dhcp pool 7
+default-router 21.0.1.254
+network 21.0.1.128 255.255.255.128
+
+int gi1/0/2
+switchport mode trunk
+
+hostname SWCORE33
+ip domain-name ulsa.com 
+crypto key generate rsa
+y
+1024
+service password-encryption
+enable secret abcd1234
+ip ssh ver 2
+line vty 0 4
+transport input ssh
+login local
+exit
+username admin privilege 15 secret adminabcd
+
+!--ip routes
+
+R7
+en
+conf t
+ipv6 unicast-routing
+int eth0/2/0
+ip add 21.0.0.42 255.255.255.252
+ipv6 add a10::2/126
+no shut
+int eth0/1/0
+ip add 21.0.0.46 255.255.255.252
+ipv6 add a11::2/126
+no shut
+int eth1/1
+ip add 21.0.0.61 255.255.255.252
+ipv6 add a15::1/126
+no shut
+int eth0/3/0
+ip add 21.0.0.57 255.255.255.252
+ipv6 add a14::1/126
+no shut
+
+int fa0/0
+no shut
+int fa0/0.6
+encapsulation dot1Q 6
+ip add 21.0.15.254 255.255.252.0
+ipv6 add a5:1e::1/64
+ipv6 nd managed-config-flag
+ipv6 dhcp server Vlan6_6
+no shut
+int fa0/0.7
+encapsulation dot1Q 7
+ip add 21.0.24.126 255.255.255.128
+ipv6 add a6:4f::1/64
+ipv6 nd managed-config-flag
+ipv6 dhcp server Vlan7_6
+no shut
+
+ip dhcp pool Vlan6_4
+default-router 21.0.15.254
+network 21.0.12.0 255.255.252.0
+ipv6 dhcp pool Vlan6_6
+add prefix a5:1e::/64
+exit
+ip dhcp pool Vlan7_4
+default-router 21.0.24.126
+network 21.0.24.0 255.255.255.128
+ipv6 dhcp pool Vlan7_6
+add prefix a6:4f::/64
+exit
+
+hostname R7
+ip domain-name ulsa.com 
+crypto key generate rsa
+y
+1024
+service password-encryption
+enable secret abcd1234
+ip ssh ver 2
+line vty 0 4
+transport input ssh
+login local
+exit
+username admin privilege 15 secret adminabcd
+exit
+!--ip routes
+
+R8
+en
+conf t
+ipv6 unicast-routing
+int eth0/3/0
+ip add 21.0.0.58 255.255.255.252
+ipv6 add a14::2/126
+no shut
+int eth0/2/0
+ip add 21.0.0.50 255.255.255.252
+ipv6 add a12::2/126
+no shut
+int eth0/0/0
+ip add 21.0.0.65 255.255.255.252
+ipv6 add a16::1/126
+no shut
+int eth1/1
+ip add 21.0.0.69 255.255.255.252
+ipv6 add a17::1/126
+no shut
+
+int fa0/0
+no shut
+int fa0/0.2
+encapsulation dot1Q 2
+ip add 21.11.255.254 255.252.0.0
+ipv6 add a1:2a::1/64
+ipv6 nd managed-config-flag
+ipv6 dhcp server Vlan2_6
+no shut
+int fa0/0.5
+encapsulation dot1Q 5
+ip add 21.0.9.254 255.255.254.0
+ipv6 add a4:4d::1/64
+ipv6 nd managed-config-flag
+ipv6 dhcp server Vlan5_6
+no shut
+int fa0/0.6
+encapsulation dot1Q 6
+ip add 21.0.19.254 255.255.252.0
+ipv6 add a5:2e::1/64
+ipv6 nd managed-config-flag
+ipv6 dhcp server Vlan6_6
+no shut
+int fa0/0.7
+encapsulation dot1Q 7
+ip add 21.0.24.254 255.255.255.128
+ipv6 add a6:4f::1/64
+ipv6 nd managed-config-flag
+ipv6 dhcp server Vlan7_6
+no shut
+
+ip dhcp pool Vlan2_4
+default-router 21.11.255.254
+network 21.8.0.0 255.252.0.0
+ipv6 dhcp pool Vlan2_6
+add prefix a1:2a::/64
+ip dhcp pool Vlan5_4
+default-router 21.0.9.254
+network 21.0.8.0 255.255.254.0
+ipv6 dhcp pool Vlan5_6
+add prefix a4:4d::/64
+ip dhcp pool Vlan6_4
+default-router 21.0.19.254
+network 21.0.16.0 255.255.252.0
+ipv6 dhcp pool Vlan6_6
+add prefix a5:2e::/64
+ip dhcp pool Vlan7_4
+default-router 21.0.24.254
+network 21.0.24.128 255.255.255.128
+ipv6 dhcp pool Vlan7_6
+add prefix a6:4f::/64
+exit
+
+hostname R8
+ip domain-name ulsa.com 
+crypto key generate rsa
+y
+1024
+service password-encryption
+enable secret abcd1234
+ip ssh ver 2
+line vty 0 4
+transport input ssh
+login local
+exit
+username admin privilege 15 secret adminabcd
+exit
+!--ip routes
+
+R9
+en
+conf t
+ipv6 unicast-routing
+int eth1/1
+ip add 21.0.0.70 255.255.255.252
+ipv6 add a17::2/126
+no shut
+int eth1/2
+ip add 21.0.0.73 255.255.255.252
+ipv6 add a18::1/126
+no shut
+
+int fa0/0
+no shut
+int fa0/0.2
+encapsulation dot1Q 2
+ip add 21.15.255.254 255.252.0.0
+ipv6 add a1:3a::1/64
+ipv6 nd managed-config-flag
+ipv6 dhcp server Vlan2_6
+no shut
+int fa0/0.3
+encapsulation dot1Q 3
+ip add 21.17.255.254 255.255.0.0
+ipv6 add a2:5b::1/64
+ipv6 nd managed-config-flag
+ipv6 dhcp server Vlan3_6
+no shut
+int fa0/0.4
+encapsulation dot1Q 4
+ip add 21.0.127.254 255.255.224.0
+ipv6 add a3:3c::1/64
+ipv6 nd managed-config-flag
+ipv6 dhcp server Vlan4_6
+no shut
+
+ip dhcp pool Vlan2_4
+default-router 21.15.255.254
+network 21.12.0.0 255.252.0.0
+ipv6 dhcp pool Vlan2_6
+add prefix a1:3a::/64
+ip dhcp pool Vlan3_4
+default-router 21.17.255.254
+network 21.17.0.0 255.255.0.0
+ipv6 dhcp pool Vlan3_6
+add prefix a2:5b::/64
+ip dhcp pool Vlan4_4
+default-router 21.0.127.254
+network 21.0.96.0 255.255.224.0
+ipv6 dhcp pool Vlan4_6
+add prefix a3:3c::/64
+exit
+
+hostname R9
+ip domain-name ulsa.com 
+crypto key generate rsa
+y
+1024
+service password-encryption
+enable secret abcd1234
+ip ssh ver 2
+line vty 0 4
+transport input ssh
+login local
+exit
+username admin privilege 15 secret adminabcd
+exit
+!--ip routes
+
+R10
+en
+conf t
+ipv6 unicast-routing
+int eth0/3/0
+ip add 21.0.0.54 255.255.255.252
+ipv6 add a13::2/126
+no shut
+int eth1/1
+ip add 21.0.0.62 255.255.255.252
+ipv6 add a15::2/126
+no shut
+int eth0/0/0
+ip add 21.0.0.66 255.255.255.252
+ipv6 add a16::2/126
+no shut
+int eth1/2
+ip add 21.0.0.74 255.255.255.252
+ipv6 add a18::2/126
+no shut
+int fa0/1
+ip add 192.168.2.254 255.255.255.0
+no shut
+
+int fa0/0
+no shut
+int fa0/0.3
+encapsulation dot1Q 3
+ip add 21.18.255.254 255.255.0.0
+ipv6 add a2:6b::1/64
+ipv6 nd managed-config-flag
+ipv6 dhcp server Vlan3_6
+no shut
+int fa0/0.4
+encapsulation dot1Q 4
+ip add 21.0.159.254 255.255.224.0
+ipv6 add a3:4c::1/64
+ipv6 nd managed-config-flag
+ipv6 dhcp server Vlan4_6
+no shut
+
+int fa0/0.10
+encapsulation dot1Q 10 native
+ip add 10.0.1.254 255.255.255.0
+no shut
+int fa0/0.50
+encapsulation dot1Q 50
+ip add 50.0.0.254 255.255.255.0
+no shut
+int fa0/0.60
+encapsulation dot1Q 60
+ip add 60.0.0.254 255.255.255.0
+no shut
+
+ip dhcp pool Vlan3_4
+default-router 21.18.255.254
+network 21.18.0.0 255.255.0.0
+ipv6 dhcp pool Vlan3_6
+add prefix a2:6b::/64
+ip dhcp pool Vlan4_4
+default-router 21.0.159.254
+network 21.0.128.0 255.255.224.0
+ipv6 dhcp pool Vlan4_6
+add prefix a3:4c::/64
+
+ip dhcp pool Vlannativa
+network 10.0.1.0 255.255.255.0
+default-router 10.0.1.254
+exit
+ip dhcp pool Vlandocentes
+network 50.0.0.0 255.255.255.0
+default-router 50.0.0.254
+exit
+ip dhcp pool Vlanalumnos
+network 60.0.0.0 255.255.255.0
+default-router 60.0.0.254
+exit
+
+hostname R10
+ip domain-name ulsa.com 
+crypto key generate rsa
+y
+1024
+service password-encryption
+enable secret abcd1234
+ip ssh ver 2
+line vty 0 4
+transport input ssh
+login local
+exit
+username admin privilege 15 secret adminabcd
+
+!---switches
+
+SW1
+en
+conf t
+vlan 3
+name tres
+vlan 5
+name cinco
+exit
+int fa0/1
+switchport mode trunk
+int fa0/2 
+switchport mode access
+switchport access vlan 5
+int fa0/3
+switchport mode access
+switchport access vlan 3
+int fa0/4
+switchport mode access
+switchport access vlan 5
+exit
+
+hostname SW1
+ip domain-name ulsa.com 
+crypto key generate rsa
+y
+1024
+service password-encryption
+enable secret abcd1234
+ip ssh ver 2
+line vty 0 4
+transport input ssh
+login local
+exit
+username admin privilege 15 secret adminabcd
+
+SW2
+en
+conf t
+vlan 3
+name tres
+
+exit
+int fa0/1
+switchport mode trunk
+int fa0/2 
+switchport mode trunk
+int fa0/3
+switchport mode trunk
+exit
+   
+hostname SW2
+ip domain-name ulsa.com 
+crypto key generate rsa
+y
+1024
+service password-encryption
+enable secret abcd1234
+ip ssh ver 2
+line vty 0 4
+transport input ssh
+login local
+exit
+username admin privilege 15 secret adminabcd
+
+SW3
+en
+conf t
+vlan 3
+name tres
+
+exit
+int fa0/1
+switchport mode access
+switchport access vlan 3
+int fa0/2 
+switchport mode access
+switchport access vlan 3
+int fa0/3
+switchport mode trunk
+exit
+   
+hostname SW3
+ip domain-name ulsa.com 
+crypto key generate rsa
+y
+1024
+service password-encryption
+enable secret abcd1234
+ip ssh ver 2
+line vty 0 4
+transport input ssh
+login local
+exit
+username admin privilege 15 secret adminabcd
+
+SWCORE1
+en
+conf t
+vlan 10
+name nativa
+vlan 20
+name posgrado
+vlan 30
+name invitados
+vlan 40
+name admon
+vlan 2
+name dos
+vlan 3
+name tres
+vlan 4
+name cuatro
+exit
+int gi1/0/1
+switchport trunk native vlan 10
+switchport mode trunk
+int gi1/0/2
+switchport trunk native vlan 10
+switchport mode trunk
+int gi1/0/3
+switchport trunk native vlan 10
+switchport mode trunk
+int gi1/0/4
+switchport trunk native vlan 10 
+switchport mode trunk
+int gi1/0/5
+switchport access vlan 10
+exit
+   
+hostname SWCORE1
+ip domain-name ulsa.com 
+crypto key generate rsa
+y
+1024
+service password-encryption
+enable secret abcd1234
+ip ssh ver 2
+line vty 0 4
+transport input ssh
+login local
+exit
+username admin privilege 15 secret adminabcd
+
+SW4
+en
+conf t
+vlan 10
+name nativa
+vlan 20
+name posgrado
+vlan 4
+name cuatro
+exit
+
+int Gi0/1
+switchport trunk native vlan 10
+switchport mode trunk
+int fa0/1
+switchport trunk native vlan 10
+switchport mode trunk
+int fa0/2
+switchport mode access
+switchport access vlan 4
+
+exit
+   
+hostname SW4
+ip domain-name ulsa.com 
+crypto key generate rsa
+y
+1024
+service password-encryption
+enable secret abcd1234
+ip ssh ver 2
+line vty 0 4
+transport input ssh
+login local
+exit
+username admin privilege 15 secret adminabcd
+
+SW5
+en
+conf t
+vlan 10
+name nativa
+vlan 30
+name invitados
+vlan 40
+name admon
+vlan 3
+name tres
+vlan 2
+name dos
+exit
+
+int Gi0/1
+switchport trunk native vlan 10
+switchport mode trunk
+int fa0/1
+switchport trunk native vlan 10
+switchport mode trunk
+int fa0/2
+switchport mode access
+switchport access vlan 2
+int fa0/3
+switchport mode access
+switchport access vlan 3
+
+exit
+   
+hostname SW5
+ip domain-name ulsa.com 
+crypto key generate rsa
+y
+1024
+service password-encryption
+enable secret abcd1234
+ip ssh ver 2
+line vty 0 4
+transport input ssh
+login local
+exit
+username admin privilege 15 secret adminabcd
+
+SW6
+en
+conf t
+vlan 3
+name tres
+vlan 4
+name cuatro
+
+int fa0/1
+switchport mode trunk
+int fa0/2
+switchport mode access
+switchport access vlan 3
+int fa0/3
+switchport mode access
+switchport access vlan 4
+int fa0/4
+switchport mode access
+switchport access vlan 4
+exit
+
+hostname SW6
+ip domain-name ulsa.com 
+crypto key generate rsa
+y
+1024
+service password-encryption
+enable secret abcd1234
+ip ssh ver 2
+line vty 0 4
+transport input ssh
+login local
+exit
+username admin privilege 15 secret adminabcd
+
+SW7
+en
+conf t
+vlan 5
+name cinco
+vlan 7
+name siete
+vlan 8
+name ocho
+exit
+int gi0/1
+switchport mode trunk
+int range fa0/1-3
+switchport mode trunk
+channel-group 1 mode auto
+exit
+
+int fa0/4
+switchport mode access
+switchport access vlan 7
+int fa0/5
+switchport mode access
+switchport access vlan 8
+
+hostname SW7
+ip domain-name ulsa.com 
+crypto key generate rsa
+y
+1024
+service password-encryption
+enable secret abcd1234
+ip ssh ver 2
+line vty 0 4
+transport input ssh
+login local
+exit
+username admin privilege 15 secret adminabcd
+
+SW8
+en
+conf t
+vlan 5
+name cinco
+vlan 7
+name siete
+vlan 8
+name ocho
+exit
+
+int range fa0/1-3
+switchport mode trunk
+channel-group 1 mode desirable
+exit
+
+int fa0/4
+switchport mode access
+switchport access vlan 7
+int fa0/5
+switchport mode access
+switchport access vlan 5
+int fa0/6
+switchport mode access
+switchport access vlan 8
+
+hostname SW8
+ip domain-name ulsa.com 
+crypto key generate rsa
+y
+1024
+service password-encryption
+enable secret abcd1234
+ip ssh ver 2
+line vty 0 4
+transport input ssh
+login local
+exit
+username admin privilege 15 secret adminabcd
+
+SW9
+en
+conf t
+vlan 5
+name cinco
+vlan 7
+name siete
+vlan 8
+name ocho
+exit
+
+int gi0/1
+switchport mode trunk
+int gi0/2
+switchport mode trunk
+
+int fa0/1
+switchport mode access
+switchport access vlan 7
+int fa0/2
+switchport mode access
+switchport access vlan 7
+
+hostname SW9
+ip domain-name ulsa.com 
+crypto key generate rsa
+y
+1024
+service password-encryption
+enable secret abcd1234
+ip ssh ver 2
+line vty 0 4
+transport input ssh
+login local
+exit
+username admin privilege 15 secret adminabcd
+
+SW10
+en
+conf t
+vlan 5
+name cinco
+vlan 8
+name ocho
+exit
+
+
+int gi0/2
+switchport mode trunk
+
+int fa0/1
+switchport mode access
+switchport access vlan 5
+int fa0/2
+switchport mode access
+switchport access vlan 8
+int fa0/3
+switchport mode access
+switchport access vlan 8
+
+hostname SW10
+ip domain-name ulsa.com 
+crypto key generate rsa
+y
+1024
+service password-encryption
+enable secret abcd1234
+ip ssh ver 2
+line vty 0 4
+transport input ssh
+login local
+exit
+username admin privilege 15 secret adminabcd
+
+SW11
+en
+conf t
+spanning-tree vlan 1 priority 4096
+vlan 4
+name cuatro
+vlan 5
+name cinco
+vlan 6
+name seis
+vlan 7
+name siete
+exit
+
+
+int gi0/1
+switchport mode trunk
+
+int fa0/1
+switchport mode trunk
+int fa0/2
+switchport mode access
+switchport access vlan 7
+int fa0/3
+switchport mode trunk
+
+hostname SW11
+ip domain-name ulsa.com 
+crypto key generate rsa
+y
+1024
+service password-encryption
+enable secret abcd1234
+ip ssh ver 2
+line vty 0 4
+transport input ssh
+login local
+exit
+username admin privilege 15 secret adminabcd
+
+SW12
+en
+conf t
+vlan 5
+name cinco
+vlan 6
+name seis
+vlan 7
+name siete
+exit
+
+int fa0/4
+switchport mode trunk
+int fa0/2
+switchport mode trunk
+int fa0/3
+switchport mode access
+switchport access vlan 5
+int fa0/5
+switchport mode access
+switchport access vlan 6
+int fa0/1
+switchport mode access
+switchport access vlan 7
+
+
+hostname SW12
+ip domain-name ulsa.com 
+crypto key generate rsa
+y
+1024
+service password-encryption
+enable secret abcd1234
+ip ssh ver 2
+line vty 0 4
+transport input ssh
+login local
+exit
+username admin privilege 15 secret adminabcd
+
+SW13
+en
+conf t
+vlan 4
+name cuatro
+vlan 6
+name seis
+
+exit
+
+int fa0/1
+switchport mode trunk
+int fa0/2
+switchport mode trunk
+int fa0/3
+switchport mode access
+switchport access vlan 6
+int fa0/4
+switchport mode access
+switchport access vlan 4
+
+hostname SW13
+ip domain-name ulsa.com 
+crypto key generate rsa
+y
+1024
+service password-encryption
+enable secret abcd1234
+ip ssh ver 2
+line vty 0 4
+transport input ssh
+login local
+exit
+username admin privilege 15 secret adminabcd
+
+sw14
+en
+conf t
+vlan 6
+name seis
+vlan 7
+name siete
+
+exit
+
+int fa0/1
+switchport mode trunk
+int fa0/2
+switchport mode trunk
+int fa0/3
+switchport mode access
+switchport access vlan 6
+int fa0/4
+switchport mode access
+switchport access vlan 7
+
+hostname SW14
+ip domain-name ulsa.com 
+crypto key generate rsa
+y
+1024
+service password-encryption
+enable secret abcd1234
+ip ssh ver 2
+line vty 0 4
+transport input ssh
+login local
+exit
+username admin privilege 15 secret adminabcd
+
+SW15
+en
+conf t
+vlan 6
+name seis
+exit
+
+int fa0/2
+switchport mode trunk
+int fa0/1
+switchport mode access
+switchport access vlan 6
+int fa0/4
+switchport mode access
+switchport access vlan 6
+
+hostname SW15
+ip domain-name ulsa.com 
+crypto key generate rsa
+y
+1024
+service password-encryption
+enable secret abcd1234
+ip ssh ver 2
+line vty 0 4
+transport input ssh
+login local
+exit
+username admin privilege 15 secret adminabcd
+
+SW16
+en
+conf t
+vlan 2
+name dos
+vlan 5
+name cinco
+vlan 6
+name seis
+vlan 7
+name siete
+exit
+int fa0/4
+switchport mode trunk
+int range fa0/1-3
+switchport mode trunk
+channel-group 1 mode active
+
+int fa0/5
+switchport mode access
+switchport access vlan 2
+int fa0/6
+switchport mode access
+switchport access vlan 7
+
+hostname SW16
+ip domain-name ulsa.com 
+crypto key generate rsa
+y
+1024
+service password-encryption
+enable secret abcd1234
+ip ssh ver 2
+line vty 0 4
+transport input ssh
+login local
+exit
+username admin privilege 15 secret adminabcd
+
+SW17
+en
+conf t
+vlan 5
+name cinco
+vlan 6
+name seis
+
+exit
+
+int range fa0/1-3
+switchport mode trunk
+channel-group 1 mode passive
+int fa0/4
+switchport mode access
+switchport access vlan 5
+int fa0/5
+switchport mode access
+switchport access vlan 6
+int fa0/6
+switchport mode access
+switchport access vlan 5
+
+
+hostname SW17
+ip domain-name ulsa.com 
+crypto key generate rsa
+y
+1024
+service password-encryption
+enable secret abcd1234
+ip ssh ver 2
+line vty 0 4
+transport input ssh
+login local
+exit
+username admin privilege 15 secret adminabcd
+
+SW18
+en
+conf t
+vlan 2
+name dos
+vlan 3
+name tres
+vlan 4
+name cuatro
+exit
+
+int fa0/1
+switchport mode trunk
+int fa0/4
+switchport mode access
+switchport access vlan 2
+int fa0/3
+switchport mode access
+switchport access vlan 3
+int fa0/2
+switchport mode trunk
+
+
+hostname SW18
+ip domain-name ulsa.com 
+crypto key generate rsa
+y
+1024
+service password-encryption
+enable secret abcd1234
+ip ssh ver 2
+line vty 0 4
+transport input ssh
+login local
+exit
+username admin privilege 15 secret adminabcd
+
+SW19
+en
+conf t
+vlan 2
+name dos
+vlan 3
+name tres
+vlan 4
+name cuatro
+exit
+
+int fa0/2
+switchport mode trunk
+int fa0/1
+switchport mode access
+switchport access vlan 2
+int fa0/3
+switchport mode access
+switchport access vlan 4
+int fa0/4
+switchport mode access
+switchport access vlan 3
+
+
+hostname SW19
+ip domain-name ulsa.com 
+crypto key generate rsa
+y
+1024
+service password-encryption
+enable secret abcd1234
+ip ssh ver 2
+line vty 0 4
+transport input ssh
+login local
+exit
+username admin privilege 15 secret adminabcd
+
+SWCORE5
+en
+conf t
+vlan 3
+name tres
+vlan 4
+name cuatro
+vlan 10
+name nativa
+vlan 50 
+name docentes
+vlan 60
+name alumnos
+exit
+
+int gi1/0/1
+switchport trunk native vlan 10
+switchport mode trunk
+int gi1/0/2
+switchport trunk native vlan 10
+switchport mode trunk
+int gi1/0/3
+switchport trunk native vlan 10
+switchport mode trunk
+int gi1/0/4
+switchport trunk native vlan 10
+switchport mode trunk
+int gi1/0/5
+switchport access vlan 10
+
+
+hostname SWCORE5
+ip domain-name ulsa.com 
+crypto key generate rsa
+y
+1024
+service password-encryption
+enable secret abcd1234
+ip ssh ver 2
+line vty 0 4
+transport input ssh
+login local
+exit
+username admin privilege 15 secret adminabcd
+
+SW20
+en
+conf t
+vlan 3
+name tres
+vlan 4
+name cuatro
+vlan 10
+name nativa
+vlan 50 
+name docentes
+vlan 60
+name alumnos
+exit
+
+int fa0/1
+switchport trunk native vlan 10
+switchport mode trunk
+int fa0/4
+switchport trunk native vlan 10
+switchport mode trunk
+int fa0/2
+switchport mode access
+switchport access vlan 4
+int fa0/3
+switchport mode access
+switchport access vlan 4
+
+
+hostname SW20
+ip domain-name ulsa.com 
+crypto key generate rsa
+y
+1024
+service password-encryption
+enable secret abcd1234
+ip ssh ver 2
+line vty 0 4
+transport input ssh
+login local
+exit
+username admin privilege 15 secret adminabcd
+
+SW21
+en
+conf t
+vlan 3
+name tres
+vlan 4
+name cuatro
+vlan 10
+name nativa
+vlan 50 
+name docentes
+vlan 60
+name alumnos
+exit
+
+int gi0/1
+switchport trunk native vlan 10
+switchport mode trunk
+int fa0/3
+switchport trunk native vlan 10
+switchport mode trunk
+int fa0/1
+switchport mode access
+switchport access vlan 4
+int fa0/2
+switchport mode access
+switchport access vlan 3
+
+
+hostname SW21
+ip domain-name ulsa.com 
+crypto key generate rsa
+y
+1024
+service password-encryption
+enable secret abcd1234
+ip ssh ver 2
+line vty 0 4
+transport input ssh
+login local
+exit
+username admin privilege 15 secret adminabcd

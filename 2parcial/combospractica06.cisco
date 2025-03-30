@@ -1,0 +1,49 @@
+Redes entre routers (/30):
+Router 1: 17.0.0.4 - 17.0.0.7
+Router 2: 17.0.0.8 - 17.0.0.11
+Router 3: 17.0.0.12 - 17.0.0.15
+Router 4: 17.0.0.16 - 17.0.0.19
+Router 5: 17.0.0.20 - 17.0.0.23
+Router 6: 17.0.0.24 - 17.0.0.27
+Router 7: 17.0.0.28 - 17.0.0.31
+Router 8: 17.0.0.32 - 17.0.0.35
+Router 9: 17.0.0.36 - 17.0.0.39
+Router 10: 17.0.0.40 - 17.0.0.43
+
+Combos generados para cada VLAN:
+
+VLAN 2: 255.252.0.0 || 0.3.255.255
+17.4.0.0 - 17.7.255.255 SWC3
+17.8.0.0 - 17.11.255.255 SWC4
+
+VLAN 3: 255.255.0.0 || 0.0.255.255
+17.1.0.0 - 17.1.255.255 SWC1 
+17.2.0.0 - 17.2.255.255 SWC2
+17.3.0.0 - 17.3.255.255 SWC3
+17.12.0.0 - 17.12.255.255 SWC4
+
+VLAN 4: 255.255.255.240 || 0.0.0.15
+17.0.0.48 - 17.0.0.63 SWC2
+17.0.0.64 - 17.0.0.79 SWC3 
+17.0.0.80 - 17.0.0.95 SWC4
+
+VLAN 5: 255.255.252.0  || 0.0.3.255
+17.0.4.0 - 17.0.7.255 SWC1
+17.0.8.0 - 17.0.11.255 SWC4 
+
+ACL:
+access-list 1 deny 17.0.0.80 0.0.0.15
+access-list 1 permit any
+int vlan 5
+ip access-group 1 out
+
+
+
+
+en
+conf t  
+access-list 1 deny 192.168.5.0 0.0.0.255
+access-list 1 permit any
+!--- se niega la vlan del router 
+int fa0/1.2
+ip access-group 1 out 

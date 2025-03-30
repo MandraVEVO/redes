@@ -1,0 +1,236 @@
+!ROUTER -> 2 - ROUTER 1 EN NUESTRO CASO
+enable
+config terminal
+
+!ROUTER_2 -> ROUTER_1int FastEthernet0/0
+int gigabit 0/1
+ip address 16.0.0.14 255.255.255.252
+ no shut
+
+!ROUTER_2 -> ROUTER_3int FastEthernet0/1
+int gigabit 0/0
+ip address 16.0.0.21 255.255.255.252
+ no shut
+
+!ROUTER_2 -> ROUTER_6int Ethernet0/0/0
+int gigabit 0/2
+ip address 16.0.0.25 255.255.255.252
+ no shut
+
+router ospf 10
+network 16.0.0.12 0.0.0.3 area 0
+network 16.0.0.20 0.0.0.3 area 0
+network 16.0.0.24 0.0.0.3 area 0
+
+
+
+
+
+
+
+!!ROUTER -> 3  - SE MANTIENE IGUAL
+
+enable
+config terminal
+
+!ROUTER_3 -> ROUTER_2int FastEthernet0/0
+int gigabit 0/0
+ip address 16.0.0.22 255.255.255.252
+ no shut
+!ROUTER_3 -> ROUTER_7int Ethernet0/0/0
+int gigabit 0/2
+ip address 16.0.0.29 255.255.255.252
+ no shut
+int gigabit 0/1
+no shut
+!ROUTER_3 -> SWITCH_9
+int gigabit 0/1.20
+encapsulation dot1Q 20
+ip address 16.3.255.254 255.255.0.0
+no shut
+!ROUTER_3 -> SWITCH_9
+int gigabit 0/1.30
+encapsulation dot1Q 30
+ip address 16.15.255.254 255.254.0.0
+no shut
+
+ip dhcp pool veinte
+default-router 16.3.255.254
+network 16.3.0.0 255.255.0.0
+ip dhcp pool treinta
+default-router 16.15.255.254
+network 16.14.0.0 255.254.0.0
+router ospf 10
+network 16.0.0.20 0.0.0.3 area 0
+network 16.0.0.28 0.0.0.3 area 0
+network 16.3.0.0 0.0.255.255 area 0
+network 16.14.0.0 0.1.255.255 area 0
+
+
+
+
+!!SWITCH -> ROUTER 3
+!!SWITCH -> 9
+enable
+config terminal
+
+vlan 20 
+name veinte
+vlan 30 
+name treinta
+int fa0/1
+switchport access vlan 20
+int fa0/2
+switchport access vlan 20
+int fa0/4
+switchport access vlan 30
+int Gi 0/2
+switchport mode trunk
+no shut
+
+
+
+
+
+!!ROUTER -> 6 - ROUTER 2 EN NUESTRO CASO
+enable
+config terminal
+
+!ROUTER_6 -> ROUTER_2int FastEthernet0/0
+int gigabit 0/1
+ip address 16.0.0.26 255.255.255.252
+ no shut
+
+int gigabit 0/2
+no shut
+
+!ROUTER_6 -> SWITCH_12
+int  gigabit 0/2.10
+encapsulation dot1Q 10
+ip address 16.0.19.254 255.255.252.0
+no shut
+!ROUTER_6 -> SWITCH_12
+int gigabit 0/2.30
+encapsulation dot1Q 30
+ip address 16.11.255.254 255.254.0.0
+no shut
+
+ip dhcp pool diez
+default-router 16.0.19.254
+network 16.0.16.0 255.255.252.0
+ip dhcp pool treinta
+default-router 16.11.255.254
+network 16.10.0.0 255.254.0.0
+router ospf 10
+network 16.0.0.24 0.0.0.3 area 0
+network 16.0.0.36 0.0.0.3 area 0
+network 16.0.16.0 0.0.3.255 area 0
+network 16.10.0.0 0.1.255.255 area 0
+
+
+
+
+!!ROUTER -> 7 - ROUTER 4 EN NUESTRO CASO
+enable
+config terminal
+
+!ROUTER_7 -> ROUTER_3int FastEthernet0/0
+int gigabitEthernet 0/0/0
+ip address 16.0.0.30 255.255.255.252
+ no shut
+
+
+
+
+int gigabitEthernet 0/0/1
+no shut
+
+!ROUTER_7 -> SWITCH_13
+int gigabitEthernet 0/0/1.10
+encapsulation dot1Q 10
+ip address 16.0.23.254 255.255.252.0
+no shut
+!ROUTER_7 -> SWITCH_13
+int gigabitEthernet 0/0/1.30
+encapsulation dot1Q 30
+ip address 16.13.255.254 255.254.0.0
+no shut
+
+ip dhcp pool diez
+default-router 16.0.23.254
+network 16.0.20.0 255.255.252.0
+ip dhcp pool treinta
+default-router 16.13.255.254
+network 16.12.0.0 255.254.0.0
+router ospf 10
+network 16.0.0.28 0.0.0.3 area 0
+network 16.0.0.36 0.0.0.3 area 0
+network 16.0.20.0 0.0.3.255 area 0
+network 16.12.0.0 0.1.255.255 area 0
+
+
+
+!!SWITCH -> 13 - CONECTADO AL ROUTER QUE ESTA ESCRITO ARRIBA
+
+enable
+config terminal
+
+vlan 10 
+name diez
+vlan 20 
+name veinte
+vlan 30 
+name treinta
+int fa0/12
+switchport mode trunk
+int Gi 1/0/24
+switchport access vlan 30
+int Gi 1/0/23
+switchport access vlan 10
+
+int range gigabit 1/0/1 -3
+switchport mode trunk
+channel-group 1 mode active
+
+
+!!SWITCH HIJO
+enable
+config terminal
+
+vlan 10 
+name diez
+vlan 20 
+name veinte
+vlan 30 
+name treinta
+int gi 1/0/24
+switchport access vlan 30
+
+int range gigabit 1/0/1 -3
+switchport mode trunk
+channel-group 1 mode passive
+
+
+
+
+
+
+
+
+enable
+config terminal
+
+vlan 10 
+name diez
+vlan 30 
+name treinta
+
+int Gi0/2
+switchport mode trunk
+no shut
+int fa0/1
+switchport access vlan 30
+int fa0/2
+switchport access vlan 10
+int fa0/3
+switchport access vlan 10

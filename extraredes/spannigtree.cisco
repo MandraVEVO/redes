@@ -1,0 +1,5 @@
+SW1
+en
+conf t
+spanning-tree vlan 1 priority 4096
+!--- de aqui es todo normal solo el comando que prioriza

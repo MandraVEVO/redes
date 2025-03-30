@@ -1,0 +1,1023 @@
+R1
+en
+conf t
+int Eth0/0/0
+ip add 17.0.0.5 255.255.255.252
+no shut 
+int Eth0/1/0
+ip add 17.0.0.9 255.255.255.252
+no shut
+int Eth0/3/0
+ip add 17.0.0.13 255.255.255.252
+no shut
+
+int fa0/0
+no shut
+int fa0/0.20
+encapsulation dot1Q 20
+ip add 17.0.7.254 255.255.252.0
+no shut
+int fa0/0.30
+encapsulation dot1Q 30
+ip add 17.7.255.254 255.252.0.0
+no shut
+int fa0/0.40
+encapsulation dot1Q 40
+ip add 17.0.63.254 255.255.224.0
+no shut
+
+int fa0/1
+no shut
+int fa0/1.20
+ip add 17.0.11.254 255.255.252.0
+standby 1 ip 17.0.11.252
+standby 1 priority 150  
+standby 1 preempt
+no shut
+exit
+
+int fa0/1.30
+ip add 17.11.255.254 255.252.0.0
+standby 1 ip 17.11.255.252
+standby 1 priority 150
+standby 1 preempt
+no shut
+exit
+
+int fa0/1.50
+ip add 17.0.0.254 255.255.255.128
+standby 1 ip 17.0.0.252
+standby 1 priority 150
+standby 1 preempt
+no shut
+exit
+
+ip dhcp pool veinte
+network 17.0.4.0 255.255.252.0
+default-router 17.0.7.254
+exit
+ip dhcp pool treinta
+network 17.4.0.0 255.252.0.0
+default-router 17.7.255.254
+exit
+ip dhcp pool cuarenta
+network 17.0.32.0 255.255.224.0
+default-router 17.0.63.254
+exit
+
+ip dhcp pool veintehsrp
+network 17.0.8.0 255.255.252.0
+default-router 17.0.11.252
+exit
+ip dhcp pool treintahsrp
+network 17.8.0.0 255.252.0.0
+default-router 17.11.255.252
+exit
+ip dhcp pool cincuentahsrp
+network 17.0.0.128 255.255.255.128
+default-router 17.0.0.252
+exit
+
+!---- ip routes
+!-routers y switchcore
+
+ip route 17.0.0.16 255.255.255.252 17.0.0.6
+ip route 17.0.0.20 255.255.255.252 17.0.0.6
+ip route 17.0.0.24 255.255.255.252 17.0.0.6
+ip route 17.0.0.28 255.255.255.252 17.0.0.6
+ip route 17.0.0.32 255.255.255.252 17.0.0.6
+ip route 17.0.0.36 255.255.255.252 17.0.0.6
+ip route 17.0.0.40 255.255.255.252 17.0.0.6
+ip route 17.0.0.44 255.255.255.252 17.0.0.6
+ip route 17.0.0.48 255.255.255.252 17.0.0.6
+!-v10
+ip route 17.0.0.64 255.255.255.240 17.0.0.6
+ip route 17.0.0.80 255.255.255.240 17.0.0.6
+!-v20
+ip route 17.0.8.0 255.255.252.0 17.0.0.6
+ip route 17.0.12.0 255.255.252.0 17.0.0.6
+ip route 17.0.16.0 255.255.252.0 17.0.0.6
+!-v30
+ip route 17.8.0.0 255.252.0.0 17.0.0.6
+ip route 17.12.0.0 255.252.0.0 17.0.0.6
+ip route 17.16.0.0 255.252.0.0 17.0.0.6
+ip route 17.20.0.0 255.252.0.0 17.0.0.6
+!-v40
+ip route 17.0.64.0 255.255.224.0 17.0.0.6
+ip route 17.0.96.0 255.255.224.0 17.0.0.6
+ip route 17.0.128.0 255.255.224.0 17.0.0.6
+!-v50
+ip route 17.0.0.128 255.255.255.128 17.0.0.6
+ip route 17.0.1.0 255.255.255.128 17.0.0.6
+ip route 17.0.1.128 255.255.255.128 17.0.0.6
+ip route 17.0.2.0 255.255.255.128 17.0.0.6
+!-wlan
+ip route 10.0.0.0 255.255.255.0 17.0.0.6
+ip route 20.0.0.0 255.255.255.0 17.0.0.6
+ip route 30.0.0.0 255.255.255.0 17.0.0.6
+ip route 40.0.0.0 255.255.255.0 17.0.0.6
+
+
+
+
+
+R2
+en 
+conf t
+int Eth0/0/0
+ip add 17.0.0.6 255.255.255.252
+no shut
+int Eth0/1/0
+ip add 17.0.0.21 255.255.255.252
+no shut
+int Eth0/2/0
+ip add 17.0.0.17 255.255.255.252
+no shut
+
+int fa0/1
+no shut
+int fa0/1.20
+encapsulation dot1Q 20
+ip add 17.0.11.253 255.255.252.0
+standby 1 ip 17.0.11.252
+no shut
+exit
+
+int fa0/1.30
+encapsulation dot1Q 30
+ip add 17.11.255.253 255.252.0.0
+standby 1 ip 17.11.255.252
+no shut
+exit
+
+int fa0/1.50
+encapsulation dot1Q 50
+ip add 17.0.0.253 255.255.255.128
+standby 1 ip 17.0.0.252
+no shut
+exit
+
+ip dhcp pool veintehsrp
+network 17.0.8.0 255.255.252.0
+default-router 17.0.11.252
+exit
+ip dhcp pool treintahsrp
+network 17.8.0.0 255.252.0.0
+default-router 17.11.255.252
+exit
+ip dhcp pool cincuentahsrp
+network 17.0.0.128 255.255.255.128
+default-router 17.0.0.252
+exit
+
+!---- ip routes
+!-routers y switchcore
+ip route 17.0.0.8 255.255.255.252 17.0.0.22
+ip route 17.0.0.12 255.255.255.252 17.0.0.22
+ip route 17.0.0.24 255.255.255.252 17.0.0.22
+ip route 17.0.0.28 255.255.255.252 17.0.0.22
+ip route 17.0.0.32 255.255.255.252 17.0.0.22
+ip route 17.0.0.36 255.255.255.252 17.0.0.22
+ip route 17.0.0.40 255.255.255.252 17.0.0.22
+ip route 17.0.0.44 255.255.255.252 17.0.0.22
+ip route 17.0.0.48 255.255.255.252 17.0.0.22
+!-v10
+ip route 17.0.0.64 255.255.255.240 17.0.0.22
+ip route 17.0.0.80 255.255.255.240 17.0.0.22
+!-v20
+ip route 17.0.4.0 255.255.252.0 17.0.0.22
+ip route 17.0.8.0 255.255.252.0 17.0.0.22
+ip route 17.0.12.0 255.255.252.0 17.0.0.22
+ip route 17.0.16.0 255.255.252.0 17.0.0.22
+!-v30
+ip route 17.4.0.0 255.252.0.0 17.0.0.22
+ip route 17.8.0.0 255.252.0.0 17.0.0.22 
+ip route 17.12.0.0 255.252.0.0 17.0.0.22
+ip route 17.16.0.0 255.252.0.0 17.0.0.22
+ip route 17.20.0.0 255.252.0.0 17.0.0.22 
+!-v40
+ip route 17.0.32.0 255.255.224.0 17.0.0.22
+ip route 17.0.64.0 255.255.224.0 17.0.0.22
+ip route 17.0.96.0 255.255.224.0 17.0.0.22
+ip route 17.0.128.0 255.255.224.0 17.0.0.22
+!-v50
+ip route 17.0.0.128 255.255.255.128 17.0.0.22
+ip route 17.0.1.0 255.255.255.128 17.0.0.22
+ip route 17.0.1.128 255.255.255.128 17.0.0.22
+ip route 17.0.2.0 255.255.255.128 17.0.0.22
+!-wlan
+ip route 10.0.0.0 255.255.255.0 17.0.0.22
+ip route 20.0.0.0 255.255.255.0 17.0.0.22
+ip route 30.0.0.0 255.255.255.0 17.0.0.22
+ip route 40.0.0.0 255.255.255.0 17.0.0.22
+
+
+R3
+en
+conf t
+int Eth0/1/0
+ip add 17.0.0.22 255.255.255.252
+no shut
+int Eth0/2/0
+ip add 17.0.0.29 255.255.255.252
+no shut
+int Eth0/3/0
+ip add 17.0.0.25 255.255.255.252
+no shut
+
+int fa0/0
+no shut
+int fa0/0.30
+encapsulation dot1Q 30
+ip add 17.15.255.254 255.252.0.0
+no shut
+exit
+int fa0/0.40
+encapsulation dot1Q 40
+ip add 17.0.95.254 255.255.224.0
+no shut
+exit
+int fa0/0.50
+encapsulation dot1Q 50
+ip add 17.0.1.126 255.255.255.128
+no shut
+exit
+
+ip dhcp pool treinta
+network 17.12.0.0 255.252.0.0
+default-router 17.15.255.254
+exit
+ip dhcp pool cuarenta
+network 17.0.64.0 255.255.224.0
+default-router 17.0.95.254
+exit
+ip dhcp pool cincuenta
+network 17.0.1.0 255.255.255.128
+default-router 17.0.1.126
+exit
+!---- ip routes
+!-routers y switchcore
+ip route 17.0.0.4 255.255.255.252 17.0.0.26
+ip route 17.0.0.8 255.255.255.252 17.0.0.26
+ip route 17.0.0.12 255.255.255.252 17.0.0.30
+ip route 17.0.0.16 255.255.255.252 17.0.0.26
+
+ip route 17.0.0.32 255.255.255.252 17.0.0.30
+ip route 17.0.0.36 255.255.255.252 17.0.0.30
+ip route 17.0.0.40 255.255.255.252 17.0.0.30
+ip route 17.0.0.44 255.255.255.252 17.0.0.30
+ip route 17.0.0.48 255.255.255.252 17.0.0.30
+!-v10
+ip route 17.0.0.64 255.255.255.240 17.0.0.26
+ip route 17.0.0.80 255.255.255.240 17.0.0.30
+!-v20
+ip route 17.0.4.0 255.255.252.0 17.0.0.26
+ip route 17.0.8.0 255.255.252.0 17.0.0.26
+ip route 17.0.12.0 255.255.252.0 17.0.0.30
+ip route 17.0.16.0 255.255.252.0 17.0.0.26
+!-v30
+ip route 17.4.0.0 255.252.0.0 17.0.0.26
+ip route 17.8.0.0 255.252.0.0 17.0.0.26
+ip route 17.16.0.0 255.252.0.0 17.0.0.30
+ip route 17.20.0.0 255.252.0.0 17.0.0.30
+!-v40
+ip route 17.0.32.0 255.255.224.0 17.0.0.26
+ip route 17.0.96.0 255.255.224.0 17.0.0.30
+ip route 17.0.128.0 255.255.224.0 17.0.0.26
+!-v50
+ip route 17.0.0.128 255.255.255.128 17.0.0.26
+ip route 17.0.1.128 255.255.255.128 17.0.0.30
+ip route 17.0.2.0 255.255.255.128 17.0.0.30
+!-wlan
+ip route 10.0.0.0 255.255.255.0 17.0.0.30
+ip route 20.0.0.0 255.255.255.0 17.0.0.30
+ip route 30.0.0.0 255.255.255.0 17.0.0.26
+ip route 40.0.0.0 255.255.255.0 17.0.0.26
+
+
+
+R4
+en
+conf t
+int Eth0/0/0
+ip add 17.0.0.33 255.255.255.252
+no shut
+int Eth0/1/0
+ip add 17.0.0.41 255.255.255.252
+no shut
+int Eth0/2/0
+ip add 17.0.0.30 255.255.255.252
+no shut 
+int Eth0/3/0
+ip add 17.0.0.14 255.255.255.252
+no shut
+int fa0/1
+ip add 17.0.0.37 255.255.255.252
+no shut
+
+int fa0/0
+no shut
+int fa0/0.20
+encapsulation dot1Q 20
+ip add 17.0.15.254 255.255.252.0
+no shut 
+int fa0/0.30 
+encapsulation dot1Q 30
+ip add 17.19.255.254 255.252.0.0
+no shut
+int fa0/0.40
+encapsulation dot1Q 40
+ip add 17.0.127.254 255.255.224.0
+no shut
+
+ip dhcp pool veinte
+network 17.0.12.0 255.255.252.0
+default-router 17.0.15.254
+exit
+ip dhcp pool treinta
+network 17.16.0.0 255.252.0.0
+default-router 17.19.255.254
+exit
+ip dhcp pool cuarenta
+network 17.0.96.0 255.255.224.0
+default-router 17.0.127.254
+exit
+!---- ip routes
+!-routers y switchcore
+ip route 17.0.0.4 255.255.255.252 17.0.0.34
+ip route 17.0.0.8 255.255.255.252 17.0.0.34
+ip route 17.0.0.16 255.255.255.252 17.0.0.34
+ip route 17.0.0.20 255.255.255.252 17.0.0.34
+ip route 17.0.0.24 255.255.255.252 17.0.0.34
+
+ip route 17.0.0.44 255.255.255.252 17.0.0.42
+ip route 17.0.0.48 255.255.255.252 17.0.0.42
+!-v10
+ip route 17.0.0.64 255.255.255.240 17.0.0.34
+ip route 17.0.0.80 255.255.255.240 17.0.0.42
+!-v20
+ip route 17.0.4.0 255.255.252.0 17.0.0.34
+ip route 17.0.8.0 255.255.252.0 17.0.0.34
+ip route 17.0.16.0 255.255.252.0 17.0.0.34
+!-v30
+ip route 17.4.0.0 255.252.0.0 17.0.0.34
+ip route 17.8.0.0 255.252.0.0 17.0.0.34
+ip route 17.12.0.0 255.252.0.0 17.0.0.34
+ip route 17.20.0.0 255.252.0.0 17.0.0.42
+!-v40
+ip route 17.0.32.0 255.255.224.0 17.0.0.34
+ip route 17.0.64.0 255.255.224.0 17.0.0.34
+ip route 17.0.128.0 255.255.224.0 17.0.0.34
+!-v50
+ip route 17.0.0.128 255.255.255.128 17.0.0.34
+ip route 17.0.1.0 255.255.255.128 17.0.0.34
+ip route 17.0.1.128 255.255.255.128 17.0.0.42
+ip route 17.0.2.0 255.255.255.128 17.0.0.42
+!-wlan
+ip route 10.0.0.0 255.255.255.0 17.0.0.42
+ip route 20.0.0.0 255.255.255.0 17.0.0.42
+ip route 30.0.0.0 255.255.255.0 17.0.0.34
+ip route 40.0.0.0 255.255.255.0 17.0.0.34
+
+
+R5
+en
+conf t
+int Eth0/0/0
+ip add 17.0.0.34 255.255.255.252
+no shut
+int Eth0/1/0
+ip add 17.0.0.10 255.255.255.252
+no shut
+int Eth0/2/0
+ip add 17.0.0.18 255.255.255.252
+no shut
+int Eth0/3/0
+ip add 17.0.0.26 255.255.255.252
+no shut
+
+int fa0/1
+ip add 192.168.1.254 255.255.255.0
+no shut
+
+int fa0/0
+no shut
+int fa0/0.10
+encapsulation dot1Q 10 native
+ip add 17.0.0.78 255.255.255.240
+no shut
+int fa0/0.20
+encapsulation dot1Q 20
+ip add 17.0.19.254 255.255.252.0
+no shut
+int fa0/0.40
+encapsulation dot1Q 40
+ip add 17.0.159.254 255.255.224.0
+no shut
+int fa0/0.3
+encapsulation dot1Q 3
+ip add 30.0.0.254 255.255.255.0
+no shut
+int fa0/0.4
+encapsulation dot1Q 4
+ip add 40.0.0.254 255.255.255.0
+no shut
+
+ip dhcp pool Vlannativa
+network 17.0.0.64 255.255.255.240
+default-router 17.0.0.78
+exit
+ip dhcp pool veinte
+network 17.0.16.0 255.255.252.0
+default-router 17.0.19.254
+exit
+ip dhcp pool cuarenta
+network 17.0.128.0 255.255.224.0
+default-router 17.0.159.254
+exit
+ip dhcp pool Vlanposgrado
+network 30.0.0.0 255.255.255.0
+default-router 30.0.0.254
+exit
+ip dhcp pool Vlaninvitados
+network 40.0.0.0 255.255.255.0
+default-router 40.0.0.254
+exit
+
+!---- ip routes
+!-routers y switchcore
+ip route 17.0.0.4 255.255.255.252 17.0.0.9
+ip route 17.0.0.12 255.255.255.252 17.0.0.9
+ip route 17.0.0.20 255.255.255.252 17.0.0.17
+ip route 17.0.0.28 255.255.255.252 17.0.0.17
+ip route 17.0.0.36 255.255.255.252 17.0.0.17
+ip route 17.0.0.40 255.255.255.252 17.0.0.17
+ip route 17.0.0.44 255.255.255.252 17.0.0.17
+ip route 17.0.0.48 255.255.255.252 17.0.0.17
+!-v10
+ip route 17.0.0.64 255.255.255.240 17.0.0.17
+ip route 17.0.0.80 255.255.255.240 17.0.0.17
+!-v20
+ip route 17.0.4.0 255.255.252.0 17.0.0.9
+ip route 17.0.8.0 255.255.252.0 17.0.0.9
+ip route 17.0.12.0 255.255.252.0 17.0.0.17
+!-v30
+ip route 17.4.0.0 255.252.0.0 17.0.0.9
+ip route 17.8.0.0 255.252.0.0 17.0.0.9
+ip route 17.12.0.0 255.252.0.0 17.0.0.17
+ip route 17.16.0.0 255.252.0.0 17.0.0.17
+ip route 17.20.0.0 255.252.0.0 17.0.0.17
+!-v40
+ip route 17.0.32.0 255.255.224.0 17.0.0.9
+ip route 17.0.64.0 255.255.224.0 17.0.0.17
+ip route 17.0.96.0 255.255.224.0 17.0.0.17
+!-v50
+ip route 17.0.0.128 255.255.255.128 17.0.0.9
+ip route 17.0.1.0 255.255.255.128 17.0.0.17
+ip route 17.0.1.128 255.255.255.128 17.0.0.17
+ip route 17.0.2.0 255.255.255.128 17.0.0.17
+!-wlan
+    ip route 10.0.0.0 255.255.255.0 17.0.0.17
+    ip route 20.0.0.0 255.255.255.0 17.0.0.17
+ip route 30.0.0.0 255.255.255.0 17.0.0.17
+ip route 40.0.0.0 255.255.255.0 17.0.0.17
+
+
+R6
+en
+conf t
+int Eth0/0/0
+ip add 17.0.0.45 255.255.255.252
+no shut
+int fa0/1
+ip add 17.0.0.38 255.255.255.252
+no shut
+int Eth0/1/0
+ip add 192.168.2.254 255.255.255.0
+no shut
+
+int fa0/0
+no shut
+int fa0/0.10
+encapsulation dot1Q 10 native
+ip add 17.0.0.94 255.255.255.240
+no shut
+int fa0/0.50
+encapsulation dot1Q 50
+ip add 17.0.1.254 255.255.255.128
+no shut
+int fa0/0.11
+encapsulation dot1Q 11
+ip add 10.0.0.254 255.255.255.0
+no shut
+int fa0/0.2
+encapsulation dot1Q 2
+ip add 20.0.0.254 255.255.255.0
+no shut 
+exit
+
+ip dhcp pool Vlannativa
+network 17.0.0.80 255.255.255.240
+default-router 17.0.0.94
+exit
+ip dhcp pool Vlanalumnos
+network 10.0.0.0 255.255.255.0
+default-router 10.0.0.254
+exit
+ip dhcp pool Vlandocentes
+network 20.0.0.0 255.255.255.0
+default-router 20.0.0.254
+exit
+ip dhcp pool cincuenta
+network 17.0.1.128 255.255.255.128
+default-router 17.0.1.254
+exit
+!---- ip routes
+!-routers y switchcore
+ip route 17.0.0.4 255.255.255.252 17.0.0.37
+ip route 17.0.0.8 255.255.255.252 17.0.0.37
+ip route 17.0.0.12 255.255.255.252 17.0.0.37
+ip route 17.0.0.16 255.255.255.252 17.0.0.37
+ip route 17.0.0.20 255.255.255.252 17.0.0.37
+ip route 17.0.0.24 255.255.255.252 17.0.0.37
+ip route 17.0.0.28 255.255.255.252 17.0.0.37
+ip route 17.0.0.32 255.255.255.252 17.0.0.37
+ip route 17.0.0.40 255.255.255.252 17.0.0.37
+ip route 17.0.0.48 255.255.255.252 17.0.0.37
+!-v10
+ip route 17.0.0.64 255.255.255.240 17.0.0.37
+ip route 17.0.0.80 255.255.255.240 17.0.0.37
+!-v20
+ip route 17.0.4.0 255.255.252.0 17.0.0.37
+ip route 17.0.8.0 255.255.252.0 17.0.0.37
+ip route 17.0.12.0 255.255.252.0 17.0.0.37
+ip route 17.0.16.0 255.255.252.0 17.0.0.37
+!-v30
+ip route 17.4.0.0 255.252.0.0 17.0.0.37
+ip route 17.8.0.0 255.252.0.0 17.0.0.37
+ip route 17.12.0.0 255.252.0.0 17.0.0.37
+ip route 17.16.0.0 255.252.0.0 17.0.0.37
+ip route 17.20.0.0 255.252.0.0 17.0.0.37
+!-v40
+ip route 17.0.32.0 255.255.224.0 17.0.0.37
+ip route 17.0.64.0 255.255.224.0 17.0.0.37
+ip route 17.0.96.0 255.255.224.0 17.0.0.37
+ip route 17.0.128.0 255.255.224.0 17.0.0.37
+!-v50
+ip route 17.0.0.128 255.255.255.128 17.0.0.37
+ip route 17.0.1.0 255.255.255.128 17.0.0.37
+ip route 17.0.2.0 255.255.255.128 17.0.0.37
+!-wlan
+    ip route 10.0.0.0 255.255.255.0 17.0.0.37
+    ip route 20.0.0.0 255.255.255.0 17.0.0.37
+    ip route 30.0.0.0 255.255.255.0 17.0.0.37
+ip route 40.0.0.0 255.255.255.0 17.0.0.37
+
+R7
+en
+conf t
+int Eth0/0/0
+ip add 17.0.0.46 255.255.255.252
+no shut
+int Eth0/1/0
+ip add 17.0.0.42 255.255.255.252
+no shut
+int fa0/0
+ip add 17.0.0.49 255.255.255.252
+no shut
+
+!---- ip routes
+!-routers y switchcore
+ip route 17.0.0.4 255.255.255.252 17.0.0.45
+ip route 17.0.0.8 255.255.255.252 17.0.0.45
+ip route 17.0.0.12 255.255.255.252 17.0.0.45
+ip route 17.0.0.16 255.255.255.252 17.0.0.45
+ip route 17.0.0.20 255.255.255.252 17.0.0.45
+ip route 17.0.0.24 255.255.255.252 17.0.0.45
+ip route 17.0.0.28 255.255.255.252 17.0.0.45
+ip route 17.0.0.32 255.255.255.252 17.0.0.45
+ip route 17.0.0.36 255.255.255.252 17.0.0.45
+
+!-v10
+ip route 17.0.0.64 255.255.255.240 17.0.0.45
+ip route 17.0.0.80 255.255.255.240 17.0.0.45
+!-v20
+ip route 17.0.4.0 255.255.252.0 17.0.0.45
+ip route 17.0.8.0 255.255.252.0 17.0.0.45
+ip route 17.0.12.0 255.255.252.0 17.0.0.45
+ip route 17.0.16.0 255.255.252.0 17.0.0.45
+!-v30
+ip route 17.4.0.0 255.252.0.0 17.0.0.45
+ip route 17.8.0.0 255.252.0.0 17.0.0.45
+ip route 17.12.0.0 255.252.0.0 17.0.0.45
+ip route 17.16.0.0 255.252.0.0 17.0.0.45
+ip route 17.20.0.0 255.252.0.0 17.0.0.50
+!-v40
+ip route 17.0.32.0 255.255.224.0 17.0.0.45
+ip route 17.0.64.0 255.255.224.0 17.0.0.45
+ip route 17.0.96.0 255.255.224.0 17.0.0.45
+ip route 17.0.128.0 255.255.224.0 17.0.0.45
+!-v50
+ip route 17.0.0.128 255.255.255.128 17.0.0.45
+ip route 17.0.1.0 255.255.255.128 17.0.0.45
+ip route 17.0.1.128 255.255.255.128 17.0.0.45
+ip route 17.0.2.0 255.255.255.128 17.0.0.50
+!-wlan
+ip route 10.0.0.0 255.255.255.0 17.0.0.45
+ip route 20.0.0.0 255.255.255.0 17.0.0.45
+ip route 30.0.0.0 255.255.255.0 17.0.0.45
+ip route 40.0.0.0 255.255.255.0 17.0.0.45
+
+
+
+
+R8core
+en
+conf t
+vlan 50 
+name cincuenta
+vlan 30
+name treinta
+exit
+int gi1/0/1
+no switchport
+ip add 17.0.0.50 255.255.255.252
+no shut
+exit
+
+int vlan 50
+ip add 17.0.2.126 255.255.255.128
+no shut
+int vlan 30
+ip add 17.23.255.254 255.252.0.0
+no shut
+exit
+
+ip dhcp pool vcincuenta
+network 17.0.2.0 255.255.255.128
+default-router 17.0.2.126
+exit
+ip dhcp pool vtreinta
+network 17.20.0.0 255.252.0.0
+default-router 17.23.255.254
+exit
+
+int gi1/0/2
+switchport mode trunk
+!---- ip routes
+!-routers y switchcore
+ip route 17.0.0.4 255.255.255.252 17.0.0.49
+ip route 17.0.0.8 255.255.255.252 17.0.0.49
+ip route 17.0.0.12 255.255.255.252 17.0.0.49
+ip route 17.0.0.16 255.255.255.252 17.0.0.49
+ip route 17.0.0.20 255.255.255.252 17.0.0.49
+ip route 17.0.0.24 255.255.255.252 17.0.0.49
+ip route 17.0.0.28 255.255.255.252 17.0.0.49
+ip route 17.0.0.32 255.255.255.252 17.0.0.49
+ip route 17.0.0.36 255.255.255.252 17.0.0.49
+ip route 17.0.0.40 255.255.255.252 17.0.0.49
+ip route 17.0.0.44 255.255.255.252 17.0.0.49
+!-v10
+ip route 17.0.0.64 255.255.255.240 17.0.0.49
+ip route 17.0.0.80 255.255.255.240 17.0.0.49
+!-v20
+ip route 17.0.4.0 255.255.252.0 17.0.0.49
+ip route 17.0.8.0 255.255.252.0 17.0.0.49
+ip route 17.0.12.0 255.255.252.0 17.0.0.49
+ip route 17.0.16.0 255.255.252.0 17.0.0.49
+!-v30
+ip route 17.4.0.0 255.252.0.0 17.0.0.49
+ip route 17.8.0.0 255.252.0.0 17.0.0.49
+ip route 17.12.0.0 255.252.0.0 17.0.0.49
+ip route 17.16.0.0 255.252.0.0 17.0.0.49
+!-v40
+ip route 17.0.32.0 255.255.224.0 17.0.0.49
+ip route 17.0.64.0 255.255.224.0 17.0.0.49
+ip route 17.0.96.0 255.255.224.0 17.0.0.49
+ip route 17.0.128.0 255.255.224.0 17.0.0.49
+!-v50
+ip route 17.0.0.128 255.255.255.128 17.0.0.49
+ip route 17.0.1.0 255.255.255.128 17.0.0.49
+ip route 17.0.1.128 255.255.255.128 17.0.0.49
+!-wlan
+ip route 10.0.0.0 255.255.255.0 17.0.0.49
+ip route 20.0.0.0 255.255.255.0 17.0.0.49
+ip route 30.0.0.0 255.255.255.0 17.0.0.49
+ip route 40.0.0.0 255.255.255.0 17.0.0.49
+
+
+!--------switches----------------
+SW1
+en
+conf t
+vlan 20
+name veinte
+vlan 30 
+name treinta
+vlan 40
+name cuarenta
+
+int fa0/4
+switchport mode trunk
+int range fa0/1-3
+switchport mode trunk
+channel-group 1 mode active
+exit
+int fa0/5
+switchport mode access
+switchport access vlan 30
+no shut
+int fa0/6
+switchport mode access
+switchport access vlan 20
+no shut
+
+
+
+SW2
+en
+conf t
+vlan 20
+name veinte
+vlan 30 
+name treinta
+vlan 40
+name cuarenta
+
+
+int range fa0/1-3
+switchport mode trunk
+channel-group 1 mode passive
+exit
+int fa0/4
+switchport mode access
+switchport access vlan 20
+int fa0/5
+switchport mode access
+switchport access vlan 40
+no shut
+int fa0/6
+switchport mode access
+switchport access vlan 30
+no shut
+
+SW3
+en
+conf t
+vlan 20
+name veinte
+vlan 30
+name treinta
+vlan 50
+name cincuenta
+
+int range fa0/1-3
+switchport mode trunk
+int fa0/4
+switchport mode access 
+switchport access vlan 20
+no shut
+int fa0/5  
+switchport mode access
+switchport access vlan 20
+no shut
+
+SW4
+en
+conf t
+
+vlan 30
+name treinta
+vlan 50
+name cincuenta
+
+int fa0/3
+switchport mode trunk
+int fa0/1
+switchport mode access 
+switchport access vlan 30
+no shut
+int fa0/2  
+switchport mode access
+switchport access vlan 50
+no shut
+int fa0/4  
+switchport mode access
+switchport access vlan 30
+no shut
+
+SW5
+en
+conf t
+vlan 30
+name treinta
+vlan 40
+name cuarenta
+vlan 50
+name cincuenta
+
+int fa0/1
+switchport mode trunk
+int fa0/2
+switchport mode access
+switchport access vlan 50
+int fa0/3
+switchport mode access
+switchport access vlan 40
+int fa0/4
+switchport mode access
+switchport access vlan 30
+
+SW6
+en
+conf t
+spanning-tree vlan 1 priority 4096
+vlan 20
+name veinte
+vlan 30
+name treinta
+vlan 40
+name cuarenta
+
+int fa0/1
+switchport mode trunk
+int fa0/4
+switchport mode trunk
+int fa0/6 
+switchport mode trunk
+int fa0/2
+switchport mode access
+switchport access vlan 20
+int fa0/3
+switchport mode access
+switchport access vlan 30
+
+SW7
+en
+conf t
+vlan 20
+name veinte
+vlan 30
+name treinta
+
+
+int fa0/5
+switchport mode trunk
+int fa0/6 
+switchport mode trunk
+int fa0/1
+switchport mode access
+switchport access vlan 20
+int fa0/2
+switchport mode access
+switchport access vlan 30
+int fa0/3
+switchport mode access
+switchport access vlan 20
+
+SW8
+en
+conf t
+vlan 40
+name cuarenta
+
+
+int fa0/5
+switchport mode trunk
+int fa0/4 
+switchport mode trunk
+int fa0/1
+switchport mode access
+switchport access vlan 40
+int fa0/2
+switchport mode access
+switchport access vlan 40
+
+SWCORE1
+en
+conf t
+vlan 10
+name nativa
+vlan 20
+name veinte
+vlan 40
+name cuarenta
+vlan 3
+name posgrado
+vlan 4
+name invitados
+exit
+
+int Gi1/0/1
+switchport trunk native vlan 10
+switchport mode trunk
+int Gi1/0/2
+switchport trunk native vlan 10
+switchport mode trunk
+int Gi1/0/3
+switchport trunk native vlan 10
+switchport mode trunk
+int Gi1/0/4
+switchport trunk native vlan 10
+switchport mode trunk
+int Gi1/0/5
+switchport access vlan 10
+
+
+
+SW9
+en
+conf t
+vlan 10
+name nativa
+vlan 20
+name veinte
+vlan 40
+name cuarenta
+vlan 4
+name invitados
+
+
+int Gi0/1
+switchport trunk native vlan 10
+switchport mode trunk
+
+int fa0/1
+switchport mode access
+switchport access vlan 20
+int fa0/2
+switchport mode access
+switchport access vlan 40
+int fa0/3
+switchport trunk native vlan 10
+switchport mode trunk
+
+SWCORE2
+en
+conf t
+vlan 10
+name nativa
+vlan 11
+name alumnos
+vlan 2
+name docentes
+vlan 50
+name cincuenta
+exit
+
+int Gi1/0/1
+switchport trunk native vlan 10
+switchport mode trunk
+int Gi1/0/2
+switchport trunk native vlan 10
+switchport mode trunk
+int Gi1/0/3
+switchport trunk native vlan 10
+switchport mode trunk
+int Gi1/0/4
+switchport access vlan 10
+
+SW10
+en
+conf t
+vlan 10
+name nativa
+vlan 50
+name cincuenta
+vlan 11
+name alumnos
+vlan 2  
+name docentes
+
+int Gi0/1
+switchport trunk native vlan 10
+switchport mode trunk
+int fa0/1
+switchport mode access
+switchport access vlan 50
+int fa0/2
+switchport trunk native vlan 10
+switchport mode trunk
+int fa0/3
+switchport trunk native vlan 10
+switchport mode trunk
+
+SW11
+en
+conf t
+vlan 50
+name cincuenta
+vlan 30
+name treinta
+
+int gi0/1
+switchport mode trunk
+int fa0/1
+switchport mode access
+switchport access vlan 50
+int fa0/2
+switchport mode access
+switchport access vlan 50
+int fa0/3
+switchport mode access
+switchport access vlan 30
