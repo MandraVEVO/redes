@@ -1,0 +1,1170 @@
+R1
+en
+conf t
+hostname R1
+int eth0/1/0
+ip add 13.0.0.5 255.255.255.252
+no shut 
+int eth0/2/0
+ip add 13.0.0.9 255.255.255.252
+no shut
+int fa0/0
+no shut
+int fa0/0.2
+encapsulation dot1Q 2
+ip add 13.0.7.254 255.255.252.0
+no shut
+int fa0/0.4
+encapsulation dot1Q 4
+ip add 13.7.255.254 255.252.0.0
+no shut
+int fa0/0.6
+encapsulation dot1Q 6
+ip add 13.28.255.254 255.255.0.0
+no shut
+
+ip dhcp pool vlan2_4
+network 13.0.4.0 255.255.252.0
+default-router 13.0.7.254
+exit
+ip dhcp pool vlan4_4
+network 13.4.0.0 255.252.0.0
+default-router 13.7.255.254
+exit
+ip dhcp pool vlan6_4
+network 13.28.0.0 255.255.0.0
+default-router 13.28.255.254
+exit
+
+router ospf 10
+redistribute connected subnets
+network 13.0.0.4 0.0.0.3 area 0
+network 13.0.0.8 0.0.0.3 area 0
+network 13.0.4.0 0.0.3.255 area 0
+network 13.4.0.0 0.3.255.255 area 0
+network 13.28.0.0 0.0.255.255 area 0
+exit
+!----- accesslist extendida
+access-list 100 deny tcp 13.30.0.0 0.0.255.255 host 13.0.4.3 eq 443
+access-list 100 deny tcp 13.0.16.0 0.0.3.255 host 13.0.4.3 eq 80
+access-list 100 permit ip any any
+
+int fa0/0.2
+ip access-group 100 out
+
+
+R2
+en
+conf t
+hostname R2
+int eth0/0/0
+ip add 13.0.0.13 255.255.255.252
+no shut
+int eth0/1/0
+ip add 13.0.0.6 255.255.255.252
+no shut
+int eth0/2/0
+ip add 13.0.0.17 255.255.255.252
+no shut
+int eth0/3/0
+ip add 13.0.0.66 255.255.255.252
+no shut
+int fa0/1
+ip add 13.0.0.30 255.255.255.252
+no shut
+int fa0/0
+no shut
+int fa0/0.4
+encapsulation dot1Q 4
+ip add 13.11.255.254 255.252.0.0
+no shut
+int fa0/0.5
+encapsulation dot1Q 5
+ip add 13.0.1.254 255.255.255.0
+no shut
+int fa0/0.6 
+encapsulation dot1Q 6
+ip add 13.29.255.254 255.255.0.0
+no shut
+
+ip dhcp pool vlan4_4
+network 13.8.0.0 255.252.0.0 
+default-router 13.11.255.254
+exit
+ip dhcp pool vlan5_4
+network 13.0.1.0 255.255.255.0 
+default-router 13.0.1.254
+exit
+ip dhcp pool vlan6_4
+network 13.29.0.0 255.255.0.0
+default-router 13.29.255.254
+
+router ospf 10
+redistribute connected subnets
+network 13.0.0.4 0.0.0.3 area 0
+network 13.0.0.12 0.0.0.3 area 0
+network 13.0.0.64 0.0.0.3 area 0
+network 13.0.0.28 0.0.0.3 area 0
+network 13.0.0.16 0.0.0.3 area 0 
+network 13.8.0.0 0.3.255.255 area 0
+network 13.0.1.0 0.0.0.255 area 0
+network 13.29.0.0 0.0.255.255 area 0
+exit
+!--- accesslist extendida
+access-list 100 deny tcp 13.0.8.0 0.0.3.255 host 13.0.1.1 eq 443
+access-list 100 deny icmp host 13.0.1.1 13.0.8.0 0.0.3.255
+access-list 100 permit ip any any
+
+int fa0/0.5
+ip access-group 100 out
+
+
+
+R3
+en
+conf t
+hostname R3
+int eth0/0/0
+ip add 13.0.0.14 255.255.255.252
+no shut
+int eth0/1/0
+ip add 13.0.0.69 255.255.255.252
+no shut
+int eth0/2/0
+ip add 13.0.0.10 255.255.255.252
+no shut
+int eth0/3/0
+ip add 13.0.0.62 255.255.255.252
+no shut
+int fa0/1
+ip add 13.0.0.34 255.255.255.252
+no shut
+int fa0/0 
+ip add 13.0.0.77 255.255.255.252
+no shut
+
+router ospf 10
+redistribute connected subnets
+network 13.0.0.8 0.0.0.3 area 0
+network 13.0.0.12 0.0.0.3 area 0
+network 13.0.0.32 0.0.0.3 area 0
+network 13.0.0.60 0.0.0.3 area 0
+network 13.0.0.68 0.0.0.3 area 0
+network 13.0.0.76 0.0.0.3 area 0
+exit
+
+R4
+en
+conf t
+hostname R4
+int eth0/0/0
+ip add 13.0.0.25 255.255.255.252
+no shut
+int eth0/2/0
+ip add 13.0.0.18 255.255.255.252
+no shut
+int fa0/0
+ip add 13.0.0.21 255.255.255.252
+no shut
+
+router ospf 10
+network 13.0.0.16 0.0.0.3 area 0
+network 13.0.0.24 0.0.0.3 area 0
+network 13.0.0.20 0.0.0.3 area 0
+exit
+
+r5
+en
+conf t
+hostname R5
+int eth0/0/0
+ip add 13.0.0.26 255.255.255.252
+no shut
+int eth0/1/0
+ip add 13.0.0.41 255.255.255.252
+no shut
+int eth0/2/0
+ip add 13.0.0.37 255.255.255.252
+no shut
+int eth0/3/0
+ip add 13.0.0.33 255.255.255.252
+no shut 
+int fa0/1
+ip add 13.0.0.29 255.255.255.252
+no shut
+int fa0/0
+ip add 13.0.0.45 255.255.255.252
+no shut
+
+router ospf 10
+network 13.0.0.24 0.0.0.3 area 0
+network 13.0.0.28 0.0.0.3 area 0
+network 13.0.0.32 0.0.0.3 area 0
+network 13.0.0.36 0.0.0.3 area 0
+network 13.0.0.40 0.0.0.3 area 0
+network 13.0.0.44 0.0.0.3 area 0
+exit
+
+r6
+en
+conf t  
+hostname R6
+int eth0/0/0
+ip add 13.0.0.57 255.255.255.252
+no shut
+int eth0/1/0
+ip add 13.0.0.50 255.255.255.252
+no shut
+int eth0/2/0
+ip add 13.0.0.38 255.255.255.252
+no shut
+int eth0/3/0
+ip add 13.0.0.65 255.255.255.252
+no shut
+int fa0/1
+ip add 13.0.0.61 255.255.255.252
+no shut
+int fa0/0
+ip add 13.0.0.53 255.255.255.252
+no shut
+
+router ospf 10
+redistribute connected subnets  
+network 13.0.0.48 0.0.0.3 area 0
+network 13.0.0.36 0.0.0.3 area 0
+network 13.0.0.64 0.0.0.3 area 0
+network 13.0.0.60 0.0.0.3 area 0
+network 13.0.0.56 0.0.0.3 area 0
+network 13.0.0.52 0.0.0.3 area 0
+exit
+
+r7
+en  
+conf t
+hostname R7
+int eth0/0/0
+ip add 13.0.0.58 255.255.255.252
+no shut
+int eth0/1/0
+ip add 13.0.0.70 255.255.255.252
+no shut
+int fa0/0
+ip add 13.0.0.73 255.255.255.252
+no shut
+
+router ospf 10
+network 13.0.0.68 0.0.0.3 area 0
+network 13.0.0.56 0.0.0.3 area 0
+network 13.0.0.72 0.0.0.3 area 0
+exit
+
+R8
+en
+conf t
+hostname R8
+int eth0/0/0
+ip add 13.0.0.49 255.255.255.252
+no shut
+int eth0/1/0
+ip add 13.0.0.42 255.255.255.252
+no shut
+int fa0/0
+no shut
+int fa0/0.2
+encapsulation dot1Q 2
+ip add 13.0.19.254 255.255.252.0
+no shut
+int fa0/0.4
+encapsulation dot1Q 4
+ip add 13.27.255.254 255.252.0.0
+no shut
+int fa0/0.5
+encapsulation dot1Q 5
+ip add 13.0.20.254 255.255.255.0
+no shut
+int fa0/0.6
+encapsulation dot1Q 6
+ip add 13.31.255.254 255.255.0.0
+no shut
+
+ip dhcp pool vlan2_4
+network 13.0.16.0 255.255.252.0
+default-router 13.0.19.254
+exit
+ip dhcp pool vlan4_4
+network 13.24.0.0 255.252.0.0
+default-router 13.27.255.254
+exit
+ip dhcp pool vlan5_4
+network 13.0.20.0 255.255.255.0
+default-router 13.0.20.254
+exit
+ip dhcp pool vlan6_4
+network 13.31.0.0 255.255.0.0
+default-router 13.31.255.254
+exit
+
+router ospf 10
+redistribute connected subnets
+network 13.0.0.40 0.0.0.3 area 0
+network 13.0.0.48 0.0.0.3 area 0
+network 13.0.16.0 0.0.3.255 area 0
+network 13.24.0.0 0.3.255.255 area 0
+network 13.0.20.0 0.0.0.255 area 0
+network 13.31.0.0 0.0.255.255 area 0
+exit
+
+SWC1
+en
+conf t
+ip routing
+hostname SWC1
+vlan 3
+name tres
+vlan 4
+name cuatro
+vlan 5
+name cinco
+
+int gi1/0/1
+no switchport
+ip add 13.0.0.78 255.255.255.252
+no shut
+
+int vlan 3
+ip add 13.0.255.254 255.255.128.0
+no shut
+int vlan 4
+ip add 13.15.255.254 255.252.0.0
+no shut
+int vlan 5
+ip add 13.0.2.254 255.255.255.0
+no shut
+
+ip dhcp pool vlan3_4
+network 13.0.128.0 255.255.128.0
+default-router 13.0.255.254
+exit
+ip dhcp pool vlan4_4
+network 13.12.0.0 255.252.0.0
+default-router 13.15.255.254
+exit
+ip dhcp pool vlan5_4
+network 13.0.2.0 255.255.255.0
+default-router 13.0.2.254
+exit
+
+int gi1/0/2
+switchport mode trunk
+exit
+
+router ospf 10
+redistribute connected subnets
+network 13.0.0.76 0.0.0.3 area 0
+network 13.0.128.0 0.0.127.255 area 0
+network 13.12.0.0 0.3.255.255 area 0
+network 13.0.2.0 255.255.255.0 area 0
+exit
+
+SWC2
+en
+conf t
+ip routing
+hostname SWC2
+vlan 2
+name dos
+vlan 3
+name tres
+vlan 7
+name nativa1
+vlan 8
+name alumnos1
+vlan 9
+name docentes1
+vlan 10
+name invitados1
+
+int gi1/0/1
+no switchport
+ip add 13.0.0.22 255.255.255.252
+no shut
+
+int vlan 2
+ip add 13.0.11.254 255.255.252.0
+no shut
+int vlan 3
+ip add 13.1.127.254 255.255.128.0
+no shut
+int vlan 7
+ip add 13.0.0.110 255.255.255.240 
+no shut
+int vlan 8
+ip add 13.0.0.174 255.255.255.240
+no shut
+int vlan 9
+ip add 13.0.0.158 255.255.255.240
+no shut
+int vlan 10
+ip add 13.0.0.190 255.255.255.240
+no shut
+
+ip dhcp pool vlan2_4
+network 13.0.8.0 255.255.252.0
+default-router 13.0.11.254
+exit
+ip dhcp pool vlan3_4
+network 13.1.0.0 255.255.128.0
+default-router 13.1.127.254
+exit
+ip dhcp pool nativa1
+network 13.0.0.96 255.255.255.240
+default-router 13.0.0.110
+exit
+ip dhcp pool alumnos1  
+network 13.0.0.160 255.255.255.240
+default-router 13.0.0.174
+exit
+ip dhcp pool docentes1
+network 13.0.0.144 255.255.255.240
+default-router 13.0.0.158
+exit
+ip dhcp pool invitados1
+network 13.0.0.176 255.255.255.240
+default-router 13.0.0.190
+exit
+
+int gi1/0/2
+switchport trunk native vlan 7
+switchport mode trunk
+exit
+
+int gi1/0/3 
+switchport mode access
+switchport access vlan 7
+exit
+
+int gi1/0/4  
+no switchport
+ip add 192.168.1.254 255.255.255.0
+no shut
+
+int gi1/0/5 
+switchport mode access
+switchport access vlan 7
+exit
+
+
+router ospf 10
+redistribute connected subnets
+network 13.0.0.20 0.0.0.3 area 0
+network 13.0.8.0 0.0.3.255 area 0
+network 13.1.0.0 0.0.127.255 area 0
+network 13.0.0.96 0.0.0.15 area 0
+network 13.0.0.160 0.0.0.15 area 0
+network 13.0.0.144 0.0.0.15 area 0
+network 13.0.0.176 0.0.0.15 area 0
+exit
+
+SWC3
+en
+conf t
+hostname SWC3
+ip routing
+vlan 3
+name tres
+vlan 4
+name cuatro
+vlan 7
+name nativa2
+vlan 8
+name alumnos2
+vlan 9
+name docentes2
+vlan 10
+name invitados2
+
+int gi1/0/1
+no switchport
+ip add 13.0.0.46 255.255.255.252
+no shut
+
+
+int vlan 3
+ip add 13.1.255.254 255.255.128.0
+no shut
+int vlan 4
+ip add 13.19.255.254 255.252.0.0
+no shut
+int vlan 7
+ip add 13.0.0.126 255.255.255.240
+no shut
+int vlan 8
+ip add 13.0.0.207 255.255.255.240
+no shut
+int vlan 9
+ip add 13.0.0.222 255.255.255.240
+no shut
+int vlan 10
+ip add 13.0.0.238 255.255.255.240
+no shut
+
+
+ip dhcp pool vlan3_4
+network 13.1.128.0 255.255.128.0
+default-router 13.1.255.254
+exit
+ip dhcp pool vlan4_4
+network 13.16.0.0 255.252.0.0 
+default-router 13.19.255.254
+exit
+ip dhcp pool nativa2
+network 13.0.0.112 255.255.255.240
+default-router 13.0.0.126
+exit
+ip dhcp pool alumnos2  
+network 13.0.0.192 255.255.255.240
+default-router 13.0.0.206
+exit
+ip dhcp pool docentes2
+network 13.0.0.208 255.255.255.240
+default-router 13.0.0.222
+exit
+ip dhcp pool invitados2
+network 13.0.0.224 255.255.255.240
+default-router 13.0.0.238
+exit
+
+int gi1/0/2
+switchport trunk native vlan 7
+switchport mode trunk
+exit
+
+int gi1/0/3 
+switchport trunk native vlan 7
+switchport mode trunk
+exit
+
+int gi1/0/4  
+no switchport
+ip add 192.168.2.254 255.255.255.0
+no shut
+
+int gi1/0/5  
+switchport mode access
+switchport access vlan 7
+exit
+
+
+router ospf 10
+redistribute connected subnets
+network 13.0.0.44 0.0.0.3 area 0
+network 13.1.128.0 0.0.127.255 area 0
+network 13.16.0.0 0.3.255.255 area 0
+network 13.0.0.112 0.0.0.15 area 0
+network 13.0.0.192 0.0.0.15 area 0
+network 13.0.0.208 0.0.0.15 area 0
+network 13.0.0.224 0.0.0.15 area 0  
+exit
+
+SWC4
+en
+conf t
+ip routing
+hostname SWC4
+vlan 2
+name dos
+vlan 3
+name tres
+vlan 4
+name cuatro
+vlan 6
+name seis
+vlan 7
+name nativa3
+vlan 8
+name alumnos3
+vlan 9
+name docentes3
+vlan 10
+name invitados3
+
+int gi1/0/1
+no switchport
+ip add 13.0.0.54 255.255.255.252
+no shut
+int vlan 2
+ip add 13.0.15.254 255.255.252.0
+no shut
+int vlan 3
+ip add 13.2.127.254 255.255.128.0
+no shut
+int vlan 6
+ip add 13.30.255.254 255.255.0.0
+no shut
+int vlan 7
+ip add 13.0.0.142 255.255.255.240
+no shut
+int vlan 8
+ip add 13.0.0.254 255.255.255.240
+no shut
+int vlan 9
+ip add 13.0.22.14 255.255.255.240
+no shut
+int vlan 10
+ip add 13.0.22.30 255.255.255.240
+no shut
+
+ip dhcp pool vlan2_4
+network 13.0.12.0 255.255.252.0
+default-router 13.0.15.254
+exit
+ip dhcp pool vlan3_4
+network 13.2.0.0 255.255.128.0
+default-router 13.2.127.254
+exit
+ip dhcp pool vlan6_4
+network 13.30.0.0 255.255.0.0
+default-router 13.30.255.254
+exit
+ip dhcp pool nativa3
+network 13.0.0.128 255.255.255.240
+default-router 13.0.0.142
+exit
+ip dhcp pool alumnos3 
+network 13.0.0.240 255.255.255.240
+default-router 13.0.0.254
+exit
+ip dhcp pool docentes3
+network 13.0.22.0 255.255.255.240
+default-router 13.0.22.14
+exit
+ip dhcp pool invitados3
+network 13.0.22.16 255.255.255.240
+default-router 13.0.22.30
+exit
+
+int gi1/0/2
+switchport trunk native vlan 7
+switchport mode trunk
+exit
+
+int gi1/0/3
+switchport mode access
+switchport access vlan 7
+exit
+
+int gi1/0/4 
+no switchport
+ip add 192.168.3.254 255.255.255.0
+no shut
+
+int gi1/0/5  
+switchport mode access
+switchport access vlan 7
+exit
+
+
+router ospf 10
+redistribute connected subnets
+network 13.0.0.52 0.0.0.3 area 0
+network 13.0.12.0 0.0.3.255 area 0
+network 13.2.0.0 255.255.128.0 area 0
+network 13.30.0.0 0.0.255.255 area 0
+network 13.0.0.128 0.0.0.15 area 0
+network 13.0.0.240 0.0.0.15 area 0
+network 13.0.22.0 0.0.0.15 area 0
+network 13.0.22.16 0.0.0.15 area 0 
+exit
+
+SWC5
+en
+conf t
+ip routing
+hostname SWC5
+vlan 3
+name tres
+vlan 4
+name cuatro
+vlan 5
+name cinco
+
+int gi1/0/1
+no switchport
+ip add 13.0.0.74 255.255.255.252
+no shut
+
+int vlan 3
+ip add 13.2.255.254 255.255.128.0
+no shut
+int vlan 4
+ip add 13.23.255.254 255.252.0.0
+no shut
+int vlan 5
+ip add 13.0.3.254 255.255.255.0
+no shut
+
+ip dhcp pool vlan3_4
+network 13.2.128.0 255.255.128.0
+default-router 13.2.255.254
+exit
+ip dhcp pool vlan4_4
+network 13.20.0.0 255.252.0.0
+default-router 13.23.255.254
+exit
+ip dhcp pool vlan5_4
+network 13.0.3.0 255.255.255.0
+default-router 13.0.3.254
+exit
+
+int gi1/0/2
+switchport mode trunk
+exit
+
+router ospf 10
+redistribute connected subnets
+network 13.0.0.72 0.0.0.3 area 0
+network 13.2.128.0 0.0.127.255 area 0
+network 13.20.0.0 0.3.255.255 area 0
+network 13.0.3.0 0.0.0.255 area 0
+exit
+
+SW1
+en
+conf t
+hostname SW1
+vlan 2
+name dos
+vlan 4 
+name cuatro
+vlan 6
+name seis
+
+int fa0/1
+switchport mode trunk
+int fa0/2
+switchport mode trunk
+int fa0/3
+switchport mode trunk
+int fa0/4
+switchport access vlan 2
+
+
+SW2
+en
+conf t
+hostname SW2
+vlan 2
+name dos
+vlan 4 
+name cuatro
+vlan 6
+name seis
+
+int fa0/1
+switchport access vlan 6
+int fa0/2
+switchport mode trunk
+int fa0/3
+switchport access vlan 6
+int fa0/4
+switchport access vlan 2
+
+SW3
+en
+conf t
+hostname SW3
+vlan 2
+name dos
+vlan 4 
+name cuatro
+vlan 6
+name seis
+
+int fa0/1
+switchport access vlan 6
+int fa0/2
+switchport access vlan 4
+int fa0/3
+switchport mode trunk
+int fa0/4
+switchport access vlan 2
+
+sw4
+en
+conf t
+hostname SW4
+
+vlan 4 
+name cuatro
+vlan 5
+name cinco
+vlan 6
+name seis
+
+int fa0/1
+switchport mode trunk
+int fa0/2
+switchport mode trunk
+int fa0/3
+switchport access vlan 5
+int fa0/4
+switchport access vlan 6
+
+sw5
+en
+conf t
+hostname SW5
+
+vlan 4 
+name cuatro
+vlan 5
+name cinco
+vlan 6
+name seis
+
+int fa0/1
+switchport access vlan 4
+int fa0/2
+switchport mode trunk
+int fa0/3
+switchport access vlan 6
+int fa0/4
+switchport access vlan 4
+
+sw6
+en
+conf t
+hostname SW6
+
+vlan 3
+name tres
+vlan 4
+name cuatro
+vlan 5
+name cinco
+
+int gi0/2
+switchport mode trunk
+int fa0/1
+switchport access vlan 3
+int fa0/2
+switchport access vlan 4
+int fa0/3
+switchport access vlan 5
+
+SW7
+en
+conf t
+hostname SW7
+
+vlan 2
+name dos
+vlan 3
+name tres
+vlan 7
+name nativa1
+vlan 8
+name alumnos1
+vlan 9
+name docentes1
+vlan 10
+name invitados1
+
+int gi0/2
+switchport trunk native vlan 7
+switchport mode trunk
+int fa0/1
+switchport trunk native vlan 7
+switchport mode trunk
+int fa0/2
+switchport access vlan 2
+int fa0/3
+switchport trunk native vlan 7
+switchport mode trunk
+
+sw8
+en
+conf t
+hostname SW8
+
+vlan 2
+name dos
+vlan 3
+name tres
+vlan 7
+name nativa1
+vlan 8
+name alumnos1
+vlan 9
+name docentes1
+vlan 10
+name invitados1
+
+
+int fa0/1
+switchport trunk native vlan 7
+switchport mode trunk
+int fa0/2
+switchport access vlan 3
+int fa0/3
+switchport trunk native vlan 7
+switchport mode trunk
+int fa0/4
+switchport access vlan 2
+
+SW9
+en
+conf t
+hostname SW9
+
+
+vlan 3
+name tres
+vlan 4
+name cuatro
+vlan 7
+name nativa2
+vlan 8
+name alumnos2
+vlan 9
+name docentes2
+vlan 10
+name invitados2
+
+int gi0/2
+switchport trunk native vlan 7
+switchport mode trunk
+int fa0/1
+switchport trunk native vlan 7
+switchport mode trunk
+int fa0/2
+switchport access vlan 4
+int fa0/3
+switchport trunk native vlan 7
+switchport mode trunk
+
+SW10
+en
+conf t
+hostname SW10
+
+
+vlan 3
+name tres
+vlan 4
+name cuatro
+vlan 7
+name nativa2
+vlan 8
+name alumnos2
+vlan 9
+name docentes2
+vlan 10
+name invitados2
+
+
+int fa0/1
+switchport trunk native vlan 7
+switchport mode trunk
+int fa0/2
+switchport access vlan 3
+int fa0/4
+switchport access vlan 3
+int fa0/3
+switchport trunk native vlan 7
+switchport mode trunk
+
+SW11
+en
+conf t
+hostname SW11
+vlan 2
+name dos
+vlan 3
+name tres
+vlan 6
+name seis
+vlan 7
+name nativa3
+vlan 8
+name alumnos3
+vlan 9
+name docentes3
+vlan 10
+name invitados3
+
+int gi0/2
+switchport trunk native vlan 7
+switchport mode trunk
+int fa0/1
+switchport trunk native vlan 7
+switchport mode trunk
+int fa0/2
+switchport access vlan 3
+int fa0/3
+switchport access vlan 6
+
+SW12
+en
+conf t
+hostname SW12
+vlan 2
+name dos
+vlan 3
+name tres
+vlan 6
+name seis
+vlan 7
+name nativa3
+vlan 8
+name alumnos3
+vlan 9
+name docentes3
+vlan 10
+name invitados3
+
+
+int fa0/1
+switchport trunk native vlan 7
+switchport mode trunk
+int fa0/2
+switchport access vlan 2
+int fa0/3
+switchport trunk native vlan 7
+switchport mode trunk
+int fa0/4
+switchport trunk native vlan 7
+switchport mode trunk
+
+
+sw13
+en
+conf t
+hostname SW13
+vlan 3
+name tres
+vlan 4
+name cuatro
+vlan 5
+name cinco
+
+int gi0/2
+switchport mode trunk
+int fa0/1
+switchport mode trunk
+int fa0/2
+switchport access vlan 4
+int fa0/3
+switchport access vlan 5
+
+sw14
+en
+conf t
+hostname SW13
+vlan 3
+name tres
+vlan 4
+name cuatro
+vlan 5
+name cinco
+
+
+int fa0/1
+switchport mode trunk
+int fa0/2
+switchport access vlan 4
+int fa0/3
+switchport access vlan 3
+int fa0/4
+switchport access vlan 5
+
+sw15
+en 
+conf t
+hostname SW15
+vlan 2
+name dos
+vlan 4
+name cuatro 
+vlan 5
+name cinco
+vlan 6
+name seis
+
+int gi1/0/1
+switchport mode trunk
+int gi1/0/2
+switchport mode trunk
+int gi1/0/3
+switchport access vlan 2
+int gi1/0/4
+switchport access vlan 5
+
+
+SW16
+
+en
+conf t
+spanning-tree vlan 1 priority 4096
+vlan 2
+name dos
+vlan 4
+name cuatro 
+vlan 5
+name cinco
+vlan 6
+name seis
+
+
+int fa0/1
+switchport mode trunk
+int fa0/3
+switchport mode trunk
+
+sw17
+en
+conf t
+hostname SW17
+vlan 2
+name dos
+vlan 4
+name cuatro 
+vlan 5
+name cinco
+vlan 6
+name seis
+
+
+int fa0/1
+switchport mode trunk
+int fa0/2
+switchport mode trunk
+int fa0/3
+switchport access vlan 2
+int fa0/4
+switchport access vlan 6
+int fa0/5
+switchport access vlan 5
+
+sw18
+en
+conf t
+hostname SW18
+vlan 2
+name dos
+vlan 4
+name cuatro 
+vlan 5
+name cinco
+vlan 6
+name seis
+
+
+int fa0/2
+switchport mode trunk
+int fa0/3
+switchport mode trunk
+int fa0/4
+switchport access vlan 4
+int fa0/1
+switchport access vlan 5
